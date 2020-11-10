@@ -1,0 +1,120 @@
+﻿<Page x:Class="TDDD49.Views.ChatPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TDDD49.Views"
+      mc:Ignorable="d"
+      Title="Chat"
+      VerticalAlignment="Stretch"
+      HorizontalAlignment="Stretch"
+      >
+
+    <Page.Resources>
+        <Style TargetType="{x:Type StackPanel}" x:Key="SideStackPanel">
+            <Setter Property="Background" Value="LightBlue"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel x:Name="UserPanel" Grid.Column="0" Style="{StaticResource SideStackPanel}">
+            <ScrollViewer Height="{Binding ElementName=UserPanel, Path=ActualHeight}" VerticalScrollBarVisibility="Visible">
+                <ItemsControl x:Name="UserList" ItemsSource="{Binding Users}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="IdStorer" Text="{Binding ID}" Visibility="Collapsed"></TextBlock>
+                                <Label Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding Name}" Style="{StaticResource SubLabel}"></Label>
+                                <Ellipse Grid.Column="2" Width="15" Height="15">
+                                    <Ellipse.Style>
+                                        <Style TargetType="{x:Type Ellipse}">
+                                            <Setter Property="Fill" Value="Green"/>
+                                            <Setter Property="Margin" Value="0 4 0 0"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                                    <Setter Property="Fill" Value="Red"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                                <Button Grid.Column="3" Content="View" Command="{Binding ElementName=UserList,  Path=DataContext.SwitchUserCommand}" CommandParameter="{Binding Name}" FontSize="16"></Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+        
+        <Grid Grid.Column="1" Grid.ColumnSpan="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Label Content="Current Conversation" Style="{StaticResource HeaderLabel}" Grid.Column="2" Grid.ColumnSpan="6" Grid.Row="0"></Label>
+
+            <StackPanel x:Name="ChatPanel" Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="1" Grid.RowSpan="4" Style="{StaticResource SideStackPanel}" Margin="0 0 15 0">
+                <ScrollViewer Height="{Binding ElementName=ChatPanel, Path=ActualHeight}" VerticalScrollBarVisibility="Visible">
+                    <ItemsControl ItemsSource="{Binding Messages}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <StackPanel.Style>
+                                        <Style TargetType="{x:Type StackPanel}">
+                                            <Setter Property="Orientation" Value="Horizontal"/>
+                                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                                            <Setter Property="Margin" Value="5 5 0 0"/>
+                                            <Setter Property="Background" Value="White"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsInternalUserMessage}" Value="True">
+                                                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                                                    <Setter Property="Margin" Value="0 5 5 0"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <Label Content="{Binding Content}" Style="{StaticResource SubLabel}" Margin="0 7.5 0 0"></Label>
+                                    <Label Content="{Binding TimePosted}" Style="{StaticResource SubLabel}" FontSize="8"></Label>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+
+            <Border Style="{StaticResource ContentBorder}" BorderThickness="3" Height="{Binding ElementName=MsgTextBox, Path=ActualHeight}" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="5" Margin="5 0 5 5">
+                <Button Content="Send" Command="{Binding SendCommand}" CommandParameter="{Binding Path=Text, ElementName=MsgTextBox}"></Button>
+            </Border>
+            <TextBox x:Name="MsgTextBox" VerticalAlignment="Bottom" Background="LightBlue" Grid.Column="1" Grid.ColumnSpan="7" Grid.Row="5" Margin="0 0 25 5"></TextBox>
+        </Grid>
+    </Grid>
+</Page>
