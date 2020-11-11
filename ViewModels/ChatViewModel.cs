@@ -41,7 +41,7 @@ namespace TDDD49.ViewModels
         {
             Users = new ObservableCollection<User>
             {
-            new User() { Name = "George" ,IsOnline = false },
+            new User() { Name = "George", IsOnline = false },
             new User() { Name = "Steven", IsOnline = true },
             new User() { Name = "Julia", IsOnline = true },
             new User() { Name = "Sarah", IsOnline = false },
@@ -58,7 +58,7 @@ namespace TDDD49.ViewModels
             };
             Users.ElementAt(1).Messages = new ObservableCollection<TDDD49.Models.Message>()
             {
-                new TDDD49.Models.Message() { TimePosted=DateTime.Now, Content="Whats up!", IsInternalUserMessage = false },
+                new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Whats up!", IsInternalUserMessage = false },
                 new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Whaddup bruh?", IsInternalUserMessage = true},
             };
         }

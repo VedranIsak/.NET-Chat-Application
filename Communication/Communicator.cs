@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows;
 using Newtonsoft.Json;
+using TDDD49.Models;
 
 namespace WpfApp2
 {
@@ -11,7 +12,6 @@ namespace WpfApp2
     {
         public Communicator() { }
 
-        private string ChattingWith { get; set; }
         private TcpListener Server { get; set; }
         private TcpClient Client { get; set; }
         private NetworkStream Stream { get; set; }
@@ -38,7 +38,7 @@ namespace WpfApp2
                         break;
                     }
                     //Console.WriteLine(Encoding.ASCII.GetString(res, 0, readBytes));
-                    MessageObj response = JsonConvert.DeserializeObject<MessageObj>(Encoding.ASCII.GetString(res, 0, readBytes));
+                    Message response = JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(res, 0, readBytes));
                     if (response.MessageType == "decline")
                     {
                         String s = String.Format("{0} ville inte chatta med dig.", response.Sender);
@@ -54,7 +54,6 @@ namespace WpfApp2
                         String s = String.Format("{0} ville chatta med dig.", response.Sender);
                         MessageBox.Show(s);
 
-                        this.ChattingWith = response.Sender;
                         sendMessage(name, "accept");
                         
                         break;
@@ -118,13 +117,12 @@ namespace WpfApp2
                         {
                             break;
                         }
-                        MessageObj res = JsonConvert.DeserializeObject<MessageObj>(Encoding.ASCII.GetString(bytes, 0, i));
+                        Message res = JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(bytes, 0, i));
 
                         if (res.MessageType == "accept")
                         {
                             string s = string.Format("You are now chatting with {0}", res.Sender);
                             MessageBox.Show(s);
-                            this.ChattingWith = res.Sender;
                             break;
                         }
                         else if (res.MessageType == "decline")
@@ -180,7 +178,7 @@ namespace WpfApp2
             }
         }
 
-        public MessageObj recieveMessage()
+        public Message recieveMessage()
         {
             //Console.WriteLine("recmes");
             while (true)
@@ -189,7 +187,7 @@ namespace WpfApp2
                 {
                     var res = new byte[9999999];
                     int readBytes = Stream.Read(res, 0, res.Length);
-                    MessageObj response = JsonConvert.DeserializeObject<MessageObj>(Encoding.ASCII.GetString(res, 0, readBytes));
+                    Message response = JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(res, 0, readBytes));
 
                     if (response.MessageType == "disconnect")
                     {
@@ -201,7 +199,7 @@ namespace WpfApp2
                     }
                     else if (response.MessageType == "message")
                     {
-                        String s = String.Format("{0}: {1}", response.Sender, response.Message);
+                        String s = String.Format("{0}: {1}", response.Sender, response.Content);
                         return response;
                     }
                 }
@@ -212,7 +210,7 @@ namespace WpfApp2
         {
             if (Stream != null)
             {
-                MessageObj mes = new MessageObj() { Message = message, MessageType = messageType, Sender = name };
+                Message mes = new Message() { Content = message, MessageType = messageType, Sender = name, IsInternalUserMessage = false, TimePosted = DateTime.Now };
                 byte[] send = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(mes));
                 Stream.Write(send, 0, send.Length);
             }

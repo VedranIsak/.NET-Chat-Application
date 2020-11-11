@@ -14,7 +14,8 @@ namespace TDDD49.Models
         public int ID { get; private set; }
         public string Name { get; set; }
         public int Port { get; set; }
-        public bool IsOnline { get; set; }
+        public bool IsOnline { get; set; } // Kanske ta bort elr använd som "current chat" typ för att se vilken man chattar med just nu
+        public string Ip { get; set; } = "127.0.0.1";
         public ObservableCollection<Message> Messages { get; set; }
     }
 }
