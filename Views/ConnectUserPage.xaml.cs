@@ -24,7 +24,7 @@ namespace TDDD49.Views
     {
         public ConnectUserPage()
         {
-            DataContext = new ConnectUserPage()
+            DataContext = new ConfigureViewModel();
             InitializeComponent();
         }
     }
