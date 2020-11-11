@@ -112,7 +112,7 @@
             </StackPanel>
 
             <Border Style="{StaticResource ContentBorder}" BorderThickness="3" Height="{Binding ElementName=MsgTextBox, Path=ActualHeight}" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="5" Margin="5 0 5 5">
-                <Button Content="Send" Command="{Binding SendCommand}" CommandParameter="{Binding Path=Text, ElementName=MsgTextBox}"></Button>
+                <Button Content="Send" Command="{Binding SendCommand}" CommandParameter="{Binding Path=Text, ElementName=MsgTextBox}" Grid.Column="0" Grid.Row="5"></Button>
             </Border>
             <TextBox x:Name="MsgTextBox" VerticalAlignment="Bottom" Background="LightBlue" Grid.Column="1" Grid.ColumnSpan="7" Grid.Row="5" Margin="0 0 25 5"></TextBox>
         </Grid>
