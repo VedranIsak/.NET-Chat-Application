@@ -3,8 +3,9 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
 
-namespace WpfApp2
+namespace TDDD49
 {
+    /*
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -25,7 +26,7 @@ namespace WpfApp2
             //DataContext = this.jag;
             DataContext = this;
         }
-        /*
+        
 
         //  https://www.youtube.com/watch?v=XXg9g56FS0k
 
@@ -163,7 +164,7 @@ namespace WpfApp2
             this.communicator.sendMessage(this.Person.Name, "disconnect");
             this.communicator.stopChatting(this.Person.Name);
         }
-        */
+        
     }
-
+    */
 }

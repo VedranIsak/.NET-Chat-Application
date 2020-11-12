@@ -75,11 +75,7 @@ namespace TDDD49.ViewModels
         {
             Users = new ObservableCollection<User>
             {
-<<<<<<< HEAD
             new User() { Name = "George", Port=8080, IpAddress="localhost", IsOnline = false },
-=======
-            new User() { Name = "George", IsOnline = false },
->>>>>>> fb4bcbd37986b2f07238d945f5236007063fbc21
             new User() { Name = "Steven", IsOnline = true },
             new User() { Name = "Julia", IsOnline = true },
             new User() { Name = "Sarah", IsOnline = false },

@@ -3,10 +3,10 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Windows;
-using Newtonsoft.Json;
 using TDDD49.Models;
+using Newtonsoft.Json;
 
-namespace WpfApp2
+namespace TDDD49
 {
     class Communicator
     {

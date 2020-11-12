@@ -6,12 +6,12 @@ using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp2
+namespace TDDD49
 {   
     // this is a user model, a user should have a name, ip and a port
-    public class User : INotifyPropertyChanged
+    public class UserObj : INotifyPropertyChanged
     {
-        public User() { }
+        public UserObj() { }
         private string name = "Namn";
         private Int32 port = 9000;
         public string Name { get { return name; } set { name = value; OnPropertyChanged("Name"); } }

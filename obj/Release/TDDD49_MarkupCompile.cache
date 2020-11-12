@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\herma\Desktop\tddd49\obj\Debug\
+C:\Users\herma\Desktop\tddd49\obj\Release\
 TDDD49
 none
 false
-DEBUG;TRACE
+TRACE
 C:\Users\herma\Desktop\tddd49\App.xaml
 42113817546
 
-24-1551057710
-151216857964
+23-1514538775
+14-1175798665
 MainWindow.xaml;Views\ChatPage.xaml;Views\ConfigurePage.xaml;Views\ConnectUserPage.xaml;
 
-False
+True
 
