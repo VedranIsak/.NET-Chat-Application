@@ -44,3 +44,5 @@ C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49.Properties.Resources.resources
 C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49.csproj.GenerateResource.cache
 C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49.csproj.CoreCompileInputs.cache
 C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49.csproj.CopyComplete
+C:\Users\vedra\source\repos\TDDD49\TDDD49\bin\Debug\Newtonsoft.Json.dll
+C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\TDDD49.csproj.CopyComplete

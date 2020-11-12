@@ -39,19 +39,6 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock x:Name="IdStorer" Text="{Binding ID}" Visibility="Collapsed"></TextBlock>
                                 <Label Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding Name}" Style="{StaticResource SubLabel}"></Label>
-                                <Ellipse Grid.Column="2" Width="15" Height="15">
-                                    <Ellipse.Style>
-                                        <Style TargetType="{x:Type Ellipse}">
-                                            <Setter Property="Fill" Value="Green"/>
-                                            <Setter Property="Margin" Value="0 4 0 0"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsOnline}" Value="True">
-                                                    <Setter Property="Fill" Value="Red"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Ellipse.Style>
-                                </Ellipse>
                                 <Button Grid.Column="3" Content="View" Command="{Binding ElementName=UserList,  Path=DataContext.SwitchUserCommand}" CommandParameter="{Binding Name}" FontSize="16"></Button>
                             </Grid>
                         </DataTemplate>

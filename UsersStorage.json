@@ -1,0 +1,30 @@
+﻿[
+    {
+        "ID": 213213321,
+        "Name": "Marcus",
+        "Port": 8080,
+        "IpAddress": "127.0.0.1",
+        "IsOnline": "true",
+        "Messages": [
+            {
+                "Content": "HajHaj",
+                "TimePosted": null,
+                "IsInternalUserMessage": "true"
+            }
+        ]
+    },
+    {
+        "ID": 213234321,
+        "Name": "Peter",
+        "Port": 8080,
+        "IpAddress": "127.0.0.1",
+        "IsOnline": "true",
+        "Messages": [
+            {
+                "Content": "Hojsi Hojsi",
+                "TimePosted": null,
+                "IsInternalUserMessage": "true"
+            }
+        ]
+    }
+]

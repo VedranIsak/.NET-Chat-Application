@@ -13,6 +13,8 @@ using System.Windows.Forms;
 
 using TDDD49.Models;
 using TDDD49.ViewModels.Commands;
+using System.IO;
+using Newtonsoft.Json;
 
 // IPAddresserna och portnumren som används är fortfarande hårdkodade
 // TO DO -> Fixa JSON 
@@ -36,11 +38,11 @@ namespace TDDD49.ViewModels
 
             Users = new ObservableCollection<User>
             {
-            new User() { Name = "George", Port=8080, IpAddress="localhost", IsOnline = false },
-            new User() { Name = "Steven", IsOnline = true },
-            new User() { Name = "Julia", IsOnline = true },
-            new User() { Name = "Sarah", IsOnline = false },
-            new User() { Name = "Alex", IsOnline = true }
+            new User() { Name = "George", Port=8080, IpAddress="localhost" },
+            new User() { Name = "Steven" },
+            new User() { Name = "Julia" },
+            new User() { Name = "Sarah" },
+            new User() { Name = "Alex"}
             };
 
             Users.ElementAt(0).Messages = new ObservableCollection<TDDD49.Models.Message>()
@@ -57,48 +59,35 @@ namespace TDDD49.ViewModels
                 new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Whaddup bruh?", IsInternalUserMessage = true},
             };
 
-            InternalUser = Users.ElementAt(0);
+            LoadJSON();
+
+            InternalUser = new User { Name = "MeMyselfioo", Port=8080, IpAddress="localhost" };
             ExternalUser = Users.ElementAt(1);
-            List<Models.Message> listMessages = InternalUser.Messages.Concat(ExternalUser.Messages).ToList<Models.Message>();
-            listMessages.Sort((x, y) => x.TimePosted.CompareTo(y.TimePosted));
-            Messages = new ObservableCollection<Models.Message>();
-            foreach (var msg in listMessages)
-            {
-                Messages.Add(msg);
-            }
+            Messages = ExternalUser.Messages;
 
             var listenerThread = new Thread(ReadMessage);
             listenerThread.Start();
         }
 
-        public void LoadMockData()
-        {
-            Users = new ObservableCollection<User>
-            {
-            new User() { Name = "George", Port=8080, IpAddress="localhost", IsOnline = false },
-            new User() { Name = "Steven", IsOnline = true },
-            new User() { Name = "Julia", IsOnline = true },
-            new User() { Name = "Sarah", IsOnline = false },
-            new User() { Name = "Alex", IsOnline = true }
-            };
-
-            Users.ElementAt(0).Messages = new ObservableCollection<TDDD49.Models.Message>()
-            {
-                new TDDD49.Models.Message() { TimePosted=DateTime.Now, Content="Hi whats up!", IsInternalUserMessage = false },
-                new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Nothing much, you?", IsInternalUserMessage = true},
-                new TDDD49.Models.Message() { TimePosted=DateTime.Now, Content="Nothing much", IsInternalUserMessage = false },
-                new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Good!", IsInternalUserMessage = true }
-
-            };
-            Users.ElementAt(1).Messages = new ObservableCollection<TDDD49.Models.Message>()
-            {
-                new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Whats up!", IsInternalUserMessage = false },
-                new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Whaddup bruh?", IsInternalUserMessage = true},
-            };
-        }
-
         public ICommand SendCommand { get; set; }
         public ICommand SwitchUserCommand { get; set; }
+
+        private async void LoadJSON()
+        {
+            StreamReader usersReader = new StreamReader("../UsersStorage.json");
+            StreamReader userReader = new StreamReader("../UserStorage.json");
+
+            string inputUsersString = await usersReader.ReadToEndAsync();
+            string inputUserString = await userReader.ReadToEndAsync();
+
+            InternalUser = JsonConvert.DeserializeObject<Models.User>(inputUserString);
+            List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString);
+            foreach(var user in tmp)
+            {
+                Users.Add(user);
+            }
+            ExternalUser = Users.ElementAt(0);
+        }
 
         public ObservableCollection<User> Users
         {
@@ -150,6 +139,7 @@ namespace TDDD49.ViewModels
             set
             {
                 externalUser = value;
+                Messages = externalUser.Messages;
             }
         }
 
@@ -199,7 +189,7 @@ namespace TDDD49.ViewModels
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    InternalUser.Messages.Add(new TDDD49.Models.Message() { Content = message, TimePosted = DateTime.Now, IsInternalUserMessage = true });
+                    ExternalUser.Messages.Add(new TDDD49.Models.Message() { Content = message, TimePosted = DateTime.Now, IsInternalUserMessage = true });
                 });
             });
         }
@@ -239,7 +229,7 @@ namespace TDDD49.ViewModels
 
                         System.Windows.Application.Current.Dispatcher.Invoke(() =>
                         {
-                            InternalUser.Messages.Add(new TDDD49.Models.Message() { Content = msg.ToString(), TimePosted = DateTime.Now, IsInternalUserMessage = false });
+                            ExternalUser.Messages.Add(new TDDD49.Models.Message() { Content = msg.ToString(), TimePosted = DateTime.Now, IsInternalUserMessage = false });
                         });
                         stream.Close();
                         tcpClient.Close();
