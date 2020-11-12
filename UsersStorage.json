@@ -1,29 +1,82 @@
 ﻿[
+    
     {
-        "ID": 213213321,
-        "Name": "Marcus",
+        "ID": 46104728,
+        "Name": "George",
         "Port": 8080,
-        "IpAddress": "127.0.0.1",
-        "IsOnline": "true",
+        "IpAddress": "localhost",
         "Messages": [
             {
-                "Content": "HajHaj",
-                "TimePosted": null,
-                "IsInternalUserMessage": "true"
+                "Content": "Hi whats up!",
+                "TimePosted": "2020-11-12T23:12:21.9483395+01:00",
+                "IsInternalUserMessage": false,
+                "MessageType": "message",
+                "Sender": "George"
+            },
+            {
+                "Content": "Nothing much, you?",
+                "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+                "IsInternalUserMessage": true,
+                "MessageType": "message",
+                "Sender": "Richard"
+            },
+            {
+                "Content": "Nothing much",
+                "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+                "IsInternalUserMessage": false,
+                "MessageType": "message",
+                "Sender": "George"
+            },
+            {
+                "Content": "Good!",
+                "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+                "IsInternalUserMessage": true,
+                "MessageType": "message",
+                "Sender": "Richard"
             }
         ]
     },
     {
-        "ID": 213234321,
-        "Name": "Peter",
-        "Port": 8080,
-        "IpAddress": "127.0.0.1",
-        "IsOnline": "true",
+        "ID": 12289376,
+        "Name": "Steven",
+        "Port": 9000,
+        "IpAddress": "localhost",
         "Messages": [
             {
-                "Content": "Hojsi Hojsi",
-                "TimePosted": null,
-                "IsInternalUserMessage": "true"
+                "Content": "Whats up!",
+                "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+                "IsInternalUserMessage": false,
+                "MessageType": "message",
+                "Sender": "Aaron"
+            },
+            {
+                "Content": "Whaddup bruh?",
+                "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+                "IsInternalUserMessage": true,
+                "MessageType": "message",
+                "Sender": "Richard"
+            }
+        ]
+    },
+    {
+        "ID": 43495525,
+        "Name": "Julia",
+        "Port": 8020,
+        "IpAddress": "localhost",
+        "Messages": [
+            {
+                "Content": "Hi",
+                "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+                "IsInternalUserMessage": false,
+                "MessageType": "message",
+                "Sender": "Paul"
+            },
+            {
+                "Content": "Hello",
+                "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+                "IsInternalUserMessage": true,
+                "MessageType": "message",
+                "Sender": "Richard"
             }
         ]
     }

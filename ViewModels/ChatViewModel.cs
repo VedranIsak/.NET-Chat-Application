@@ -33,37 +33,10 @@ namespace TDDD49.ViewModels
 
         public ChatViewModel()
         {
+            Users = new ObservableCollection<User>();
+            LoadJSON();
             SendCommand = new SendButtonCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
-
-            Users = new ObservableCollection<User>
-            {
-            new User() { Name = "George", Port=8080, IpAddress="localhost" },
-            new User() { Name = "Steven" },
-            new User() { Name = "Julia" },
-            new User() { Name = "Sarah" },
-            new User() { Name = "Alex"}
-            };
-
-            Users.ElementAt(0).Messages = new ObservableCollection<TDDD49.Models.Message>()
-            {
-                new TDDD49.Models.Message() { TimePosted=DateTime.Now, Content="Hi whats up!", IsInternalUserMessage = false },
-                new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Nothing much, you?", IsInternalUserMessage = true},
-                new TDDD49.Models.Message() { TimePosted=DateTime.Now, Content="Nothing much", IsInternalUserMessage = false },
-                new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Good!", IsInternalUserMessage = true }
-
-            };
-            Users.ElementAt(1).Messages = new ObservableCollection<TDDD49.Models.Message>()
-            {
-                new TDDD49.Models.Message() { TimePosted=DateTime.Now, Content="Whats up!", IsInternalUserMessage = false },
-                new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Whaddup bruh?", IsInternalUserMessage = true},
-            };
-
-            LoadJSON();
-
-            InternalUser = new User { Name = "MeMyselfioo", Port=8080, IpAddress="localhost" };
-            ExternalUser = Users.ElementAt(1);
-            Messages = ExternalUser.Messages;
 
             var listenerThread = new Thread(ReadMessage);
             listenerThread.Start();
@@ -72,21 +45,21 @@ namespace TDDD49.ViewModels
         public ICommand SendCommand { get; set; }
         public ICommand SwitchUserCommand { get; set; }
 
-        private async void LoadJSON()
+        private void LoadJSON()
         {
-            StreamReader usersReader = new StreamReader("../UsersStorage.json");
-            StreamReader userReader = new StreamReader("../UserStorage.json");
-
-            string inputUsersString = await usersReader.ReadToEndAsync();
-            string inputUserString = await userReader.ReadToEndAsync();
-
-            InternalUser = JsonConvert.DeserializeObject<Models.User>(inputUserString);
-            List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString);
-            foreach(var user in tmp)
+            using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
             {
-                Users.Add(user);
+                string inputUsersString = usersReader.ReadToEnd();
+                List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString).ToList<Models.User>();
+                foreach (var user in tmp) { users.Add(user); }
+                externalUser = users.ElementAt(0);
             }
-            ExternalUser = Users.ElementAt(0);
+
+            using (StreamReader userReader = new StreamReader("../../UserStorage.json"))
+            {
+                string inputUserString = userReader.ReadToEnd();
+                internalUser = JsonConvert.DeserializeObject<Models.User>(inputUserString);
+            }
         }
 
         public ObservableCollection<User> Users

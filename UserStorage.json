@@ -1,7 +1,15 @@
 ﻿{
-    "ID":  12212122222
-    "Name": "Memyselfiooo",
+    "ID": 51292428,
+    "Name": "Memyselfii",
     "Port": 8080,
-    "IpAddress": "localhost",
-    "Messages":  null
+    "IpAddress": "127.0.0.1",
+    "Messages": [
+        {
+            "Content": "HajHaj",
+            "TimePosted": "2020-11-12T21:48:29.1356298+01:00",
+            "IsInternalUserMessage": true,
+            "MessageType": "message",
+            "Sender": "Richard"
+        }
+    ]
 }
