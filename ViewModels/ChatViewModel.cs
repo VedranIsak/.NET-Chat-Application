@@ -14,14 +14,17 @@ using System.Windows.Forms;
 using TDDD49.Models;
 using TDDD49.ViewModels.Commands;
 
-//Binda AllMessages ordnat till Itemtemplaten
-//Fixa att man kan lagra meddelanden i SQL Server
+// IPAddresserna och portnumren som används är fortfarande hårdkodade
+// TO DO -> Fixa JSON 
+// TO DO -> Fixa searchbar högst upp
+// ConnectUser sidan bindar inte bra till ChatViewModel
 
 namespace TDDD49.ViewModels
 {
     public class ChatViewModel : ViewModel
     {
-        private User currentUser;
+        private User internalUser;
+        private User externalUser;
         private ObservableCollection<User> users;
         private ObservableCollection<TDDD49.Models.Message> messages;
         private const string ipAddress = "localhost";
@@ -30,8 +33,39 @@ namespace TDDD49.ViewModels
         {
             SendCommand = new SendButtonCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
-            LoadMockData();
-            CurrentUser = Users.ElementAt(0);
+
+            Users = new ObservableCollection<User>
+            {
+            new User() { Name = "George", Port=8080, IpAddress="localhost", IsOnline = false },
+            new User() { Name = "Steven", IsOnline = true },
+            new User() { Name = "Julia", IsOnline = true },
+            new User() { Name = "Sarah", IsOnline = false },
+            new User() { Name = "Alex", IsOnline = true }
+            };
+
+            Users.ElementAt(0).Messages = new ObservableCollection<TDDD49.Models.Message>()
+            {
+                new TDDD49.Models.Message() { TimePosted=DateTime.Now, Content="Hi whats up!", IsInternalUserMessage = false },
+                new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Nothing much, you?", IsInternalUserMessage = true},
+                new TDDD49.Models.Message() { TimePosted=DateTime.Now, Content="Nothing much", IsInternalUserMessage = false },
+                new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Good!", IsInternalUserMessage = true }
+
+            };
+            Users.ElementAt(1).Messages = new ObservableCollection<TDDD49.Models.Message>()
+            {
+                new TDDD49.Models.Message() { TimePosted=DateTime.Now, Content="Whats up!", IsInternalUserMessage = false },
+                new TDDD49.Models.Message() { TimePosted = DateTime.Now, Content="Whaddup bruh?", IsInternalUserMessage = true},
+            };
+
+            InternalUser = Users.ElementAt(0);
+            ExternalUser = Users.ElementAt(1);
+            List<Models.Message> listMessages = InternalUser.Messages.Concat(ExternalUser.Messages).ToList<Models.Message>();
+            listMessages.Sort((x, y) => x.TimePosted.CompareTo(y.TimePosted));
+            Messages = new ObservableCollection<Models.Message>();
+            foreach (var msg in listMessages)
+            {
+                Messages.Add(msg);
+            }
 
             var listenerThread = new Thread(ReadMessage);
             listenerThread.Start();
@@ -41,13 +75,13 @@ namespace TDDD49.ViewModels
         {
             Users = new ObservableCollection<User>
             {
-            new User() { Name = "George" ,IsOnline = false },
+            new User() { Name = "George", Port=8080, IpAddress="localhost", IsOnline = false },
             new User() { Name = "Steven", IsOnline = true },
             new User() { Name = "Julia", IsOnline = true },
             new User() { Name = "Sarah", IsOnline = false },
             new User() { Name = "Alex", IsOnline = true }
             };
-            CurrentUser = Users.ElementAt(0);
+
             Users.ElementAt(0).Messages = new ObservableCollection<TDDD49.Models.Message>()
             {
                 new TDDD49.Models.Message() { TimePosted=DateTime.Now, Content="Hi whats up!", IsInternalUserMessage = false },
@@ -76,24 +110,6 @@ namespace TDDD49.ViewModels
             }
         }
 
-        public User CurrentUser
-        {
-            get { return currentUser; }
-            set
-            {
-                currentUser = value;
-                Messages = currentUser.Messages;
-                ExternalPort = currentUser.Port;
-                OnPropertyChanged(nameof(CurrentUser));
-            }
-        }
-
-        public int CurrentExternalPort
-        {
-            get { return base.ExternalPort; }
-            set { base.ExternalPort = value; }
-        }
-
         public ObservableCollection<TDDD49.Models.Message> Messages
         {
             get { return messages; }
@@ -104,6 +120,61 @@ namespace TDDD49.ViewModels
             }
         }
 
+        public User InternalUser
+        {
+            get { return internalUser; }
+            set { internalUser = value; }
+        }
+
+        public string InternalUserName
+        {
+            get { return InternalUser.Name; }
+            set { InternalUser.Name = value; }
+        }
+
+        public int InternalPort
+        {
+            get { return InternalUser.Port; }
+            set { InternalUser.Port = value; }
+        }
+
+        public string InternalIpAddress
+        {
+            get { return InternalUser.IpAddress; }
+            set { InternalUser.IpAddress = value; }
+        }
+
+        public User ExternalUser
+        {
+            get { return externalUser; }
+            set
+            {
+                externalUser = value;
+            }
+        }
+
+        public string ExternalUserName
+        {
+            get { return ExternalUser.Name; }
+            set
+            {
+                ExternalUser.Name = value;
+                OnPropertyChanged(nameof(ExternalUserName));
+            }
+        }
+
+        public int ExternalPort
+        {
+            get { return ExternalUser.Port; }
+            set { ExternalUser.Port = value; }
+        }
+
+        public string ExternalIpAddress
+        {
+            get { return ExternalUser.IpAddress; }
+            set { ExternalUser.IpAddress = value; }
+        }
+
         public void WriteMessage(string message)
         {
             Task.Run(() =>
@@ -112,7 +183,7 @@ namespace TDDD49.ViewModels
                 NetworkStream writeStream;
                 try
                 {
-                    tcpClient = new TcpClient("localhost", ExternalPort);
+                    tcpClient = new TcpClient("localhost", 8080);
                     writeStream = tcpClient.GetStream();
                 }
                 catch (Exception e) { return; }
@@ -128,7 +199,7 @@ namespace TDDD49.ViewModels
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    CurrentUser.Messages.Add(new TDDD49.Models.Message() { Content = message, TimePosted = DateTime.Now, IsInternalUserMessage = true });
+                    InternalUser.Messages.Add(new TDDD49.Models.Message() { Content = message, TimePosted = DateTime.Now, IsInternalUserMessage = true });
                 });
             });
         }
@@ -137,8 +208,8 @@ namespace TDDD49.ViewModels
         {
             Task.Run(() =>
             {
-                IPAddress ip = Dns.GetHostEntry(ipAddress).AddressList[0];
-                TcpListener tcpListener = new TcpListener(ip, InternalPort);
+                IPAddress ip = Dns.GetHostEntry("localhost").AddressList[0];
+                TcpListener tcpListener = new TcpListener(ip, 8080);
                 tcpListener.Start();
 
                 while (true)
@@ -147,7 +218,6 @@ namespace TDDD49.ViewModels
                     NetworkStream stream = tcpClient.GetStream();
                     byte[] receivedBuffer = new byte[100];
 
-                    //stream.ReadTimeout = 250;
                     int bytesRead = 0;
                     bytesRead = stream.Read(receivedBuffer, 0, receivedBuffer.Length);
                     if (bytesRead > 0)
@@ -169,7 +239,7 @@ namespace TDDD49.ViewModels
 
                         System.Windows.Application.Current.Dispatcher.Invoke(() =>
                         {
-                            CurrentUser.Messages.Add(new TDDD49.Models.Message() { Content = msg.ToString(), TimePosted = DateTime.Now, IsInternalUserMessage = false });
+                            InternalUser.Messages.Add(new TDDD49.Models.Message() { Content = msg.ToString(), TimePosted = DateTime.Now, IsInternalUserMessage = false });
                         });
                         stream.Close();
                         tcpClient.Close();

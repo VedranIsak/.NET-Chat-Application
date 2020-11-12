@@ -22,9 +22,9 @@ namespace TDDD49.Views
     /// </summary>
     public partial class ConnectUserPage : Page
     {
-        public ConnectUserPage()
+        public ConnectUserPage(ChatViewModel chatViewModel)
         {
-            DataContext = new ConfigureViewModel();
+            DataContext = new ConnectUserViewModel(chatViewModel);
             InitializeComponent();
         }
     }

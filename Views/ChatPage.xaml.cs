@@ -22,9 +22,9 @@ namespace TDDD49.Views
     /// </summary>
     public partial class ChatPage : Page
     {
-        public ChatPage()
+        public ChatPage(ChatViewModel chatViewModel)
         {
-            DataContext = new ChatViewModel(); 
+            DataContext = chatViewModel; 
             InitializeComponent();
         }
     }

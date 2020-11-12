@@ -9,21 +9,25 @@ using System.Windows.Input;
 
 using TDDD49.Views;
 using TDDD49.ViewModels.Commands;
+using TDDD49.Models;
 
 namespace TDDD49.ViewModels
 {
     class ShellViewModel : ViewModel
     {
         private Page currentPage;
+        private ChatViewModel chatViewModel;
         private ConfigurePage configurePage;
         private ChatPage chatPage;
-        private ICommand topMenuButtonCommand;
+        private ConnectUserPage connectUserPage;
 
         public ShellViewModel()
         {
-            configurePage = new ConfigurePage();
-            chatPage = new ChatPage();
-            topMenuButtonCommand = new TopMenuButtonCommand(this, configurePage, chatPage);
+            chatViewModel = new ChatViewModel();
+            chatPage = new ChatPage(chatViewModel);
+            configurePage = new ConfigurePage(chatViewModel);
+            connectUserPage = new ConnectUserPage(chatViewModel);
+            TopMenuButtonCommand = new TopMenuButtonCommand(this, configurePage, chatPage, connectUserPage);
             CurrentPage = configurePage;
         }
 
@@ -40,13 +44,6 @@ namespace TDDD49.ViewModels
             }
         }
 
-        public ICommand TopMenuButtonCommand
-        {
-            get { return topMenuButtonCommand; }
-            private set
-            {
-                topMenuButtonCommand = value;
-            }
-        }
+        public ICommand TopMenuButtonCommand { get; private set; }
     }
 }

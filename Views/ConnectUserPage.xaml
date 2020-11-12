@@ -31,13 +31,31 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Add a new user to chat with!" Style="{StaticResource HeaderLabel}" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="2"></Label>
-        <Label Content="User IP" Grid.Column="1" Grid.Row="2" Margin="0 10 0 0"></Label>
-        <Border Style="{StaticResource ContentBorder}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3">
+        <Label Content="Add a new user to chat with!" Style="{StaticResource HeaderLabel}" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="1"></Label>
+
+        <Label Content="User Name" Grid.Column="1" Grid.Row="1" Margin="0 20 0 0"></Label>
+        <Label Content="Not a valid username..." Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" FontSize="16" Foreground="Red" Margin="0 20 0 0">
+            <Label.Style>
+                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ValidExternalUserName}" Value="True">
+                            <Setter Property="Label.Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+        <Border Style="{StaticResource ContentBorder}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2">
+            <TextBox Text="{Binding ExternalUserName, UpdateSourceTrigger=PropertyChanged}" Padding="1"></TextBox>
+        </Border>
+
+        <Label Content="User IP Address" Grid.Column="1" Grid.Row="3" Margin="0 20 0 0"></Label>
+        <Border Style="{StaticResource ContentBorder}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="4">
             <TextBox Text="{Binding ExternalIpAddress, UpdateSourceTrigger=PropertyChanged}" Padding="1"></TextBox>
         </Border>
-        <Label Content="User Port" Grid.Column="1" Grid.Row="4" Margin="0 10 0 0"></Label>
-        <Label Content="Not a valid port..." Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" FontSize="16" Foreground="Red" Margin="0 20 0 0">
+        
+        <Label Content="User Port" Grid.Column="1" Grid.Row="5" Margin="0 20 0 0"></Label>
+        <Label Content="Not a valid port..." Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" FontSize="16" Foreground="Red" Margin="0 20 0 0">
             <Label.Style>
                 <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                     <Style.Triggers>
@@ -48,10 +66,10 @@
                 </Style>
             </Label.Style>
         </Label>
-        <Border Style="{StaticResource ContentBorder}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5">
+        <Border Style="{StaticResource ContentBorder}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="6">
             <TextBox Text="{Binding ExternalPort, UpdateSourceTrigger=PropertyChanged}" Padding="1"></TextBox>
         </Border>
 
-        <Button Content="Add User" Grid.Column="2" Grid.Row="7"></Button>
+        <Button Content="Add User" Command="{Binding AddUserCommand}" Grid.Column="2" Grid.Row="8"></Button>
     </Grid>
 </Page>

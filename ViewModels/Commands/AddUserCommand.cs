@@ -7,15 +7,16 @@ using System.Windows.Input;
 
 using TDDD49.ViewModels;
 using TDDD49.Models;
-using System.Net.Sockets;
 
 namespace TDDD49.ViewModels.Commands
 {
-    class SendButtonCommand : ICommand
+    class AddUserCommand : ICommand
     {
+        private ConnectUserViewModel connectUserViewModel;
         private ChatViewModel chatViewModel;
-        public SendButtonCommand(ChatViewModel chatViewModel)
+        public AddUserCommand(ConnectUserViewModel connectUserViewModel, ChatViewModel chatViewModel)
         {
+            this.connectUserViewModel = connectUserViewModel;
             this.chatViewModel = chatViewModel;
         }
 
@@ -27,15 +28,18 @@ namespace TDDD49.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            string input = parameter as string;
-            if(input == null) { return false; }
-            if (input.Length == 0) return false;
-            return true;
+            if(connectUserViewModel.ValidExternalPort && connectUserViewModel.ValidExternalUserName) { return true; }
+            return false;
         }
 
         public void Execute(object parameter)
-        {            string messageToWrite = parameter as string;
-            chatViewModel.WriteMessage(messageToWrite);
+        {
+            chatViewModel.Users.Add(new User()
+            {
+                Name = connectUserViewModel.ExternalUserName,
+                Port = connectUserViewModel.ExternalPort,
+                IpAddress = connectUserViewModel.ExternalIpAddress
+            });
         }
     }
 }

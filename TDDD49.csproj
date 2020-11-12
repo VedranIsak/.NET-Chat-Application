@@ -59,10 +59,12 @@
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
+    <Compile Include="ViewModels\Commands\AddUserCommand.cs" />
     <Compile Include="ViewModels\Commands\SendButtonCommand.cs" />
     <Compile Include="ViewModels\Commands\SwitchUserCommand.cs" />
     <Compile Include="ViewModels\Commands\TopMenuButtonCommand.cs" />
     <Compile Include="ViewModels\ConfigureViewModel.cs" />
+    <Compile Include="ViewModels\ConnectUserViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\ChatPage.xaml.cs">
@@ -70,6 +72,9 @@
     </Compile>
     <Compile Include="Views\ConfigurePage.xaml.cs">
       <DependentUpon>ConfigurePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConnectUserPage.xaml.cs">
+      <DependentUpon>ConnectUserPage.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -88,6 +93,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ConfigurePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConnectUserPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -114,6 +123,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Storage.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

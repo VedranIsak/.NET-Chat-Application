@@ -14,8 +14,8 @@
         <Style TargetType="{x:Type Button}">
             <Setter Property="FontFamily" Value="Roboto"/>
             <Setter Property="FontSize" Value="24"/>
-            <Setter Property="Foreground" Value="SteelBlue"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="SteelBlue"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
 

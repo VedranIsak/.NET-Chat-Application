@@ -15,11 +15,13 @@ namespace TDDD49.ViewModels.Commands
         private ShellViewModel shellViewModel;
         private ConfigurePage configurePage;
         private ChatPage chatPage;
-        public TopMenuButtonCommand(ShellViewModel shellViewModel, ConfigurePage configurePage, ChatPage chatPage)
+        private ConnectUserPage connectUserPage;
+        public TopMenuButtonCommand(ShellViewModel shellViewModel, ConfigurePage configurePage, ChatPage chatPage, ConnectUserPage connectUserPage)
         {
             this.shellViewModel = shellViewModel;
             this.configurePage = configurePage;
             this.chatPage = chatPage;
+            this.connectUserPage = connectUserPage;
         }
 
         public event EventHandler CanExecuteChanged
@@ -36,11 +38,14 @@ namespace TDDD49.ViewModels.Commands
 
             switch(direction)
             {
-                case "Configure":
+                case "Settings":
                     shellViewModel.CurrentPage = configurePage;
                     break;
                 case "Chat":
                     shellViewModel.CurrentPage = chatPage;
+                    break;
+                case "Add Friend":
+                    shellViewModel.CurrentPage = connectUserPage;
                     break;
                 default:
                     break;

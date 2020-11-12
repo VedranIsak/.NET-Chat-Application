@@ -18,3 +18,5 @@ C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ChatPage.baml
 C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConfigurePage.g.cs
 C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConfigurePage.baml
 C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\TDDD49.csprojAssemblyReference.cache
+C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConnectUserPage.g.cs
+C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConnectUserPage.baml

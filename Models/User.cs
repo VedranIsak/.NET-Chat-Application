@@ -14,9 +14,9 @@ namespace TDDD49.Models
         public int ID { get; private set; }
         public string Name { get; set; }
         public int Port { get; set; }
+        public string IpAddress { get; set; }
         public bool IsOnline { get; set; }
         public ObservableCollection<Message> Messages { get; set; }
     }
 }
 
-//Kolla in binding till base class!
