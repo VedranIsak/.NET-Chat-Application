@@ -85,20 +85,20 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\vedra\\.nuget\\packages\\": {}
+    "C:\\Users\\herma\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\vedra\\source\\repos\\TDDD49\\TDDD49\\TDDD49.csproj",
+      "projectUniqueName": "C:\\Users\\herma\\Desktop\\tddd49\\TDDD49.csproj",
       "projectName": "TDDD49",
-      "projectPath": "C:\\Users\\vedra\\source\\repos\\TDDD49\\TDDD49\\TDDD49.csproj",
-      "packagesPath": "C:\\Users\\vedra\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\vedra\\source\\repos\\TDDD49\\TDDD49\\obj\\",
+      "projectPath": "C:\\Users\\herma\\Desktop\\tddd49\\TDDD49.csproj",
+      "packagesPath": "C:\\Users\\herma\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\herma\\Desktop\\tddd49\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [
-        "C:\\Users\\vedra\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\herma\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

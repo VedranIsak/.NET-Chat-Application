@@ -24,13 +24,14 @@ namespace TDDD49.ViewModels
         private ConfigurePage configurePage;
         private ChatPage chatPage;
         private ConnectUserPage connectUserPage;
+        private Communicator communicator = new Communicator();
 
         public ShellViewModel()
         {
-            chatViewModel = new ChatViewModel();
+            chatViewModel = new ChatViewModel(communicator);
             chatPage = new ChatPage(chatViewModel);
             configurePage = new ConfigurePage(chatViewModel);
-            connectUserPage = new ConnectUserPage(chatViewModel);
+            connectUserPage = new ConnectUserPage(chatViewModel, communicator);
             TopMenuButtonCommand = new TopMenuButtonCommand(this, configurePage, chatPage, connectUserPage);
             CurrentPage = configurePage;
         }

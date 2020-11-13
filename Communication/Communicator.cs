@@ -8,17 +8,17 @@ using Newtonsoft.Json;
 
 namespace TDDD49
 {
-    class Communicator
+    public class Communicator
     {
-        public Communicator() { }
-
+        
         private TcpListener Server { get; set; }
         private TcpClient Client { get; set; }
         private NetworkStream Stream { get; set; }
 
+        public Communicator() { }
 
         // https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.tcpclient?view=netcore-3.1
-        public void ConnectToOtherPerson(Int32 port, string server, String name)
+        public void ConnectToOtherPerson(Int32 port, string server, string name)
         {
             Client = new TcpClient(server, port);
             Stream = Client.GetStream();
@@ -62,7 +62,7 @@ namespace TDDD49
             }
         }
 
-        public void ListenToPort(Int32 port, String name)
+        public void ListenToPort(Int32 port, string name)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace TDDD49
             }
         }
 
-        public void stopChatting(String name)
+        public void stopChatting(string name)
         {
             sendMessage(name, "disconnect");
             disconnectStream();
@@ -212,6 +212,15 @@ namespace TDDD49
             {
                 Message mes = new Message() { Content = message, MessageType = messageType, Sender = name, IsInternalUserMessage = false, TimePosted = DateTime.Now };
                 byte[] send = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(mes));
+                Stream.Write(send, 0, send.Length);
+            }
+        }
+
+        public void sendMessage(Message m)
+        {
+            if (Stream != null)
+            {
+                byte[] send = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(m));
                 Stream.Write(send, 0, send.Length);
             }
         }
