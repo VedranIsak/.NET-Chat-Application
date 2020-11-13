@@ -34,7 +34,8 @@ namespace TDDD49.ViewModels.Commands
         }
 
         public void Execute(object parameter)
-        {            string messageToWrite = parameter as string;
+        {
+            string messageToWrite = parameter as string;
             chatViewModel.WriteMessage(messageToWrite);
         }
     }

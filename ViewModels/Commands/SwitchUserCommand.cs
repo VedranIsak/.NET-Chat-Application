@@ -12,7 +12,7 @@ namespace TDDD49.ViewModels.Commands
 {
     public class SwitchUserCommand : ICommand
     {
-
+        //Här byter man vilken användare som man chattar med, så här ska anslutningsinställningarna (ip, port) bytas
         public SwitchUserCommand(ChatViewModel chatViewModel)
         {
             this.ChatViewModel = chatViewModel;

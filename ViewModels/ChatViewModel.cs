@@ -28,13 +28,13 @@ namespace TDDD49.ViewModels
         private User internalUser;
         private User externalUser;
         private ObservableCollection<User> users;
-        private ObservableCollection<TDDD49.Models.Message> messages;
+        private ObservableCollection<Models.Message> messages;
         private const string ipAddress = "localhost";
 
         public ChatViewModel()
         {
             Users = new ObservableCollection<User>();
-            LoadJSON();
+            ReadFromJSON();
             SendCommand = new SendButtonCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
 
@@ -45,7 +45,7 @@ namespace TDDD49.ViewModels
         public ICommand SendCommand { get; set; }
         public ICommand SwitchUserCommand { get; set; }
 
-        private void LoadJSON()
+        private void ReadFromJSON()
         {
             using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
             {
@@ -60,6 +60,30 @@ namespace TDDD49.ViewModels
                 string inputUserString = userReader.ReadToEnd();
                 internalUser = JsonConvert.DeserializeObject<Models.User>(inputUserString);
             }
+        }
+
+        private void WriteToJSON(Models.Message newMessage)
+        {
+            using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
+            {
+                string inputUsersString = usersReader.ReadToEnd();
+                List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString).ToList<Models.User>();
+                foreach (var user in tmp)
+                {
+                    if (user.ID == ExternalUser.ID)
+                    {
+                        user.Messages.Add(newMessage);
+                    }
+                }
+                string jsonList = JsonConvert.SerializeObject(tmp);
+                File.WriteAllText("../../UsersStorage.json", jsonList);
+            }
+        }
+
+        public void AddMessage(Models.Message newMessage)
+        {
+            Messages.Add(newMessage);
+            WriteToJSON(newMessage);
         }
 
         public ObservableCollection<User> Users

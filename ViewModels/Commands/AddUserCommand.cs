@@ -28,7 +28,7 @@ namespace TDDD49.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            if(connectUserViewModel.ValidExternalPort && connectUserViewModel.ValidExternalUserName) { return true; }
+            if(connectUserViewModel.ValidExternalPort) { return true; }
             return false;
         }
 
@@ -36,7 +36,8 @@ namespace TDDD49.ViewModels.Commands
         {
             chatViewModel.Users.Add(new User()
             {
-                Name = connectUserViewModel.ExternalUserName,
+                //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det
+                //Name = connectUserViewModel.ExternalUserName,
                 Port = connectUserViewModel.ExternalPort,
                 IpAddress = connectUserViewModel.ExternalIpAddress
             });
