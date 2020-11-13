@@ -30,16 +30,18 @@ namespace TDDD49.ViewModels
         private ObservableCollection<User> users;
         private ObservableCollection<TDDD49.Models.Message> messages;
         private const string ipAddress = "localhost";
+        private Communicator communicator;
+        private Thread recieveMessageThread;
 
-        public ChatViewModel()
+        public ChatViewModel(Communicator c)
         {
             Users = new ObservableCollection<User>();
             LoadJSON();
             SendCommand = new SendButtonCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
 
-            var listenerThread = new Thread(ReadMessage);
-            listenerThread.Start();
+            communicator = c;
+
         }
 
         public ICommand SendCommand { get; set; }
@@ -140,76 +142,69 @@ namespace TDDD49.ViewModels
 
         public void WriteMessage(string message)
         {
-            Task.Run(() =>
+            Models.Message mes = new Models.Message()
             {
-                TcpClient tcpClient;
-                NetworkStream writeStream;
-                try
+                Content = message,
+                Sender = this.internalUser.Name,
+                TimePosted = DateTime.Now,
+                MessageType = "message",
+                IsInternalUserMessage = true
+            };
+            // vid merge okommentera nedan
+            // AddMessages.Add(mes);
+            mes.IsInternalUserMessage = false;
+            try
+            {
+                new Thread(() =>
                 {
-                    tcpClient = new TcpClient("localhost", 8080);
-                    writeStream = tcpClient.GetStream();
-                }
-                catch (Exception e) { return; }
-
-                int byteCount = Encoding.ASCII.GetByteCount(message + 1);
-                byte[] sendData = new byte[byteCount];
-                sendData = Encoding.ASCII.GetBytes(message + ";");
-
-                writeStream.Write(sendData, 0, sendData.Length);
-
-                writeStream.Close();
-                tcpClient.Close();
-
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                {
-                    ExternalUser.Messages.Add(new TDDD49.Models.Message() { Content = message, TimePosted = DateTime.Now, IsInternalUserMessage = true });
+                    communicator.sendMessage(mes);
                 });
-            });
+                
+            }
+            catch (SocketException err)
+            {
+                System.Windows.MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
+                communicator.disconnectStream();
+                Console.WriteLine(err);
+            }
         }
 
         private void ReadMessage()
         {
-            Task.Run(() =>
+            try
             {
-                IPAddress ip = Dns.GetHostEntry("localhost").AddressList[0];
-                TcpListener tcpListener = new TcpListener(ip, 8080);
-                tcpListener.Start();
-
-                while (true)
+                this.recieveMessageThread = new Thread(() =>
                 {
-                    TcpClient tcpClient = tcpListener.AcceptTcpClient();
-                    NetworkStream stream = tcpClient.GetStream();
-                    byte[] receivedBuffer = new byte[100];
-
-                    int bytesRead = 0;
-                    bytesRead = stream.Read(receivedBuffer, 0, receivedBuffer.Length);
-                    if (bytesRead > 0)
+                    Models.Message message = null;
+                    while (true)
                     {
-                        try { bytesRead = stream.Read(receivedBuffer, 0, receivedBuffer.Length); }
-                        catch (SocketException se)
+                        message = this.communicator.recieveMessage();
+
+                        if (message != null && message.MessageType == "disconnect")
                         {
-                            System.Windows.Forms.MessageBox.Show("Error! Cannot establish a connection!");
                             break;
                         }
-
-                        StringBuilder msg = new StringBuilder();
-
-                        foreach (byte b in receivedBuffer)
-                        {
-                            if (b.Equals(59)){ break; }
-                            else { msg.Append(Convert.ToChar(b).ToString()); }
-                        }
-
                         System.Windows.Application.Current.Dispatcher.Invoke(() =>
                         {
-                            ExternalUser.Messages.Add(new TDDD49.Models.Message() { Content = msg.ToString(), TimePosted = DateTime.Now, IsInternalUserMessage = false });
+                            // när merge, kommentera bort under detta
+                            // AddMessages.Add(message);
                         });
-                        stream.Close();
-                        tcpClient.Close();
                     }
-                }
-                tcpListener.Stop();
-            });
+                });
+                this.recieveMessageThread.IsBackground = true;
+                this.recieveMessageThread.Start();
+            }
+            catch (SocketException e1)
+            {
+                System.Windows.MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
+                communicator.disconnectStream();
+                Console.WriteLine(e1);
+            }
+            catch (Newtonsoft.Json.JsonReaderException e2)
+            {
+                Console.WriteLine(e2);
+            }
+            
         }
     }
 }

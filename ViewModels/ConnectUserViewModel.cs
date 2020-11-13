@@ -18,11 +18,13 @@ namespace TDDD49.ViewModels
         private string externalUserName;
         private int externalPort;
         private string externalIpAddress;
+        private Communicator communicator;
 
-        public ConnectUserViewModel(ChatViewModel chatViewModel)
+        public ConnectUserViewModel(ChatViewModel chatViewModel, Communicator c)
         {
             this.chatViewModel = chatViewModel;
             AddUserCommand = new AddUserCommand(this, chatViewModel);
+            communicator = c;
         }
 
         public bool ValidExternalPort
