@@ -45,10 +45,7 @@ namespace TDDD49.ViewModels
             //ExternalUser = Users.ElementAt(0);
             //InternalUser = Users.ElementAt(0);
             communicator = c;
-<<<<<<< HEAD
-=======
             ReadMessage();
->>>>>>> c9cf697ecdb28e872dd26f056e418711c42f04a8
         }
 
         public ICommand SendCommand { get; set; }
@@ -66,13 +63,13 @@ namespace TDDD49.ViewModels
                     tmpObservable.Add(user);
                 }
                 Users = tmpObservable;
-                externalUser = Users.ElementAt(0);
-                Messages = externalUser.Messages;
+                ExternalUser = Users.ElementAt(0);
+                Messages = ExternalUser.Messages;
             }
             using (StreamReader userReader = new StreamReader("../../UserStorage.json"))
             {
                 string inputUserString = userReader.ReadToEnd();
-                internalUser = JsonConvert.DeserializeObject<User>(inputUserString);
+                InternalUser = JsonConvert.DeserializeObject<User>(inputUserString);
             }
         }
 
@@ -81,27 +78,27 @@ namespace TDDD49.ViewModels
             var json = File.ReadAllText("../../UsersStorage.json");
             Console.WriteLine(json);
             List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(json).ToList<Models.User>();
+            bool userIsStored = false;
             foreach (var user in tmp)
             {
-<<<<<<< HEAD
                 string inputUsersString = usersReader.ReadToEnd();
                 List<User> tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
-                bool userIsStored = false;
-=======
                 if (user.ID == this.ExternalUser.ID)
                 {
                     user.Messages.Add(newMessage);
+                    userIsStored = true;
                 }
             }
+
             var jsonOut = JsonConvert.SerializeObject(tmp);
             Console.WriteLine(jsonOut);
             File.WriteAllText("../../UsersStorage.json", jsonOut);
+            bool userIsStored = false;
             /*
             using (var usersReader = File.Open("../../UsersStorage.json", FileMode.Open))
             {
                 string inputUsersString = usersReader.Read();
-                List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString).ToList<Models.User>();
->>>>>>> c9cf697ecdb28e872dd26f056e418711c42f04a8
+                List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString).ToList<Models.User>();*/
                 foreach (var user in tmp)
                 {
                     if (user.ID == ExternalUser.ID)
@@ -110,16 +107,13 @@ namespace TDDD49.ViewModels
                         userIsStored = true;
                     }
                 }
-<<<<<<< HEAD
                 //userIsStored är true ifall användaren redan är sparad i jsonfilen, då lägger man bara till det nya meddelandet till användarens Messages
                 //Annars måste man lägga till en ny användare till listan som hämtas från jsonfilen
                 if(!userIsStored)
                 {
                     tmp.Add(ExternalUser);
                 }
-=======
-                usersReader.write()
->>>>>>> c9cf697ecdb28e872dd26f056e418711c42f04a8
+                usersReader.write();
                 string jsonList = JsonConvert.SerializeObject(tmp);
                 Console.WriteLine(1);
                 var file = File.Create("../../UsersStorage.json");
@@ -128,9 +122,6 @@ namespace TDDD49.ViewModels
                 //File.WriteAllText("../../UsersStorage.json", jsonList);
                 file.Close();
                 Console.WriteLine(2);
-            
-            }
-            */
         }
 
         public void AddMessage(Models.Message newMessage)
@@ -188,10 +179,10 @@ namespace TDDD49.ViewModels
         {
             get 
             { 
-                if (messages == null)
-                {
-                    return new ObservableCollection<Models.Message>();
-                }
+                //if (messages == null)
+                //{
+                //    return new ObservableCollection<Models.Message>();
+                //}
                 return messages; 
             }
             set
@@ -253,11 +244,9 @@ namespace TDDD49.ViewModels
                 MessageType = "message",
                 IsInternalUserMessage = false
             };
-<<<<<<< HEAD
-=======
+
             // vid merge okommentera nedan
             this.AddMessage(mes);
->>>>>>> c9cf697ecdb28e872dd26f056e418711c42f04a8
             mes.IsInternalUserMessage = false;
             try
             {
@@ -310,14 +299,12 @@ namespace TDDD49.ViewModels
                                 AddMessage(message);
                             });
                         }
-<<<<<<< HEAD
                         System.Windows.Application.Current.Dispatcher.Invoke(() =>
                         {
                             //när merge, kommentera bort under detta
                             AddMessage(message);
                         });
-=======
->>>>>>> c9cf697ecdb28e872dd26f056e418711c42f04a8
+
                     }
                 });
                 this.recieveMessageThread.IsBackground = true;
