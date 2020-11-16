@@ -16,32 +16,34 @@ using TDDD49.ViewModels.Commands;
 using System.IO;
 using Newtonsoft.Json;
 
-// IPAddresserna och portnumren som används är fortfarande hårdkodade
-// TO DO -> Fixa JSON 
-// TO DO -> Fixa searchbar högst upp
-// ConnectUser sidan bindar inte bra till ChatViewModel
-
 namespace TDDD49.ViewModels
 {
     public class ChatViewModel : ViewModel
     {
+        private string searchQuery;
         private User internalUser;
         private User externalUser;
         private ObservableCollection<User> users;
+        private ObservableCollection<User> filteredUsers;
         private ObservableCollection<Models.Message> messages;
-        private const string ipAddress = "localhost";
         private Communicator communicator;
         private Thread recieveMessageThread;
 
         public ChatViewModel(Communicator c)
         {
-            Users = new ObservableCollection<User>();
-            ReadFromJSON();
+            //Users = new ObservableCollection<User>();
+            /*Users.Add(new User() { Name = "Paulie", Port = 8080, IpAddress = "localhost",
+                Messages = new ObservableCollection<Models.Message>()
+                { new Models.Message() { Content="sdsjdaasjd", IsInternalUserMessage=false, TimePosted=DateTime.Now },
+                new Models.Message() { Content="ajasjasjasasj", IsInternalUserMessage=false, TimePosted=DateTime.Now }
+                } });*/
+            //FilteredUsers = new ObservableCollection<User>();
             SendCommand = new SendButtonCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
-
+            ReadFromJSON();
+            //ExternalUser = Users.ElementAt(0);
+            //InternalUser = Users.ElementAt(0);
             communicator = c;
-
         }
 
         public ICommand SendCommand { get; set; }
@@ -52,15 +54,20 @@ namespace TDDD49.ViewModels
             using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
             {
                 string inputUsersString = usersReader.ReadToEnd();
-                List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString).ToList<Models.User>();
-                foreach (var user in tmp) { users.Add(user); }
-                externalUser = users.ElementAt(0);
+                List<User> tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
+                ObservableCollection<User> tmpObservable = new ObservableCollection<User>();
+                foreach (var user in tmp)
+                {
+                    tmpObservable.Add(user);
+                }
+                Users = tmpObservable;
+                externalUser = Users.ElementAt(0);
+                Messages = externalUser.Messages;
             }
-
             using (StreamReader userReader = new StreamReader("../../UserStorage.json"))
             {
                 string inputUserString = userReader.ReadToEnd();
-                internalUser = JsonConvert.DeserializeObject<Models.User>(inputUserString);
+                internalUser = JsonConvert.DeserializeObject<User>(inputUserString);
             }
         }
 
@@ -69,13 +76,21 @@ namespace TDDD49.ViewModels
             using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
             {
                 string inputUsersString = usersReader.ReadToEnd();
-                List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString).ToList<Models.User>();
+                List<User> tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
+                bool userIsStored = false;
                 foreach (var user in tmp)
                 {
                     if (user.ID == ExternalUser.ID)
                     {
                         user.Messages.Add(newMessage);
+                        userIsStored = true;
                     }
+                }
+                //userIsStored är true ifall användaren redan är sparad i jsonfilen, då lägger man bara till det nya meddelandet till användarens Messages
+                //Annars måste man lägga till en ny användare till listan som hämtas från jsonfilen
+                if(!userIsStored)
+                {
+                    tmp.Add(ExternalUser);
                 }
                 string jsonList = JsonConvert.SerializeObject(tmp);
                 File.WriteAllText("../../UsersStorage.json", jsonList);
@@ -86,6 +101,39 @@ namespace TDDD49.ViewModels
         {
             Messages.Add(newMessage);
             WriteToJSON(newMessage);
+        }
+
+        public string SearchQuery
+        {
+            get { return searchQuery; }
+            set
+            {
+                searchQuery = value;
+                OnPropertyChanged(SearchQuery);
+                FilterSearchQuery(searchQuery);
+            }
+        }
+
+        private void FilterSearchQuery(string query)
+        {
+            ObservableCollection<User> userTmp = Users;
+            List<User> tmp = userTmp.Where((user) => user.Name.IndexOf(query, StringComparison.CurrentCultureIgnoreCase) >= 0).ToList();
+            ObservableCollection<User> observableTmp = new ObservableCollection<User>();
+            foreach(var user in tmp)
+            {
+                observableTmp.Add(user);
+            }
+            FilteredUsers = observableTmp;
+        }
+
+        public ObservableCollection<User> FilteredUsers
+        {
+            get { return filteredUsers; }
+            set
+            {
+                filteredUsers = value;
+                OnPropertyChanged(nameof(FilteredUsers));
+            }
         }
 
         public ObservableCollection<User> Users
@@ -114,23 +162,23 @@ namespace TDDD49.ViewModels
             set { internalUser = value; }
         }
 
-        public string InternalUserName
-        {
-            get { return InternalUser.Name; }
-            set { InternalUser.Name = value; }
-        }
+        //public string InternalUserName
+        //{
+        //    get { return InternalUser.Name; }
+        //    set { InternalUser.Name = value; }
+        //}
 
-        public int InternalPort
-        {
-            get { return InternalUser.Port; }
-            set { InternalUser.Port = value; }
-        }
+        //public int InternalPort
+        //{
+        //    get { return InternalUser.Port; }
+        //    set { InternalUser.Port = value; }
+        //}
 
-        public string InternalIpAddress
-        {
-            get { return InternalUser.IpAddress; }
-            set { InternalUser.IpAddress = value; }
-        }
+        //public string InternalIpAddress
+        //{
+        //    get { return InternalUser.IpAddress; }
+        //    set { InternalUser.IpAddress = value; }
+        //}
 
         public User ExternalUser
         {
@@ -140,28 +188,6 @@ namespace TDDD49.ViewModels
                 externalUser = value;
                 Messages = externalUser.Messages;
             }
-        }
-
-        public string ExternalUserName
-        {
-            get { return ExternalUser.Name; }
-            set
-            {
-                ExternalUser.Name = value;
-                OnPropertyChanged(nameof(ExternalUserName));
-            }
-        }
-
-        public int ExternalPort
-        {
-            get { return ExternalUser.Port; }
-            set { ExternalUser.Port = value; }
-        }
-
-        public string ExternalIpAddress
-        {
-            get { return ExternalUser.IpAddress; }
-            set { ExternalUser.IpAddress = value; }
         }
 
         public void WriteMessage(string message)
@@ -174,8 +200,6 @@ namespace TDDD49.ViewModels
                 MessageType = "message",
                 IsInternalUserMessage = true
             };
-            // vid merge okommentera nedan
-            // AddMessages.Add(mes);
             mes.IsInternalUserMessage = false;
             try
             {
@@ -210,8 +234,8 @@ namespace TDDD49.ViewModels
                         }
                         System.Windows.Application.Current.Dispatcher.Invoke(() =>
                         {
-                            // när merge, kommentera bort under detta
-                            // AddMessages.Add(message);
+                            //när merge, kommentera bort under detta
+                            AddMessage(message);
                         });
                     }
                 });

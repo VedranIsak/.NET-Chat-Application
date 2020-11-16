@@ -43,12 +43,35 @@ namespace TDDD49.ViewModels
             }
         }
 
+        //public string InternalUserName
+        //{
+        //    get { return chatViewModel.InternalUserName; }
+        //    set
+        //    {
+        //        chatViewModel.InternalUserName = value;
+        //        if (value.Length >= 3)
+        //        {
+        //            for (int i = 0; i < notAllowedCharacters.Length; i++)
+        //            {
+        //                if (value.IndexOf(notAllowedCharacters[i]) != -1)
+        //                {
+        //                    ValidInternalUserName = false;
+        //                    break;
+        //                }
+        //                else { ValidInternalUserName = true; }
+        //            }
+        //            if (ValidInternalUserName) { chatViewModel.InternalUserName = value; }
+        //            OnPropertyChanged(nameof(InternalUserName));
+        //        }
+        //    }
+        //}
+
         public string InternalUserName
         {
-            get { return chatViewModel.InternalUserName; }
+            get { return chatViewModel.InternalUser.Name; }
             set
             {
-                chatViewModel.InternalUserName = value;
+                chatViewModel.InternalUser.Name = value;
                 if (value.Length >= 3)
                 {
                     for (int i = 0; i < notAllowedCharacters.Length; i++)
@@ -60,31 +83,54 @@ namespace TDDD49.ViewModels
                         }
                         else { ValidInternalUserName = true; }
                     }
-                    if (ValidInternalUserName) { chatViewModel.InternalUserName = value; }
+                    if (ValidInternalUserName) { chatViewModel.InternalUser.Name = value; }
                     OnPropertyChanged(nameof(InternalUserName));
                 }
             }
         }
 
+        //public string InternalIpAddress
+        //{
+        //    get { return chatViewModel.InternalIpAddress; }
+        //    set
+        //    {
+        //        chatViewModel.InternalIpAddress = value;
+        //        OnPropertyChanged(nameof(InternalIpAddress));
+        //    }
+        //}
+
         public string InternalIpAddress
         {
-            get { return chatViewModel.InternalIpAddress; }
+            get { return chatViewModel.InternalUser.IpAddress; }
             set
             {
-                chatViewModel.InternalIpAddress = value;
+                chatViewModel.InternalUser.IpAddress = value;
                 OnPropertyChanged(nameof(InternalIpAddress));
             }
         }
 
+        //public int InternalPort
+        //{
+        //    get { return chatViewModel.InternalPort; }
+        //    set
+        //    {
+        //        if (value > 1023 && value < 65353) { ValidInternalPort = true; }
+        //        else { ValidInternalPort = false; }
+        //        chatViewModel.InternalPort = value;
+        //        if (ValidInternalPort) { chatViewModel.InternalPort = value; }
+        //        OnPropertyChanged(nameof(InternalPort));
+        //    }
+        //}
+
         public int InternalPort
         {
-            get { return chatViewModel.InternalPort; }
+            get { return chatViewModel.InternalUser.Port; }
             set
             {
                 if (value > 1023 && value < 65353) { ValidInternalPort = true; }
                 else { ValidInternalPort = false; }
-                chatViewModel.InternalPort = value;
-                if (ValidInternalPort) { chatViewModel.InternalPort = value; }
+                chatViewModel.InternalUser.Port = value;
+                if (ValidInternalPort) { chatViewModel.InternalUser.Port = value; }
                 OnPropertyChanged(nameof(InternalPort));
             }
         }
