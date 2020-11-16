@@ -5,21 +5,43 @@ using System.Net.Sockets;
 using System.Windows;
 using TDDD49.Models;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace TDDD49
 {
     public class Communicator
     {
-        
-        private TcpListener Server { get; set; }
-        private TcpClient Client { get; set; }
-        private NetworkStream Stream { get; set; }
+        public string Name { get; set; }
+        public TcpListener Server { get; set; }
+        public TcpClient Client { get; set; }
+        public NetworkStream Stream { get; set; }
+        private Thread connectThread;
 
         public Communicator() { }
+
+        // Kanske snyggare att skapa trådar här men svårare att uppdatera saker då kansek
+        public void connectPerson(string name, Int32 port, string server)
+        {
+            if (connectThread != null)
+            {
+                if (Client != null)
+                {
+                    Client.Close();
+                    Client = null;
+                }
+                connectThread.Abort();
+            }
+            connectThread = new Thread(() =>
+            {
+                ConnectToOtherPerson(port, server, name);
+            });
+        }
 
         // https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.tcpclient?view=netcore-3.1
         public void ConnectToOtherPerson(Int32 port, string server, string name)
         {
+            Console.WriteLine("Connecting to person");
+            
             Client = new TcpClient(server, port);
             Stream = Client.GetStream();
 
@@ -33,7 +55,7 @@ namespace TDDD49
                     var res = new byte[9999999];
                     int readBytes = Stream.Read(res, 0, res.Length);
 
-                    if(readBytes == 0)
+                    if (readBytes == 0)
                     {
                         break;
                     }
@@ -53,9 +75,9 @@ namespace TDDD49
                     {
                         String s = String.Format("{0} ville chatta med dig.", response.Sender);
                         MessageBox.Show(s);
-
+                        Name = response.Sender;
                         sendMessage(name, "accept");
-                        
+
                         break;
                     }
                 }
@@ -68,6 +90,7 @@ namespace TDDD49
             {
                 // Set the TcpListener on port 13000.
                 // Int32 port = 13000;
+                Console.WriteLine("Listen to port!!!!!");
                 IPAddress localAddr = IPAddress.Parse("127.0.0.1");
 
                 // TcpListener server = new TcpListener(port);
@@ -123,6 +146,7 @@ namespace TDDD49
                         {
                             string s = string.Format("You are now chatting with {0}", res.Sender);
                             MessageBox.Show(s);
+                            Name = res.Sender;
                             break;
                         }
                         else if (res.MessageType == "decline")
@@ -144,12 +168,16 @@ namespace TDDD49
             }
             catch (SocketException e)
             {
+                MessageBox.Show("Kopplingen bröts, försök igen");
                 Console.WriteLine("SocketException: {0}", e);
             }
             finally
             {
                 // Stop listening for new clients.
-                Server.Stop();
+                if (Server != null)
+                {
+                    Server.Stop();
+                }
             }
         }
 
@@ -176,34 +204,45 @@ namespace TDDD49
                 this.Server.Stop();
                 this.Server = null;
             }
+            Name = null;
         }
 
         public Message recieveMessage()
         {
             //Console.WriteLine("recmes");
-            while (true)
+            if (Stream != null)
             {
-                if (Stream.DataAvailable)
+                while (true)
                 {
-                    var res = new byte[9999999];
-                    int readBytes = Stream.Read(res, 0, res.Length);
-                    Message response = JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(res, 0, readBytes));
-
-                    if (response.MessageType == "disconnect")
+                    if (Stream == null)
                     {
-                        String s = String.Format("{0} har kopplat bort.", response.Sender);
-                        MessageBox.Show(s);
-                        disconnectStream();
-                        return response;
-                        // break;
+                        break;
                     }
-                    else if (response.MessageType == "message")
+                    if (Stream.DataAvailable)
                     {
-                        String s = String.Format("{0}: {1}", response.Sender, response.Content);
-                        return response;
+                        var res = new byte[9999999];
+                        int readBytes = Stream.Read(res, 0, res.Length);
+                        Message response = JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(res, 0, readBytes));
+
+                        if (response.MessageType == "disconnect")
+                        {
+                            String s = String.Format("{0} har kopplat bort.", response.Sender);
+                            MessageBox.Show(s);
+                            disconnectStream();
+                            return response;
+                            // break;
+                        }
+                        else if (response.MessageType == "message")
+                        {
+                            String s = String.Format("{0}: {1}", response.Sender, response.Content);
+                            Console.WriteLine(s);
+                            response.IsInternalUserMessage = false;
+                            return response;
+                        }
                     }
                 }
             }
+            return null;
         }
 
         public void sendMessage(string name, string messageType, string message = "")
