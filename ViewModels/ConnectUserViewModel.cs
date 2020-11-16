@@ -23,8 +23,8 @@ namespace TDDD49.ViewModels
         public ConnectUserViewModel(ChatViewModel chatViewModel, Communicator c)
         {
             this.chatViewModel = chatViewModel;
-            AddUserCommand = new AddUserCommand(this, chatViewModel);
-            ListenCommand = new ListenCommand(this);
+            AddUserCommand = new AddUserCommand(this, chatViewModel, c);
+            ListenCommand = new ListenCommand(this, c, chatViewModel);
             communicator = c;
         }
 

@@ -1,16 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using TDDD49.Models;
 
 namespace TDDD49.ViewModels.Commands
 {
     public class ListenCommand : ICommand
     {
         private ConnectUserViewModel connectUserViewModel;
-        public ListenCommand(ConnectUserViewModel connectUserViewModel) { this.connectUserViewModel = connectUserViewModel; }
+        private Communicator communicator;
+        private Thread listenThread;
+        private ChatViewModel chatViewModel;
+        public ListenCommand(ConnectUserViewModel connectUserViewModel, Communicator c, ChatViewModel chatViewModel) 
+        { 
+            this.connectUserViewModel = connectUserViewModel; 
+            this.communicator = c;
+            this.chatViewModel = chatViewModel;
+        }
 
         public event EventHandler CanExecuteChanged
         {
@@ -27,6 +39,62 @@ namespace TDDD49.ViewModels.Commands
         public void Execute(object parameter)
         {
             //Här ska den interna användaren kunnna börja lyssna på port & ip
+            if (listenThread != null)
+            {
+                if (listenThread.IsAlive)
+                {
+                    //MessageBox.Show("Du kommer börja lyssna på nytt!", "kopplar bort");
+                    if (communicator.Server != null)
+                    {
+                        communicator.Server.Stop();
+                    }
+                    if (communicator.Client != null)
+                    {
+                        communicator.Client.Close();
+                    }
+                    // communicator.Server.Stop();
+                    listenThread.Abort();
+                    Console.WriteLine("aborted");
+                }
+                else
+                {
+                    communicator.stopChatting(chatViewModel.InternalUser.Name);
+                }
+
+            }
+            listenThread = new Thread(() =>
+            {
+                try
+                {
+                    communicator.ListenToPort(name: this.chatViewModel.InternalUser.Name, port: this.chatViewModel.InternalUser.Port);
+                    TcpListener s = communicator.Server;
+                    TcpClient c = communicator.Client;
+                    NetworkStream st = communicator.Stream;
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        chatViewModel.Users.Add(new User()
+                        {
+                            //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det
+                            //Name = connectUserViewModel.ExternalUserName,
+                            Name = communicator.Name,
+                            Port = connectUserViewModel.ExternalPort,
+                            IpAddress = connectUserViewModel.ExternalIpAddress
+                        });
+                        chatViewModel.CanRecieve = true;
+                    });
+                }
+                catch (SocketException e1)
+                {
+                    Console.WriteLine("e1");
+                }
+                catch (ThreadAbortException e2)
+                {
+                    Console.WriteLine("e2");
+                }
+            });
+            listenThread.IsBackground = true;
+            listenThread.Start();
         }
     }
 }

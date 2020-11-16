@@ -32,6 +32,7 @@ namespace TDDD49.ViewModels
         private const string ipAddress = "localhost";
         private Communicator communicator;
         private Thread recieveMessageThread;
+        public bool CanRecieve { get; set; } = false;
 
         public ChatViewModel(Communicator c)
         {
@@ -41,7 +42,7 @@ namespace TDDD49.ViewModels
             SwitchUserCommand = new SwitchUserCommand(this);
 
             communicator = c;
-
+            ReadMessage();
         }
 
         public ICommand SendCommand { get; set; }
@@ -66,9 +67,23 @@ namespace TDDD49.ViewModels
 
         private void WriteToJSON(Models.Message newMessage)
         {
-            using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
+            var json = File.ReadAllText("../../UsersStorage.json");
+            Console.WriteLine(json);
+            List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(json).ToList<Models.User>();
+            foreach (var user in tmp)
             {
-                string inputUsersString = usersReader.ReadToEnd();
+                if (user.ID == this.ExternalUser.ID)
+                {
+                    user.Messages.Add(newMessage);
+                }
+            }
+            var jsonOut = JsonConvert.SerializeObject(tmp);
+            Console.WriteLine(jsonOut);
+            File.WriteAllText("../../UsersStorage.json", jsonOut);
+            /*
+            using (var usersReader = File.Open("../../UsersStorage.json", FileMode.Open))
+            {
+                string inputUsersString = usersReader.Read();
                 List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString).ToList<Models.User>();
                 foreach (var user in tmp)
                 {
@@ -77,13 +92,24 @@ namespace TDDD49.ViewModels
                         user.Messages.Add(newMessage);
                     }
                 }
+                usersReader.write()
                 string jsonList = JsonConvert.SerializeObject(tmp);
-                File.WriteAllText("../../UsersStorage.json", jsonList);
+                Console.WriteLine(1);
+                var file = File.Create("../../UsersStorage.json");
+                byte[] send = Encoding.ASCII.GetBytes(jsonList);
+                file.Write(send, 0, jsonList.Length);
+                //File.WriteAllText("../../UsersStorage.json", jsonList);
+                file.Close();
+                Console.WriteLine(2);
+            
             }
+            */
         }
 
         public void AddMessage(Models.Message newMessage)
         {
+            Console.WriteLine("{0}, {1}, {2}" ,newMessage.Content, newMessage.Sender, newMessage.IsInternalUserMessage);
+            Console.WriteLine(Messages);
             Messages.Add(newMessage);
             WriteToJSON(newMessage);
         }
@@ -98,9 +124,16 @@ namespace TDDD49.ViewModels
             }
         }
 
-        public ObservableCollection<TDDD49.Models.Message> Messages
+        public ObservableCollection<Models.Message> Messages
         {
-            get { return messages; }
+            get 
+            { 
+                if (messages == null)
+                {
+                    return new ObservableCollection<Models.Message>();
+                }
+                return messages; 
+            }
             set
             {
                 messages = value;
@@ -138,7 +171,14 @@ namespace TDDD49.ViewModels
             set
             {
                 externalUser = value;
-                Messages = externalUser.Messages;
+                if (externalUser.Messages == null)
+                {
+                    Messages = new ObservableCollection<Models.Message>();
+                }
+                else
+                {
+                    Messages = externalUser.Messages;
+                }
             }
         }
 
@@ -166,23 +206,26 @@ namespace TDDD49.ViewModels
 
         public void WriteMessage(string message)
         {
+            Console.WriteLine(this.externalUser.Name);
             Models.Message mes = new Models.Message()
             {
                 Content = message,
                 Sender = this.internalUser.Name,
                 TimePosted = DateTime.Now,
                 MessageType = "message",
-                IsInternalUserMessage = true
+                IsInternalUserMessage = false
             };
             // vid merge okommentera nedan
-            // AddMessages.Add(mes);
+            this.AddMessage(mes);
             mes.IsInternalUserMessage = false;
             try
             {
-                new Thread(() =>
+                Thread t = new Thread(() =>
                 {
                     communicator.sendMessage(mes);
                 });
+                t.IsBackground = true;
+                t.Start();
                 
             }
             catch (SocketException err)
@@ -195,6 +238,7 @@ namespace TDDD49.ViewModels
 
         private void ReadMessage()
         {
+            Console.WriteLine("Readmessage");
             try
             {
                 this.recieveMessageThread = new Thread(() =>
@@ -202,17 +246,29 @@ namespace TDDD49.ViewModels
                     Models.Message message = null;
                     while (true)
                     {
-                        message = this.communicator.recieveMessage();
+                        
+                        if (CanRecieve)
+                        {
+                            Console.WriteLine(CanRecieve);
+                            message = this.communicator.recieveMessage();
 
-                        if (message != null && message.MessageType == "disconnect")
-                        {
-                            break;
+                            if (message == null)
+                            {
+                                continue;
+                            }
+
+                            else if (message.MessageType == "disconnect")
+                            {
+                                CanRecieve = false;
+                            }
+                            //this.AddMessage(message);
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                // när merge, kommentera bort under detta
+                                //AddMessage.Add(message);
+                                AddMessage(message);
+                            });
                         }
-                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            // när merge, kommentera bort under detta
-                            // AddMessages.Add(message);
-                        });
                     }
                 });
                 this.recieveMessageThread.IsBackground = true;
@@ -221,6 +277,7 @@ namespace TDDD49.ViewModels
             catch (SocketException e1)
             {
                 System.Windows.MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
+                CanRecieve = false;
                 communicator.disconnectStream();
                 Console.WriteLine(e1);
             }

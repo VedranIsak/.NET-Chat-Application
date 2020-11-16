@@ -7,6 +7,9 @@ using System.Windows.Input;
 
 using TDDD49.ViewModels;
 using TDDD49.Models;
+using System.Threading;
+using System.Net.Sockets;
+using System.Windows;
 
 namespace TDDD49.ViewModels.Commands
 {
@@ -14,10 +17,13 @@ namespace TDDD49.ViewModels.Commands
     {
         private ConnectUserViewModel connectUserViewModel;
         private ChatViewModel chatViewModel;
-        public AddUserCommand(ConnectUserViewModel connectUserViewModel, ChatViewModel chatViewModel)
+        private Thread addThread;
+        private Communicator communicator;
+        public AddUserCommand(ConnectUserViewModel connectUserViewModel, ChatViewModel chatViewModel, Communicator c)
         {
             this.connectUserViewModel = connectUserViewModel;
             this.chatViewModel = chatViewModel;
+            this.communicator = c;
         }
 
         public event EventHandler CanExecuteChanged
@@ -34,13 +40,82 @@ namespace TDDD49.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            chatViewModel.Users.Add(new User()
+            if (addThread != null)
             {
-                //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det
-                //Name = connectUserViewModel.ExternalUserName,
-                Port = connectUserViewModel.ExternalPort,
-                IpAddress = connectUserViewModel.ExternalIpAddress
+                if (addThread.IsAlive)
+                {/*
+                    if (communicator.Client != null)
+                    {
+                        communicator.Client.Close();
+                    }
+                    if (communicator.Server != null)
+                    {
+                        communicator.Server.Stop();
+                    }*/
+                    communicator.disconnectStream();
+                    // communicator.Server.Stop();
+                    addThread.Abort();
+                }
+                //MessageBox.Show("Du blir bortkopplad från din nuvarande chatt!", "kopplar bort");
+                communicator.stopChatting(chatViewModel.InternalUser.Name);
+                addThread.Abort();
+            }
+
+            addThread = new Thread(() =>
+            {
+                try
+                {
+                    communicator.ConnectToOtherPerson(name: chatViewModel.InternalUser.Name, port: connectUserViewModel.ExternalPort, server: connectUserViewModel.ExternalIpAddress);
+                    
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        chatViewModel.Users.Add(new User()
+                        {
+                            //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det
+                            //Name = connectUserViewModel.ExternalUserName, 
+                            Name = communicator.Name,
+                            Port = connectUserViewModel.ExternalPort,
+                            IpAddress = connectUserViewModel.ExternalIpAddress
+                        });
+                        chatViewModel.CanRecieve = true;
+                    });
+
+                    /*
+                    communicator.connectPerson(name: chatViewModel.InternalUser.Name, port: connectUserViewModel.ExternalPort, server: connectUserViewModel.ExternalIpAddress);
+                    chatViewModel.Users.Add(new User()
+                    {
+                        //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det
+                        //Name = connectUserViewModel.ExternalUserName, 
+                        Name = communicator.Name,
+                        Port = connectUserViewModel.ExternalPort,
+                        IpAddress = connectUserViewModel.ExternalIpAddress
+                    });*/
+                }
+                catch (SocketException e)
+                {
+                    //MessageBox.Show("Noone listening to that address.");
+                    Console.WriteLine("Noone listening to that address");
+                    Console.WriteLine(e);
+                }
+
+                Console.WriteLine("donE");
             });
+            addThread.IsBackground = true;
+            addThread.Start();
+            
+            while(true)
+            {
+                if (communicator.Client != null)
+                {
+                    Console.WriteLine("not null");
+                    break;
+                }
+                if (!addThread.IsAlive)
+                {
+                    break;
+                }
+            }
+            
         }
     }
 }
