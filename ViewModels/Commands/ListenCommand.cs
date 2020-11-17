@@ -68,20 +68,23 @@ namespace TDDD49.ViewModels.Commands
                 try
                 {
                     communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port);
-                    
-                    Application.Current.Dispatcher.Invoke(() =>
+
+                    if (!chatViewModel.Users.Any(item => item.ID == communicator.externalUser.ID))
                     {
-                        //if (chatViewModel.Users.Any(item => item.ID == communicator.externalUser.ID))
-                        chatViewModel.Users.Add(new User()
+                        Console.WriteLine("new user");
+                        Application.Current.Dispatcher.Invoke(() =>
                         {
-                            //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det
-                            //Name = connectUserViewModel.ExternalUserName,
-                            Name = communicator.Name,
-                            Port = connectUserViewModel.ExternalPort,
-                            IpAddress = connectUserViewModel.ExternalIpAddress
+                            chatViewModel.Users.Add(new User()
+                            {
+                                //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det
+                                Name = communicator.externalUser.Name,
+                                Port = connectUserViewModel.ExternalPort,
+                                IpAddress = connectUserViewModel.ExternalIpAddress
+                            });
                         });
-                        chatViewModel.CanRecieve = true;
-                    });
+                    }
+                    chatViewModel.CanRecieve = true;
+
                 }
                 catch (SocketException e1)
                 {

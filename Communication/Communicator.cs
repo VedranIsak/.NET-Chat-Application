@@ -12,8 +12,6 @@ namespace TDDD49
     public class Communicator
     {
         public User externalUser;
-        public string Name { get; set; }
-        public int ID { get; set; }
         public TcpListener Server { get; set; }
         public TcpClient Client { get; set; }
         public NetworkStream Stream { get; set; }
@@ -187,7 +185,7 @@ namespace TDDD49
                 this.Server.Stop();
                 this.Server = null;
             }
-            Name = null;
+            externalUser = null;
         }
 
         public Message recieveMessage()

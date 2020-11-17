@@ -60,6 +60,15 @@ namespace TDDD49.ViewModels
             {
                 string inputUserString = userReader.ReadToEnd();
                 InternalUser = JsonConvert.DeserializeObject<User>(inputUserString);
+
+            }
+            if (InternalUser.ID == null)
+            {
+                InternalUser.ID = GetHashCode();
+                using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
+                {
+                    writer.Write(JsonConvert.SerializeObject(InternalUser));
+                }
             }
         }
 
@@ -198,13 +207,12 @@ namespace TDDD49.ViewModels
                 Sender = this.internalUser,
                 TimePosted = DateTime.Now,
                 MessageType = "message",
-                IsInternalUserMessage = false
+                IsInternalUserMessage = true
             };
 
             // vid merge okommentera nedan
             Console.WriteLine("Write message");
             this.AddMessage(mes);
-            mes.IsInternalUserMessage = false;
             try
             {
                 Thread t = new Thread(() =>
@@ -238,7 +246,7 @@ namespace TDDD49.ViewModels
                             try
                             {
                                 message = this.communicator.recieveMessage();
-
+                                message.IsInternalUserMessage = false;
                             }
                             catch (ObjectDisposedException e1)
                             {
