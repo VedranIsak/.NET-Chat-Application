@@ -28,6 +28,7 @@
 
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Foreground" Value="SteelBlue"/>
+            <Setter Property="Background" Value="White"/>
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>

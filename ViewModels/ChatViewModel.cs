@@ -2,45 +2,44 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Forms;
 
 using TDDD49.Models;
 using TDDD49.ViewModels.Commands;
 using System.IO;
 using Newtonsoft.Json;
 
-// IPAddresserna och portnumren som används är fortfarande hårdkodade
-// TO DO -> Fixa JSON 
-// TO DO -> Fixa searchbar högst upp
-// ConnectUser sidan bindar inte bra till ChatViewModel
-
 namespace TDDD49.ViewModels
 {
     public class ChatViewModel : ViewModel
     {
+        private string searchQuery;
         private User internalUser;
         private User externalUser;
         private ObservableCollection<User> users;
+        private ObservableCollection<User> filteredUsers;
         private ObservableCollection<Models.Message> messages;
-        private const string ipAddress = "localhost";
         private Communicator communicator;
         private Thread recieveMessageThread;
         public bool CanRecieve { get; set; } = false;
 
         public ChatViewModel(Communicator c)
         {
-            Users = new ObservableCollection<User>();
-            ReadFromJSON();
+            //Users = new ObservableCollection<User>();
+            /*Users.Add(new User() { Name = "Paulie", Port = 8080, IpAddress = "localhost",
+                Messages = new ObservableCollection<Models.Message>()
+                { new Models.Message() { Content="sdsjdaasjd", IsInternalUserMessage=false, TimePosted=DateTime.Now },
+                new Models.Message() { Content="ajasjasjasasj", IsInternalUserMessage=false, TimePosted=DateTime.Now }
+                } });*/
+            //FilteredUsers = new ObservableCollection<User>();
             SendCommand = new SendButtonCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
-
+            ReadFromJSON();
+            //ExternalUser = Users.ElementAt(0);
+            //InternalUser = Users.ElementAt(0);
             communicator = c;
             ReadMessage();
         }
@@ -53,83 +52,90 @@ namespace TDDD49.ViewModels
             using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
             {
                 string inputUsersString = usersReader.ReadToEnd();
-                List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString).ToList<Models.User>();
-                foreach (var user in tmp) { users.Add(user); }
-                externalUser = users.ElementAt(0);
+                List<User> tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
+                ObservableCollection<User> tmpObservable = new ObservableCollection<User>();
+                foreach (var user in tmp)
+                {
+                    tmpObservable.Add(user);
+                }
+                Users = tmpObservable;
+                ExternalUser = Users.ElementAt(0);
+                Messages = ExternalUser.Messages;
             }
-
             using (StreamReader userReader = new StreamReader("../../UserStorage.json"))
             {
                 string inputUserString = userReader.ReadToEnd();
-                internalUser = JsonConvert.DeserializeObject<Models.User>(inputUserString);
+                InternalUser = JsonConvert.DeserializeObject<User>(inputUserString);
             }
         }
 
         private void WriteToJSON(Models.Message newMessage)
         {
             var json = File.ReadAllText("../../UsersStorage.json");
-            Console.WriteLine(json);
-            List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(json).ToList<Models.User>();
+            List<User> tmp = JsonConvert.DeserializeObject<List<User>>(json).ToList<User>();
 
             if (!tmp.Any(item => item.ID == this.externalUser.ID))
             {
-                if (this.externalUser.Messages == null)
-                {
-                    this.externalUser.Messages = new ObservableCollection<Models.Message>();
-                }
                 this.externalUser.Messages.Add(newMessage);
                 tmp.Add(this.externalUser);
             }
             else
             {
-                foreach (var user in tmp)
+                foreach (User u in tmp)
                 {
-                    if (user.ID == this.ExternalUser.ID)
+                    if (u.ID == this.externalUser.ID)
                     {
-                        Console.WriteLine("same");
-                        user.Messages.Add(newMessage);
+                        u.Messages.Add(newMessage);
+                        break;
                     }
                 }
             }
-            var jsonOut = JsonConvert.SerializeObject(tmp);
+
+            String jsonOut = JsonConvert.SerializeObject(tmp);
 
             using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
             {
                 writer.Write(jsonOut);
             }
-
-            //Console.WriteLine(jsonOut);
-            //File.WriteAllText("../../UsersStorage.json", jsonOut);
-            /*
-            using (var usersReader = File.Open("../../UsersStorage.json", FileMode.Open))
-            {
-                string inputUsersString = usersReader.Read();
-                List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString).ToList<Models.User>();
-                foreach (var user in tmp)
-                {
-                    if (user.ID == ExternalUser.ID)
-                    {
-                        user.Messages.Add(newMessage);
-                    }
-                }
-                usersReader.write()
-                string jsonList = JsonConvert.SerializeObject(tmp);
-                Console.WriteLine(1);
-                var file = File.Create("../../UsersStorage.json");
-                byte[] send = Encoding.ASCII.GetBytes(jsonList);
-                file.Write(send, 0, jsonList.Length);
-                //File.WriteAllText("../../UsersStorage.json", jsonList);
-                file.Close();
-                Console.WriteLine(2);
-            
-            }
-            */
         }
 
         public void AddMessage(Models.Message newMessage)
         {
             Messages.Add(newMessage);
             WriteToJSON(newMessage);
+        }
+
+        public string SearchQuery
+        {
+            get { return searchQuery; }
+            set
+            {
+                searchQuery = value;
+                OnPropertyChanged(SearchQuery);
+                FilterSearchQuery(searchQuery);
+            }
+        }
+
+        private void FilterSearchQuery(string query)
+        {
+            ObservableCollection<User> userTmp = Users;
+            List<User> tmp = userTmp.Where((user) => user.Name.IndexOf(query, StringComparison.CurrentCultureIgnoreCase) >= 0).ToList();
+            ObservableCollection<User> observableTmp = new ObservableCollection<User>();
+            foreach(var user in tmp)
+            {
+                observableTmp.Add(user);
+            }
+            FilteredUsers = observableTmp;
+        }
+
+        public ObservableCollection<User> FilteredUsers
+        {
+            get { return filteredUsers; }
+            set
+            {
+                filteredUsers = value;
+                OnPropertyChanged(nameof(FilteredUsers));
+            }
         }
 
         public ObservableCollection<User> Users
@@ -146,10 +152,10 @@ namespace TDDD49.ViewModels
         {
             get 
             { 
-                if (messages == null)
-                {
-                    return new ObservableCollection<Models.Message>();
-                }
+                //if (messages == null)
+                //{
+                //    return new ObservableCollection<Models.Message>();
+                //}
                 return messages; 
             }
             set
@@ -165,23 +171,23 @@ namespace TDDD49.ViewModels
             set { internalUser = value; }
         }
 
-        public string InternalUserName
-        {
-            get { return InternalUser.Name; }
-            set { InternalUser.Name = value; }
-        }
+        //public string InternalUserName
+        //{
+        //    get { return InternalUser.Name; }
+        //    set { InternalUser.Name = value; }
+        //}
 
-        public int InternalPort
-        {
-            get { return InternalUser.Port; }
-            set { InternalUser.Port = value; }
-        }
+        //public int InternalPort
+        //{
+        //    get { return InternalUser.Port; }
+        //    set { InternalUser.Port = value; }
+        //}
 
-        public string InternalIpAddress
-        {
-            get { return InternalUser.IpAddress; }
-            set { InternalUser.IpAddress = value; }
-        }
+        //public string InternalIpAddress
+        //{
+        //    get { return InternalUser.IpAddress; }
+        //    set { InternalUser.IpAddress = value; }
+        //}
 
         public User ExternalUser
         {
@@ -200,28 +206,6 @@ namespace TDDD49.ViewModels
             }
         }
 
-        public string ExternalUserName
-        {
-            get { return ExternalUser.Name; }
-            set
-            {
-                ExternalUser.Name = value;
-                OnPropertyChanged(nameof(ExternalUserName));
-            }
-        }
-
-        public int ExternalPort
-        {
-            get { return ExternalUser.Port; }
-            set { ExternalUser.Port = value; }
-        }
-
-        public string ExternalIpAddress
-        {
-            get { return ExternalUser.IpAddress; }
-            set { ExternalUser.IpAddress = value; }
-        }
-
         public void WriteMessage(string message)
         {
             Console.WriteLine(this.externalUser.Name);
@@ -233,6 +217,7 @@ namespace TDDD49.ViewModels
                 MessageType = "message",
                 IsInternalUserMessage = false
             };
+
             // vid merge okommentera nedan
             this.AddMessage(mes);
             mes.IsInternalUserMessage = false;
@@ -292,6 +277,12 @@ namespace TDDD49.ViewModels
                                 AddMessage(message);
                             });
                         }
+                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            //när merge, kommentera bort under detta
+                            AddMessage(message);
+                        });
+
                     }
                 });
                 this.recieveMessageThread.IsBackground = true;
