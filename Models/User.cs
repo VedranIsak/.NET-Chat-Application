@@ -13,7 +13,7 @@ namespace TDDD49.Models
         public User() { ID = GetHashCode(); }
 
         [JsonProperty("ID")]
-        public int ID { get; private set; }
+        public int? ID { get; set; }
 
         [JsonProperty("Name")]
         public string Name { get; set; }
