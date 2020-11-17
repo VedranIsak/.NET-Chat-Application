@@ -15,7 +15,7 @@ namespace TDDD49.ViewModels.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public bool CanExecute(object parameter) { return false; }
+        public bool CanExecute(object parameter) { return true; }
 
         public void Execute(object parameter)
         {
