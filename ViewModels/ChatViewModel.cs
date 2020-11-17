@@ -91,7 +91,7 @@ namespace TDDD49.ViewModels
                 }
             }
 
-            String jsonOut = JsonConvert.SerializeObject(tmp);
+            string jsonOut = JsonConvert.SerializeObject(tmp);
 
             using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
             {
@@ -219,6 +219,7 @@ namespace TDDD49.ViewModels
             };
 
             // vid merge okommentera nedan
+            Console.WriteLine("Write message");
             this.AddMessage(mes);
             mes.IsInternalUserMessage = false;
             try
@@ -241,7 +242,6 @@ namespace TDDD49.ViewModels
 
         private void ReadMessage()
         {
-            Console.WriteLine("Readmessage");
             try
             {
                 this.recieveMessageThread = new Thread(() =>
@@ -277,12 +277,6 @@ namespace TDDD49.ViewModels
                                 AddMessage(message);
                             });
                         }
-                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            //när merge, kommentera bort under detta
-                            AddMessage(message);
-                        });
-
                     }
                 });
                 this.recieveMessageThread.IsBackground = true;

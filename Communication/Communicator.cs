@@ -218,7 +218,7 @@ namespace TDDD49
                         else if (response.MessageType == "message")
                         {
                             String s = String.Format("{0}: {1}", response.Sender, response.Content);
-                            Console.WriteLine(s);
+                            //Console.WriteLine(s);
                             response.IsInternalUserMessage = false;
                             return response;
                         }

@@ -9,7 +9,7 @@
             "TimePosted": "2020-11-12T21:48:29.1356298+01:00",
             "IsInternalUserMessage": true,
             "MessageType": "message",
-            "Sender": "Richard"
+            "Sender": { "Name": "Richard" }
         }
     ]
 }

@@ -104,19 +104,6 @@ namespace TDDD49.ViewModels.Commands
             addThread.IsBackground = true;
             addThread.Start();
             
-            while(true)
-            {
-                if (communicator.Client != null)
-                {
-                    Console.WriteLine("not null");
-                    break;
-                }
-                if (!addThread.IsAlive)
-                {
-                    break;
-                }
-            }
-            
         }
     }
 }
