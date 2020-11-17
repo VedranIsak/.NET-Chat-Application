@@ -31,6 +31,7 @@ namespace TDDD49.ViewModels
         {
             SendCommand = new SendButtonCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
+            DisconnectButtonCommand = new DisconnectButtonCommand();
             ReadFromJSON();
             communicator = c;
             ReadMessage();
@@ -38,6 +39,7 @@ namespace TDDD49.ViewModels
 
         public ICommand SendCommand { get; set; }
         public ICommand SwitchUserCommand { get; set; }
+        public ICommand DisconnectButtonCommand { get; set; }
 
         private void ReadFromJSON()
         {
