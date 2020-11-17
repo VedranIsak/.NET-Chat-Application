@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Forms;
 
 using TDDD49.Models;
 using TDDD49.ViewModels.Commands;
@@ -76,58 +72,35 @@ namespace TDDD49.ViewModels
         private void WriteToJSON(Models.Message newMessage)
         {
             var json = File.ReadAllText("../../UsersStorage.json");
-            Console.WriteLine(json);
-            List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(json).ToList<Models.User>();
-            bool userIsStored = false;
-            foreach (var user in tmp)
+            List<User> tmp = JsonConvert.DeserializeObject<List<User>>(json).ToList<User>();
+
+            if (!tmp.Any(item => item.ID == this.externalUser.ID))
             {
-                string inputUsersString = usersReader.ReadToEnd();
-                List<User> tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
-                if (user.ID == this.ExternalUser.ID)
+                this.externalUser.Messages.Add(newMessage);
+                tmp.Add(this.externalUser);
+            }
+            else
+            {
+                foreach (User u in tmp)
                 {
-                    user.Messages.Add(newMessage);
-                    userIsStored = true;
+                    if (u.ID == this.externalUser.ID)
+                    {
+                        u.Messages.Add(newMessage);
+                        break;
+                    }
                 }
             }
 
-            var jsonOut = JsonConvert.SerializeObject(tmp);
-            Console.WriteLine(jsonOut);
-            File.WriteAllText("../../UsersStorage.json", jsonOut);
-            bool userIsStored = false;
-            /*
-            using (var usersReader = File.Open("../../UsersStorage.json", FileMode.Open))
+            String jsonOut = JsonConvert.SerializeObject(tmp);
+
+            using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
             {
-                string inputUsersString = usersReader.Read();
-                List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(inputUsersString).ToList<Models.User>();*/
-                foreach (var user in tmp)
-                {
-                    if (user.ID == ExternalUser.ID)
-                    {
-                        user.Messages.Add(newMessage);
-                        userIsStored = true;
-                    }
-                }
-                //userIsStored är true ifall användaren redan är sparad i jsonfilen, då lägger man bara till det nya meddelandet till användarens Messages
-                //Annars måste man lägga till en ny användare till listan som hämtas från jsonfilen
-                if(!userIsStored)
-                {
-                    tmp.Add(ExternalUser);
-                }
-                usersReader.write();
-                string jsonList = JsonConvert.SerializeObject(tmp);
-                Console.WriteLine(1);
-                var file = File.Create("../../UsersStorage.json");
-                byte[] send = Encoding.ASCII.GetBytes(jsonList);
-                file.Write(send, 0, jsonList.Length);
-                //File.WriteAllText("../../UsersStorage.json", jsonList);
-                file.Close();
-                Console.WriteLine(2);
+                writer.Write(jsonOut);
+            }
         }
 
         public void AddMessage(Models.Message newMessage)
         {
-            Console.WriteLine("{0}, {1}, {2}" ,newMessage.Content, newMessage.Sender, newMessage.IsInternalUserMessage);
-            Console.WriteLine(Messages);
             Messages.Add(newMessage);
             WriteToJSON(newMessage);
         }
@@ -239,7 +212,7 @@ namespace TDDD49.ViewModels
             Models.Message mes = new Models.Message()
             {
                 Content = message,
-                Sender = this.internalUser.Name,
+                Sender = this.internalUser,
                 TimePosted = DateTime.Now,
                 MessageType = "message",
                 IsInternalUserMessage = false
@@ -279,8 +252,16 @@ namespace TDDD49.ViewModels
                         
                         if (CanRecieve)
                         {
-                            Console.WriteLine(CanRecieve);
-                            message = this.communicator.recieveMessage();
+                            try
+                            {
+                                message = this.communicator.recieveMessage();
+
+                            }
+                            catch (ObjectDisposedException e1)
+                            {
+                                System.Windows.MessageBox.Show("Connection lost");
+                                CanRecieve = false;
+                            }
 
                             if (message == null)
                             {
@@ -291,11 +272,8 @@ namespace TDDD49.ViewModels
                             {
                                 CanRecieve = false;
                             }
-                            //this.AddMessage(message);
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
-                                // när merge, kommentera bort under detta
-                                //AddMessage.Add(message);
                                 AddMessage(message);
                             });
                         }
@@ -317,7 +295,7 @@ namespace TDDD49.ViewModels
                 communicator.disconnectStream();
                 Console.WriteLine(e1);
             }
-            catch (Newtonsoft.Json.JsonReaderException e2)
+            catch (JsonReaderException e2)
             {
                 Console.WriteLine(e2);
             }

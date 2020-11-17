@@ -13,6 +13,8 @@ namespace TDDD49.Models
         public bool IsInternalUserMessage { get; set; }   // false om skickas och true annars
         public string MessageType { get; set; } // if a regular message this is "message". decline == "decline", 
                                                 // accept == "accept" and disconnect == "disconnect".
-        public string Sender { get; set; }      // Name of the person who sent the message
+        //public string Sender { get; set; }      // Name of the person who sent the message
+        //public int ID { get; set; }
+        public User Sender { get; set; }
     }
 }
