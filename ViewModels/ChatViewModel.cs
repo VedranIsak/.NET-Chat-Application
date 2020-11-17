@@ -19,6 +19,7 @@ namespace TDDD49.ViewModels
         private string searchQuery;
         private User internalUser;
         private User externalUser;
+        private string externalUserName;
         private ObservableCollection<User> users;
         private ObservableCollection<User> filteredUsers;
         private ObservableCollection<Models.Message> messages;
@@ -164,6 +165,7 @@ namespace TDDD49.ViewModels
             set
             {
                 externalUser = value;
+                ExternalUserName = externalUser.Name;
                 if (externalUser.Messages == null)
                 {
                     Messages = new ObservableCollection<Models.Message>();
@@ -172,6 +174,16 @@ namespace TDDD49.ViewModels
                 {
                     Messages = externalUser.Messages;
                 }
+            }
+        }
+
+        public string ExternalUserName
+        {
+            get { return externalUserName; }
+            set
+            {
+                externalUserName = value;
+                OnPropertyChanged(nameof(ExternalUserName));
             }
         }
 
