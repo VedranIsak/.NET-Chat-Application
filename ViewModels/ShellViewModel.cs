@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
 
 using TDDD49.Views;
 using TDDD49.ViewModels.Commands;
-using TDDD49.Models;
-using Newtonsoft.Json;
-using TDDD49.Models;
-using System.IO;
-using System.Collections.ObjectModel;
 
 namespace TDDD49.ViewModels
 {

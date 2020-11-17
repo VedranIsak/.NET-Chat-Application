@@ -57,15 +57,16 @@ namespace TDDD49.ViewModels.Commands
                     addThread.Abort();
                 }
                 //MessageBox.Show("Du blir bortkopplad från din nuvarande chatt!", "kopplar bort");
-                communicator.stopChatting(chatViewModel.InternalUser.Name);
+                communicator.stopChatting(chatViewModel.InternalUser);
                 addThread.Abort();
             }
 
             addThread = new Thread(() =>
             {
+                chatViewModel.CanRecieve = false;
                 try
                 {
-                    communicator.ConnectToOtherPerson(name: chatViewModel.InternalUser.Name, port: connectUserViewModel.ExternalPort, server: connectUserViewModel.ExternalIpAddress);
+                    communicator.ConnectToOtherPerson(internalUser: chatViewModel.InternalUser, port: connectUserViewModel.ExternalPort, server: connectUserViewModel.ExternalIpAddress);
                     
                     Application.Current.Dispatcher.Invoke(() =>
                     {

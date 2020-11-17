@@ -70,16 +70,36 @@ namespace TDDD49.ViewModels
             var json = File.ReadAllText("../../UsersStorage.json");
             Console.WriteLine(json);
             List<Models.User> tmp = JsonConvert.DeserializeObject<List<Models.User>>(json).ToList<Models.User>();
-            foreach (var user in tmp)
+
+            if (!tmp.Any(item => item.ID == this.externalUser.ID))
             {
-                if (user.ID == this.ExternalUser.ID)
+                if (this.externalUser.Messages == null)
                 {
-                    user.Messages.Add(newMessage);
+                    this.externalUser.Messages = new ObservableCollection<Models.Message>();
+                }
+                this.externalUser.Messages.Add(newMessage);
+                tmp.Add(this.externalUser);
+            }
+            else
+            {
+                foreach (var user in tmp)
+                {
+                    if (user.ID == this.ExternalUser.ID)
+                    {
+                        Console.WriteLine("same");
+                        user.Messages.Add(newMessage);
+                    }
                 }
             }
             var jsonOut = JsonConvert.SerializeObject(tmp);
-            Console.WriteLine(jsonOut);
-            File.WriteAllText("../../UsersStorage.json", jsonOut);
+
+            using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
+            {
+                writer.Write(jsonOut);
+            }
+
+            //Console.WriteLine(jsonOut);
+            //File.WriteAllText("../../UsersStorage.json", jsonOut);
             /*
             using (var usersReader = File.Open("../../UsersStorage.json", FileMode.Open))
             {
@@ -108,8 +128,6 @@ namespace TDDD49.ViewModels
 
         public void AddMessage(Models.Message newMessage)
         {
-            Console.WriteLine("{0}, {1}, {2}" ,newMessage.Content, newMessage.Sender, newMessage.IsInternalUserMessage);
-            Console.WriteLine(Messages);
             Messages.Add(newMessage);
             WriteToJSON(newMessage);
         }
@@ -210,7 +228,7 @@ namespace TDDD49.ViewModels
             Models.Message mes = new Models.Message()
             {
                 Content = message,
-                Sender = this.internalUser.Name,
+                Sender = this.internalUser,
                 TimePosted = DateTime.Now,
                 MessageType = "message",
                 IsInternalUserMessage = false
@@ -249,8 +267,16 @@ namespace TDDD49.ViewModels
                         
                         if (CanRecieve)
                         {
-                            Console.WriteLine(CanRecieve);
-                            message = this.communicator.recieveMessage();
+                            try
+                            {
+                                message = this.communicator.recieveMessage();
+
+                            }
+                            catch (ObjectDisposedException e1)
+                            {
+                                System.Windows.MessageBox.Show("Connection lost");
+                                CanRecieve = false;
+                            }
 
                             if (message == null)
                             {
@@ -261,11 +287,8 @@ namespace TDDD49.ViewModels
                             {
                                 CanRecieve = false;
                             }
-                            //this.AddMessage(message);
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
-                                // när merge, kommentera bort under detta
-                                //AddMessage.Add(message);
                                 AddMessage(message);
                             });
                         }
@@ -281,7 +304,7 @@ namespace TDDD49.ViewModels
                 communicator.disconnectStream();
                 Console.WriteLine(e1);
             }
-            catch (Newtonsoft.Json.JsonReaderException e2)
+            catch (JsonReaderException e2)
             {
                 Console.WriteLine(e2);
             }

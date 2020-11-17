@@ -58,21 +58,20 @@ namespace TDDD49.ViewModels.Commands
                 }
                 else
                 {
-                    communicator.stopChatting(chatViewModel.InternalUser.Name);
+                    communicator.stopChatting(chatViewModel.InternalUser);
                 }
 
             }
             listenThread = new Thread(() =>
             {
+                chatViewModel.CanRecieve = false;
                 try
                 {
-                    communicator.ListenToPort(name: this.chatViewModel.InternalUser.Name, port: this.chatViewModel.InternalUser.Port);
-                    TcpListener s = communicator.Server;
-                    TcpClient c = communicator.Client;
-                    NetworkStream st = communicator.Stream;
-
+                    communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port);
+                    
                     Application.Current.Dispatcher.Invoke(() =>
                     {
+                        //if (chatViewModel.Users.Any(item => item.ID == communicator.externalUser.ID))
                         chatViewModel.Users.Add(new User()
                         {
                             //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det

@@ -11,34 +11,17 @@ namespace TDDD49
 {
     public class Communicator
     {
+        public User externalUser;
         public string Name { get; set; }
+        public int ID { get; set; }
         public TcpListener Server { get; set; }
         public TcpClient Client { get; set; }
         public NetworkStream Stream { get; set; }
-        private Thread connectThread;
 
         public Communicator() { }
-
-        // Kanske snyggare att skapa trådar här men svårare att uppdatera saker då kansek
-        public void connectPerson(string name, Int32 port, string server)
-        {
-            if (connectThread != null)
-            {
-                if (Client != null)
-                {
-                    Client.Close();
-                    Client = null;
-                }
-                connectThread.Abort();
-            }
-            connectThread = new Thread(() =>
-            {
-                ConnectToOtherPerson(port, server, name);
-            });
-        }
-
+        
         // https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.tcpclient?view=netcore-3.1
-        public void ConnectToOtherPerson(Int32 port, string server, string name)
+        public void ConnectToOtherPerson(Int32 port, string server, User internalUser)
         {
             Console.WriteLine("Connecting to person");
             
@@ -63,20 +46,20 @@ namespace TDDD49
                     Message response = JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(res, 0, readBytes));
                     if (response.MessageType == "decline")
                     {
-                        String s = String.Format("{0} ville inte chatta med dig.", response.Sender);
+                        String s = String.Format("{0} ville inte chatta med dig.", response.Sender.Name);
                         MessageBox.Show(s);
 
-                        sendMessage(name, "decline");
+                        sendMessage(internalUser, "decline");
                         disconnectStream();
 
                         break;
                     }
                     else if (response.MessageType == "accept")
                     {
-                        String s = String.Format("{0} ville chatta med dig.", response.Sender);
+                        String s = String.Format("{0} ville chatta med dig.", response.Sender.Name);
                         MessageBox.Show(s);
-                        Name = response.Sender;
-                        sendMessage(name, "accept");
+                        externalUser = response.Sender;
+                        sendMessage(internalUser, "accept");
 
                         break;
                     }
@@ -84,7 +67,7 @@ namespace TDDD49
             }
         }
 
-        public void ListenToPort(Int32 port, string name)
+        public void ListenToPort(Int32 port, User internalUser)
         {
             try
             {
@@ -120,13 +103,13 @@ namespace TDDD49
                     if (result == MessageBoxResult.No)
                     {
                         // Respond and decline chat.
-                        sendMessage(name, "decline");
+                        sendMessage(internalUser, "decline");
                         break;
                     }
                     if (result == MessageBoxResult.Yes)
                     {
                         // Respond and accept chat.
-                        sendMessage(name, "accept");
+                        sendMessage(internalUser, "accept");
                         
                     }
 
@@ -144,9 +127,9 @@ namespace TDDD49
 
                         if (res.MessageType == "accept")
                         {
-                            string s = string.Format("You are now chatting with {0}", res.Sender);
+                            string s = string.Format("You are now chatting with {0}", res.Sender.Name);
                             MessageBox.Show(s);
-                            Name = res.Sender;
+                            externalUser = res.Sender;
                             break;
                         }
                         else if (res.MessageType == "decline")
@@ -181,9 +164,9 @@ namespace TDDD49
             }
         }
 
-        public void stopChatting(string name)
+        public void stopChatting(User internalUser)
         {
-            sendMessage(name, "disconnect");
+            sendMessage(internalUser, "disconnect");
             disconnectStream();
         }
 
@@ -216,7 +199,7 @@ namespace TDDD49
                 {
                     if (Stream == null)
                     {
-                        break;
+                        return null;
                     }
                     if (Stream.DataAvailable)
                     {
@@ -245,11 +228,11 @@ namespace TDDD49
             return null;
         }
 
-        public void sendMessage(string name, string messageType, string message = "")
+        public void sendMessage(User internalUser, string messageType, string message = "")
         {
             if (Stream != null)
             {
-                Message mes = new Message() { Content = message, MessageType = messageType, Sender = name, IsInternalUserMessage = false, TimePosted = DateTime.Now };
+                Message mes = new Message() { Content = message, MessageType = messageType, Sender = internalUser, IsInternalUserMessage = false, TimePosted = DateTime.Now };
                 byte[] send = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(mes));
                 Stream.Write(send, 0, send.Length);
             }
