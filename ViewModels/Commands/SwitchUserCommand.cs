@@ -32,9 +32,9 @@ namespace TDDD49.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            string inp = parameter as string;
-            User newUser = ChatViewModel.Users.Single(newCurrentUser => newCurrentUser.Name.Equals(inp));
-            ChatViewModel.ExternalUser = newUser;
+            User user = parameter as User;
+            ChatViewModel.ExternalUser = user;
+            //User newUser = ChatViewModel.Users.Single(newCurrentUser => newCurrentUser.Name.Equals(inp));
             //ChatViewModel.ExternalUserName = newUser.Name;
             //ChatViewModel.ExternalPort = newUser.Port;
             //ChatViewModel.ExternalIpAddress = newUser.IpAddress;

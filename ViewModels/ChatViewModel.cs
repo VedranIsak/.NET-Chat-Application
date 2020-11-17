@@ -19,6 +19,7 @@ namespace TDDD49.ViewModels
         private string searchQuery;
         private User internalUser;
         private User externalUser;
+        private string externalUserName;
         private ObservableCollection<User> users;
         private ObservableCollection<User> filteredUsers;
         private ObservableCollection<Models.Message> messages;
@@ -28,18 +29,9 @@ namespace TDDD49.ViewModels
 
         public ChatViewModel(Communicator c)
         {
-            //Users = new ObservableCollection<User>();
-            /*Users.Add(new User() { Name = "Paulie", Port = 8080, IpAddress = "localhost",
-                Messages = new ObservableCollection<Models.Message>()
-                { new Models.Message() { Content="sdsjdaasjd", IsInternalUserMessage=false, TimePosted=DateTime.Now },
-                new Models.Message() { Content="ajasjasjasasj", IsInternalUserMessage=false, TimePosted=DateTime.Now }
-                } });*/
-            //FilteredUsers = new ObservableCollection<User>();
             SendCommand = new SendButtonCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
             ReadFromJSON();
-            //ExternalUser = Users.ElementAt(0);
-            //InternalUser = Users.ElementAt(0);
             communicator = c;
             ReadMessage();
         }
@@ -161,10 +153,6 @@ namespace TDDD49.ViewModels
         {
             get 
             { 
-                //if (messages == null)
-                //{
-                //    return new ObservableCollection<Models.Message>();
-                //}
                 return messages; 
             }
             set
@@ -180,30 +168,13 @@ namespace TDDD49.ViewModels
             set { internalUser = value; }
         }
 
-        //public string InternalUserName
-        //{
-        //    get { return InternalUser.Name; }
-        //    set { InternalUser.Name = value; }
-        //}
-
-        //public int InternalPort
-        //{
-        //    get { return InternalUser.Port; }
-        //    set { InternalUser.Port = value; }
-        //}
-
-        //public string InternalIpAddress
-        //{
-        //    get { return InternalUser.IpAddress; }
-        //    set { InternalUser.IpAddress = value; }
-        //}
-
         public User ExternalUser
         {
             get { return externalUser; }
             set
             {
                 externalUser = value;
+                ExternalUserName = externalUser.Name;
                 if (externalUser.Messages == null)
                 {
                     Messages = new ObservableCollection<Models.Message>();
@@ -212,6 +183,16 @@ namespace TDDD49.ViewModels
                 {
                     Messages = externalUser.Messages;
                 }
+            }
+        }
+
+        public string ExternalUserName
+        {
+            get { return externalUserName; }
+            set
+            {
+                externalUserName = value;
+                OnPropertyChanged(nameof(ExternalUserName));
             }
         }
 
