@@ -44,7 +44,7 @@ namespace TDDD49.ViewModels.Commands
                 case "Chat":
                     shellViewModel.CurrentPage = chatPage;
                     break;
-                case "Add Friend":
+                case "Connect":
                     shellViewModel.CurrentPage = connectPage;
                     break;
                 default:

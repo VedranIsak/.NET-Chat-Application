@@ -34,7 +34,7 @@
 
         <Label Content="Configure your settings" Style="{StaticResource HeaderLabel}" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="2"></Label>
         <Label Content="Name" Grid.Column="1" Grid.Row="1" Margin="0 20 0 0"></Label>
-        <Label Content="Not a valid username..." Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="2" FontSize="16" Foreground="Red" Margin="0 20 0 0">
+        <Label Content="Not a valid username..." Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" FontSize="16" Foreground="Red" Margin="0 20 0 0">
             <Label.Style>
                 <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                     <Style.Triggers>
