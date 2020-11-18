@@ -1,1 +1,249 @@
-[{"ID":46104728,"Name":"George","Port":8080,"IpAddress":"localhost","Messages":[{"Content":"Hi whats up!","TimePosted":"2020-11-12T23:12:21.9483395+01:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":11766267,"Name":"George","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"Nothing much, you?","TimePosted":"2020-11-12T23:12:21.9553207+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":38787544,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"Nothing much","TimePosted":"2020-11-12T23:12:21.9553207+01:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":13543581,"Name":"George","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"Good!","TimePosted":"2020-11-12T23:12:21.9553207+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":54783372,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"sss","TimePosted":"2020-11-16T11:25:09.0038542+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":23288300,"Name":"Memyselfii","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"aa","TimePosted":"2020-11-16T11:27:18.1051588+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":8268111,"Name":"Memyselfii","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"h","TimePosted":"2020-11-16T11:31:40.8324363+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":7304143,"Name":"Memyselfii","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"cool","TimePosted":"2020-11-16T11:31:46.3615556+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":65737292,"Name":"Memyselfii","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"ok","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}}]},{"ID":12289376,"Name":"Steven","Port":9000,"IpAddress":"localhost","Messages":[{"Content":"Whats up!","TimePosted":"2020-11-12T23:12:21.9553207+01:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":23120425,"Name":"Aaron","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"Whaddup bruh?","TimePosted":"2020-11-12T23:12:21.9553207+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":6757235,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}}]},{"ID":43495525,"Name":"Julia","Port":8020,"IpAddress":"localhost","Messages":[{"Content":"Hi","TimePosted":"2020-11-12T23:12:21.9553207+01:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":10465156,"Name":"Paul","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"Hello","TimePosted":"2020-11-12T23:12:21.9553207+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":27077540,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}}]},{"ID":12483231,"Name":"Namn","Port":9000,"IpAddress":"127.0.0.1","Messages":[{"Content":"yo","TimePosted":"2020-11-17T11:15:51.5575032+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":45797138,"Name":"Memyselfii","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"yoyo","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":9521066,"Name":"Namn","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"sup?","TimePosted":"2020-11-17T11:16:30.6806395+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":18580737,"Name":"Memyselfii","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"nt","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":33008913,"Name":"Namn","Port":0,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"supp","TimePosted":"2020-11-18T15:49:11.6613459+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":51292428,"Name":"Memyselfii","Port":8080,"IpAddress":"127.0.0.1","Messages":[{"Content":"HajHaj","TimePosted":"2020-11-12T21:48:29.1356298+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":55144039,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}}]}},{"Content":"n","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"n","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"disconnect","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"o","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"o","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"yo","TimePosted":"2020-11-18T16:17:06.7167444+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":51292428,"Name":"Memyselfii","Port":8080,"IpAddress":"127.0.0.1","Messages":[{"Content":"HajHaj","TimePosted":"2020-11-12T21:48:29.1356298+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":4861097,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}}]}},{"Content":"ok","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"ok","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"ok","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"ok","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"ok","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"ok","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"ok","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}},{"Content":"yo","TimePosted":"2020-11-18T16:34:29.5528899+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":51292428,"Name":"Memyselfii","Port":8080,"IpAddress":"127.0.0.1","Messages":[{"Content":"HajHaj","TimePosted":"2020-11-12T21:48:29.1356298+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":43231651,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}}]}},{"Content":"yo","TimePosted":"2020-11-18T16:36:34.259667+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":51292428,"Name":"Memyselfii","Port":8080,"IpAddress":"127.0.0.1","Messages":[{"Content":"HajHaj","TimePosted":"2020-11-12T21:48:29.1356298+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":12102828,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}}]}},{"Content":"yoa","TimePosted":"2020-11-18T16:37:36.6759326+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":51292428,"Name":"Memyselfii","Port":8080,"IpAddress":"127.0.0.1","Messages":[{"Content":"HajHaj","TimePosted":"2020-11-12T21:48:29.1356298+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":40805010,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}}]}},{"Content":"aaaaaaaaa","TimePosted":"2020-11-18T16:49:27.6399466+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":51292428,"Name":"Memyselfii","Port":8080,"IpAddress":"127.0.0.1","Messages":[{"Content":"HajHaj","TimePosted":"2020-11-12T21:48:29.1356298+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":16871484,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}}]}},{"Content":"sup","TimePosted":"2020-11-18T16:54:32.1430496+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":51292428,"Name":"Memyselfii","Port":8080,"IpAddress":"127.0.0.1","Messages":[{"Content":"HajHaj","TimePosted":"2020-11-12T21:48:29.1356298+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":24412946,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}}]}},{"Content":"ss","TimePosted":"0001-01-01T00:00:00","IsInternalUserMessage":false,"MessageType":"message","Sender":{"ID":12483231,"Name":"Namn","Port":8080,"IpAddress":"127.0.0.1","Messages":null}}]}]
+[
+  {
+    "ID": 46104728,
+    "Name": "George",
+    "Port": 8080,
+    "IpAddress": "localhost",
+    "Messages": [
+      {
+        "Content": "Hi whats up!",
+        "TimePosted": "2020-11-12T23:12:21.9483395+01:00",
+        "IsInternalUserMessage": false,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 11766267,
+          "Name": "George",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      },
+      {
+        "Content": "Nothing much, you?",
+        "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+        "IsInternalUserMessage": true,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 38787544,
+          "Name": "Richard",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      },
+      {
+        "Content": "Nothing much",
+        "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+        "IsInternalUserMessage": false,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 13543581,
+          "Name": "George",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      },
+      {
+        "Content": "Good!",
+        "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+        "IsInternalUserMessage": true,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 54783372,
+          "Name": "Richard",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      },
+      {
+        "Content": "sss",
+        "TimePosted": "2020-11-16T11:25:09.0038542+01:00",
+        "IsInternalUserMessage": true,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 23288300,
+          "Name": "Memyselfii",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      },
+      {
+        "Content": "aa",
+        "TimePosted": "2020-11-16T11:27:18.1051588+01:00",
+        "IsInternalUserMessage": true,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 8268111,
+          "Name": "Memyselfii",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      },
+      {
+        "Content": "h",
+        "TimePosted": "2020-11-16T11:31:40.8324363+01:00",
+        "IsInternalUserMessage": true,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 7304143,
+          "Name": "Memyselfii",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      },
+      {
+        "Content": "cool",
+        "TimePosted": "2020-11-16T11:31:46.3615556+01:00",
+        "IsInternalUserMessage": true,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 65737292,
+          "Name": "Memyselfii",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      },
+      {
+        "Content": "ok",
+        "TimePosted": "0001-01-01T00:00:00",
+        "IsInternalUserMessage": false,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 12483231,
+          "Name": "Namn",
+          "Port": 8080,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      },
+      {
+        "Content": "Yo",
+        "TimePosted": "2020-11-18T17:28:32.9532401+01:00",
+        "IsInternalUserMessage": false,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 51292428,
+          "Name": "Memyselfii",
+          "Port": 8080,
+          "IpAddress": "127.0.0.1",
+          "Messages": [
+            {
+              "Content": "HajHaj",
+              "TimePosted": "2020-11-12T21:48:29.1356298+01:00",
+              "IsInternalUserMessage": true,
+              "MessageType": "message",
+              "Sender": {
+                "ID": 16871484,
+                "Name": "Richard",
+                "Port": 0,
+                "IpAddress": "127.0.0.1",
+                "Messages": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "Content": "yo",
+        "TimePosted": "2020-11-18T17:36:33.5806534+01:00",
+        "IsInternalUserMessage": false,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 59223347,
+          "Name": "a333",
+          "Port": 8080,
+          "IpAddress": "127.0.0.1",
+          "Messages": [
+            {
+              "Content": "HajHaj",
+              "TimePosted": "2020-11-12T21:48:29.1356298+01:00",
+              "IsInternalUserMessage": true,
+              "MessageType": "message",
+              "Sender": {
+                "ID": 24412946,
+                "Name": "Richard",
+                "Port": 0,
+                "IpAddress": "127.0.0.1",
+                "Messages": null
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ID": 12289376,
+    "Name": "Steven",
+    "Port": 9000,
+    "IpAddress": "localhost",
+    "Messages": [
+      {
+        "Content": "Whats up!",
+        "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+        "IsInternalUserMessage": false,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 23120425,
+          "Name": "Aaron",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      },
+      {
+        "Content": "Whaddup bruh?",
+        "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+        "IsInternalUserMessage": true,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 6757235,
+          "Name": "Richard",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      }
+    ]
+  },
+  {
+    "ID": 43495525,
+    "Name": "Julia",
+    "Port": 8020,
+    "IpAddress": "localhost",
+    "Messages": [
+      {
+        "Content": "Hi",
+        "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+        "IsInternalUserMessage": false,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 10465156,
+          "Name": "Paul",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      },
+      {
+        "Content": "Hello",
+        "TimePosted": "2020-11-12T23:12:21.9553207+01:00",
+        "IsInternalUserMessage": true,
+        "MessageType": "message",
+        "Sender": {
+          "ID": 27077540,
+          "Name": "Richard",
+          "Port": 0,
+          "IpAddress": "127.0.0.1",
+          "Messages": null
+        }
+      }
+    ]
+  }
+]

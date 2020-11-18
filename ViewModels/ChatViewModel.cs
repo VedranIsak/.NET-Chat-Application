@@ -22,7 +22,7 @@ namespace TDDD49.ViewModels
         private string externalUserName;
         private ObservableCollection<User> users;
         private ObservableCollection<User> filteredUsers;
-        private ObservableCollection<Models.Message> messages;
+        private ObservableCollection<Message> messages;
         private Communicator communicator;
         private Thread recieveMessageThread;
         public bool CanRecieve { get; set; } = false;
@@ -72,13 +72,17 @@ namespace TDDD49.ViewModels
             }
         }
 
-        private void WriteToJSON(Models.Message newMessage)
+        private void WriteToJSON(Message newMessage)
         {
             var json = File.ReadAllText("../../UsersStorage.json");
             List<User> tmp = JsonConvert.DeserializeObject<List<User>>(json).ToList<User>();
 
             if (!tmp.Any(item => item.ID == this.externalUser.ID))
             {
+                if (this.externalUser.Messages == null)
+                {
+                    this.externalUser.Messages = new ObservableCollection<Message>();
+                }
                 this.externalUser.Messages.Add(newMessage);
                 tmp.Add(this.externalUser);
             }
@@ -102,7 +106,7 @@ namespace TDDD49.ViewModels
             }
         }
 
-        public void AddMessage(Models.Message newMessage)
+        public void AddMessage(Message newMessage)
         {
             Messages.Add(newMessage);
             WriteToJSON(newMessage);
@@ -151,7 +155,7 @@ namespace TDDD49.ViewModels
             }
         }
 
-        public ObservableCollection<Models.Message> Messages
+        public ObservableCollection<Message> Messages
         {
             get 
             {
@@ -183,7 +187,7 @@ namespace TDDD49.ViewModels
                 ExternalUserName = externalUser.Name;
                 if (externalUser.Messages == null)
                 {
-                    Messages = new ObservableCollection<Models.Message>();
+                    Messages = new ObservableCollection<Message>();
                 }
                 else
                 {
@@ -205,7 +209,7 @@ namespace TDDD49.ViewModels
         public void WriteMessage(string message)
         {
             Console.WriteLine(this.externalUser.Name);
-            Models.Message mes = new Models.Message()
+            Message mes = new Message()
             {
                 Content = message,
                 Sender = this.internalUser,
@@ -253,10 +257,10 @@ namespace TDDD49.ViewModels
             {
                 this.recieveMessageThread = new Thread(() =>
                 {
-                    Models.Message message = null;
+                    Message message;
                     while (true)
                     {
-                        
+                        message = null;
                         if (CanRecieve)
                         {
                             try
@@ -268,6 +272,7 @@ namespace TDDD49.ViewModels
                             {
                                 MessageBox.Show("Connection lost");
                                 CanRecieve = false;
+                                continue;
                             }
 
                             if (message == null)
@@ -280,6 +285,7 @@ namespace TDDD49.ViewModels
                             }
                             else
                             {
+                                Console.WriteLine("adding message");
                                 Application.Current.Dispatcher.Invoke(() =>
                                 {
                                     AddMessage(message);

@@ -96,6 +96,10 @@ namespace TDDD49.ViewModels.Commands
                 {
                     Console.WriteLine("e2");
                 }
+                catch (NullReferenceException e3)
+                {
+                    Console.WriteLine(e3);
+                }
             });
             listenThread.IsBackground = true;
             listenThread.Start();
