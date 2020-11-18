@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Windows.Input;
 
@@ -11,6 +10,7 @@ using TDDD49.Models;
 using TDDD49.ViewModels.Commands;
 using System.IO;
 using Newtonsoft.Json;
+using System.Windows;
 
 namespace TDDD49.ViewModels
 {
@@ -22,7 +22,7 @@ namespace TDDD49.ViewModels
         private string externalUserName;
         private ObservableCollection<User> users;
         private ObservableCollection<User> filteredUsers;
-        private ObservableCollection<Models.Message> messages;
+        private ObservableCollection<Message> messages;
         private Communicator communicator;
         private Thread recieveMessageThread;
         public bool CanRecieve { get; set; } = false;
@@ -31,7 +31,7 @@ namespace TDDD49.ViewModels
         {
             SendCommand = new SendButtonCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
-            DisconnectButtonCommand = new DisconnectButtonCommand();
+            DisconnectButtonCommand = new DisconnectButtonCommand(c, this);
             ReadFromJSON();
             communicator = c;
             ReadMessage();
@@ -72,13 +72,17 @@ namespace TDDD49.ViewModels
             }
         }
 
-        private void WriteToJSON(Models.Message newMessage)
+        private void WriteToJSON(Message newMessage)
         {
             var json = File.ReadAllText("../../UsersStorage.json");
             List<User> tmp = JsonConvert.DeserializeObject<List<User>>(json).ToList<User>();
 
             if (!tmp.Any(item => item.ID == this.externalUser.ID))
             {
+                if (this.externalUser.Messages == null)
+                {
+                    this.externalUser.Messages = new ObservableCollection<Message>();
+                }
                 this.externalUser.Messages.Add(newMessage);
                 tmp.Add(this.externalUser);
             }
@@ -102,7 +106,7 @@ namespace TDDD49.ViewModels
             }
         }
 
-        public void AddMessage(Models.Message newMessage)
+        public void AddMessage(Message newMessage)
         {
             Messages.Add(newMessage);
             WriteToJSON(newMessage);
@@ -151,10 +155,14 @@ namespace TDDD49.ViewModels
             }
         }
 
-        public ObservableCollection<Models.Message> Messages
+        public ObservableCollection<Message> Messages
         {
             get 
-            { 
+            {
+                if (messages == null)
+                {
+                    messages = new ObservableCollection<Message>();
+                }
                 return messages; 
             }
             set
@@ -179,7 +187,7 @@ namespace TDDD49.ViewModels
                 ExternalUserName = externalUser.Name;
                 if (externalUser.Messages == null)
                 {
-                    Messages = new ObservableCollection<Models.Message>();
+                    Messages = new ObservableCollection<Message>();
                 }
                 else
                 {
@@ -201,7 +209,7 @@ namespace TDDD49.ViewModels
         public void WriteMessage(string message)
         {
             Console.WriteLine(this.externalUser.Name);
-            Models.Message mes = new Models.Message()
+            Message mes = new Message()
             {
                 Content = message,
                 Sender = this.internalUser,
@@ -212,12 +220,24 @@ namespace TDDD49.ViewModels
 
             // vid merge okommentera nedan
             Console.WriteLine("Write message");
-            this.AddMessage(mes);
             try
             {
                 Thread t = new Thread(() =>
                 {
-                    communicator.sendMessage(mes);
+                    try
+                    {
+                        communicator.sendMessage(mes);
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            AddMessage(mes);
+                        });
+                    }
+                    catch (NullReferenceException e)
+                    {
+                        MessageBox.Show("No connection, try connecting again", "No connection");
+                        Console.WriteLine(e);
+                    }
+                    
                 });
                 t.IsBackground = true;
                 t.Start();
@@ -225,7 +245,7 @@ namespace TDDD49.ViewModels
             }
             catch (SocketException err)
             {
-                System.Windows.MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
+                MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
                 communicator.disconnectStream();
                 Console.WriteLine(err);
             }
@@ -237,10 +257,10 @@ namespace TDDD49.ViewModels
             {
                 this.recieveMessageThread = new Thread(() =>
                 {
-                    Models.Message message = null;
+                    Message message;
                     while (true)
                     {
-                        
+                        message = null;
                         if (CanRecieve)
                         {
                             try
@@ -250,23 +270,27 @@ namespace TDDD49.ViewModels
                             }
                             catch (ObjectDisposedException e1)
                             {
-                                System.Windows.MessageBox.Show("Connection lost");
+                                MessageBox.Show("Connection lost");
                                 CanRecieve = false;
+                                continue;
                             }
 
                             if (message == null)
                             {
                                 continue;
                             }
-
                             else if (message.MessageType == "disconnect")
                             {
                                 CanRecieve = false;
                             }
-                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                            else
                             {
-                                AddMessage(message);
-                            });
+                                Console.WriteLine("adding message");
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    AddMessage(message);
+                                });
+                            }
                         }
                     }
                 });
@@ -275,7 +299,7 @@ namespace TDDD49.ViewModels
             }
             catch (SocketException e1)
             {
-                System.Windows.MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
+                MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
                 CanRecieve = false;
                 communicator.disconnectStream();
                 Console.WriteLine(e1);

@@ -44,15 +44,15 @@ namespace TDDD49.ViewModels.Commands
                 if (listenThread.IsAlive)
                 {
                     //MessageBox.Show("Du kommer börja lyssna på nytt!", "kopplar bort");
-                    if (communicator.Server != null)
+                    /*if (communicator.Server != null)
                     {
                         communicator.Server.Stop();
                     }
                     if (communicator.Client != null)
                     {
                         communicator.Client.Close();
-                    }
-                    // communicator.Server.Stop();
+                    }*/
+                    communicator.stopChatting(chatViewModel.InternalUser);
                     listenThread.Abort();
                     Console.WriteLine("aborted");
                 }
@@ -67,6 +67,8 @@ namespace TDDD49.ViewModels.Commands
                 chatViewModel.CanRecieve = false;
                 try
                 {
+                    Console.WriteLine(chatViewModel.InternalUser.ID);
+
                     communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port);
 
                     if (!chatViewModel.Users.Any(item => item.ID == communicator.externalUser.ID))
@@ -93,6 +95,10 @@ namespace TDDD49.ViewModels.Commands
                 catch (ThreadAbortException e2)
                 {
                     Console.WriteLine("e2");
+                }
+                catch (NullReferenceException e3)
+                {
+                    Console.WriteLine(e3);
                 }
             });
             listenThread.IsBackground = true;
