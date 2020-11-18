@@ -43,21 +43,17 @@ namespace TDDD49.ViewModels.Commands
             if (addThread != null)
             {
                 if (addThread.IsAlive)
-                {/*
-                    if (communicator.Client != null)
-                    {
-                        communicator.Client.Close();
-                    }
-                    if (communicator.Server != null)
-                    {
-                        communicator.Server.Stop();
-                    }*/
+                {
                     communicator.disconnectStream();
                     // communicator.Server.Stop();
                     addThread.Abort();
                 }
+                else
+                {
+                    communicator.stopChatting(chatViewModel.InternalUser);
+                }
                 //MessageBox.Show("Du blir bortkopplad från din nuvarande chatt!", "kopplar bort");
-                communicator.stopChatting(chatViewModel.InternalUser);
+                //communicator.stopChatting(chatViewModel.InternalUser);
                 addThread.Abort();
             }
 
@@ -66,6 +62,8 @@ namespace TDDD49.ViewModels.Commands
                 chatViewModel.CanRecieve = false;
                 try
                 {
+                    Console.WriteLine(chatViewModel.InternalUser.Name);
+                    Console.WriteLine(chatViewModel.InternalUser.ID);
                     communicator.ConnectToOtherPerson(internalUser: chatViewModel.InternalUser, port: connectUserViewModel.ExternalPort, server: connectUserViewModel.ExternalIpAddress);
                     
                     if (!chatViewModel.Users.Any(item => item.ID == communicator.externalUser.ID))
@@ -100,9 +98,18 @@ namespace TDDD49.ViewModels.Commands
                 }
                 catch (SocketException e)
                 {
-                    //MessageBox.Show("Noone listening to that address.");
-                    Console.WriteLine("Noone listening to that address");
+                    MessageBox.Show("Noone listening to that address");
                     Console.WriteLine(e);
+                }
+                catch (ArgumentNullException e2)
+                {
+                    MessageBox.Show("Bad IP address, try again", "Bad IP address");
+                    Console.WriteLine(e2);
+                }
+                catch (Communicator.BadServerException e3)
+                {
+                    MessageBox.Show("Bad IP address, try again", "Bad IP address");
+                    Console.WriteLine(e3);
                 }
 
                 Console.WriteLine("donE");

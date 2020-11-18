@@ -60,7 +60,7 @@ namespace TDDD49.ViewModels
                         }
                         else { ValidInternalUserName = true; }
                     }
-                    if (ValidInternalUserName) { chatViewModel.InternalUser.Name = value; }
+                    if (ValidInternalUserName) { chatViewModel.InternalUser.Name = value; chatViewModel.InternalUser.ID = GetHashCode(); }
                     OnPropertyChanged(nameof(InternalUserName));
                 }
             }

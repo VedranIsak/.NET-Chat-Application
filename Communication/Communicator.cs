@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Windows;
 using TDDD49.Models;
 using Newtonsoft.Json;
-using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace TDDD49
 {
@@ -15,12 +15,28 @@ namespace TDDD49
         public TcpListener Server { get; set; }
         public TcpClient Client { get; set; }
         public NetworkStream Stream { get; set; }
+        private const string Pattern = @"^(([0-9]{1,3}.){3}([0-9]{1,3})|localhost)";
+        private Regex regex = new Regex(Pattern, RegexOptions.Compiled);
 
         public Communicator() { }
+
+        public class BadServerException : Exception
+        {
+            public BadServerException(string message)
+                : base(message)
+            {
+            }
+        }
         
         // https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.tcpclient?view=netcore-3.1
         public void ConnectToOtherPerson(Int32 port, string server, User internalUser)
         {
+            if (!regex.Match(server).Success) {
+                Console.WriteLine("bad server");
+                string s = string.Format("{0} is invalid server ip", server);
+                throw new BadServerException(s);
+            }
+
             Console.WriteLine("Connecting to person");
             
             Client = new TcpClient(server, port);
@@ -207,6 +223,7 @@ namespace TDDD49
 
                         if (response.MessageType == "disconnect")
                         {
+                            Console.WriteLine("disconnected");
                             String s = String.Format("{0} har kopplat bort.", response.Sender);
                             MessageBox.Show(s);
                             disconnectStream();
@@ -238,11 +255,9 @@ namespace TDDD49
 
         public void sendMessage(Message m)
         {
-            if (Stream != null)
-            {
-                byte[] send = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(m));
-                Stream.Write(send, 0, send.Length);
-            }
+            Console.WriteLine("sending message");
+            byte[] send = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(m));
+            Stream.Write(send, 0, send.Length);
         }
     }
 }
