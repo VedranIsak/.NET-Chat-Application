@@ -18,13 +18,13 @@ using TDDD49.ViewModels;
 namespace TDDD49.Views
 {
     /// <summary>
-    /// Interaction logic for ConfigurePage.xaml
+    /// Interaction logic for ConnectUserPage.xaml
     /// </summary>
-    public partial class ConfigurePage : Page
+    public partial class ConnectPage : Page
     {
-        public ConfigurePage(ChatViewModel chatViewModel)
+        public ConnectPage(ChatViewModel chatViewModel, Communicator c)
         {
-            DataContext = new ConfigureViewModel(chatViewModel); 
+            DataContext = new ConnectViewModel(chatViewModel, c);
             InitializeComponent();
         }
     }

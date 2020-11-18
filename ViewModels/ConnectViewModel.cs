@@ -10,7 +10,7 @@ using TDDD49.ViewModels.Commands;
 
 namespace TDDD49.ViewModels
 {
-    public class ConnectUserViewModel : ViewModel
+    public class ConnectViewModel : ViewModel
     {
         private ChatViewModel chatViewModel;
         private bool validExternalPort = true;
@@ -20,7 +20,7 @@ namespace TDDD49.ViewModels
         private string externalIpAddress;
         private Communicator communicator;
 
-        public ConnectUserViewModel(ChatViewModel chatViewModel, Communicator c)
+        public ConnectViewModel(ChatViewModel chatViewModel, Communicator c)
         {
             this.chatViewModel = chatViewModel;
             AddUserCommand = new AddUserCommand(this, chatViewModel, c);

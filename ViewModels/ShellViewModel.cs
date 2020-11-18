@@ -10,19 +10,19 @@ namespace TDDD49.ViewModels
     {
         private Page currentPage;
         private ChatViewModel chatViewModel;
-        private ConfigurePage configurePage;
+        private SettingsPage settingsPage;
         private ChatPage chatPage;
-        private ConnectUserPage connectUserPage;
+        private ConnectPage connectPage;
         private Communicator communicator = new Communicator();
 
         public ShellViewModel()
         {
             chatViewModel = new ChatViewModel(communicator);
             chatPage = new ChatPage(chatViewModel);
-            configurePage = new ConfigurePage(chatViewModel);
-            connectUserPage = new ConnectUserPage(chatViewModel, communicator);
-            TopMenuButtonCommand = new TopMenuButtonCommand(this, configurePage, chatPage, connectUserPage);
-            CurrentPage = configurePage;
+            settingsPage = new SettingsPage(chatViewModel);
+            connectPage = new ConnectPage(chatViewModel, communicator);
+            SwitchPageCommand = new SwitchPageCommand(this, settingsPage, chatPage, connectPage);
+            CurrentPage = settingsPage;
         }
 
         public Page CurrentPage
@@ -38,6 +38,6 @@ namespace TDDD49.ViewModels
             }
         }
 
-        public ICommand TopMenuButtonCommand { get; private set; }
+        public ICommand SwitchPageCommand { get; private set; }
     }
 }

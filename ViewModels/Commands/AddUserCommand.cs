@@ -15,13 +15,13 @@ namespace TDDD49.ViewModels.Commands
 {
     class AddUserCommand : ICommand
     {
-        private ConnectUserViewModel connectUserViewModel;
+        private ConnectViewModel connectViewModel;
         private ChatViewModel chatViewModel;
         private Thread addThread;
         private Communicator communicator;
-        public AddUserCommand(ConnectUserViewModel connectUserViewModel, ChatViewModel chatViewModel, Communicator c)
+        public AddUserCommand(ConnectViewModel connectViewModel, ChatViewModel chatViewModel, Communicator c)
         {
-            this.connectUserViewModel = connectUserViewModel;
+            this.connectViewModel = connectViewModel;
             this.chatViewModel = chatViewModel;
             this.communicator = c;
         }
@@ -34,7 +34,7 @@ namespace TDDD49.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            if(connectUserViewModel.ValidExternalPort) { return true; }
+            if(connectViewModel.ValidExternalPort) { return true; }
             return false;
         }
 
@@ -64,7 +64,7 @@ namespace TDDD49.ViewModels.Commands
                 {
                     Console.WriteLine(chatViewModel.InternalUser.Name);
                     Console.WriteLine(chatViewModel.InternalUser.ID);
-                    communicator.ConnectToOtherPerson(internalUser: chatViewModel.InternalUser, port: connectUserViewModel.ExternalPort, server: connectUserViewModel.ExternalIpAddress);
+                    communicator.ConnectToOtherPerson(internalUser: chatViewModel.InternalUser, port: connectViewModel.ExternalPort, server: connectViewModel.ExternalIpAddress);
                     
                     if (!chatViewModel.Users.Any(item => item.ID == communicator.externalUser.ID))
                     {
@@ -77,8 +77,8 @@ namespace TDDD49.ViewModels.Commands
                                 //Name = connectUserViewModel.ExternalUserName, 
                                 ID = communicator.externalUser.ID,
                                 Name = communicator.externalUser.Name,
-                                Port = connectUserViewModel.ExternalPort,
-                                IpAddress = connectUserViewModel.ExternalIpAddress
+                                Port = connectViewModel.ExternalPort,
+                                IpAddress = connectViewModel.ExternalIpAddress
                             });
                             
                         });

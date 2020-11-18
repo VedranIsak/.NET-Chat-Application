@@ -9,11 +9,11 @@ using System.Windows.Input;
 
 namespace TDDD49.ViewModels.Commands
 {
-    class DisconnectButtonCommand : ICommand
+    class DisconnectCommand : ICommand
     {
         Communicator communicator;
         ChatViewModel chatViewModel;
-        public DisconnectButtonCommand(Communicator c, ChatViewModel cvm)
+        public DisconnectCommand(Communicator c, ChatViewModel cvm)
         {
             this.chatViewModel = cvm;
             this.communicator = c;

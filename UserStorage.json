@@ -1,15 +1,1 @@
-﻿{
-    "ID": 51292428,
-    "Name": "Memyselfii",
-    "Port": 8080,
-    "IpAddress": "127.0.0.1",
-    "Messages": [
-        {
-            "Content": "HajHaj",
-            "TimePosted": "2020-11-12T21:48:29.1356298+01:00",
-            "IsInternalUserMessage": true,
-            "MessageType": "message",
-            "Sender": { "Name": "Richard" }
-        }
-    ]
-}
+{"ID":51292428,"Name":"Memyselfii","Port":8090,"IpAddress":"127.0.0.1","Messages":[{"Content":"HajHaj","TimePosted":"2020-11-12T21:48:29.1356298+01:00","IsInternalUserMessage":true,"MessageType":"message","Sender":{"ID":11203942,"Name":"Richard","Port":0,"IpAddress":"127.0.0.1","Messages":null}}]}

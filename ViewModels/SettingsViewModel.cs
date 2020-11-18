@@ -8,20 +8,24 @@ using System.Windows;
 using System.Windows.Input;
 
 using TDDD49.Views;
+using TDDD49.ViewModels.Commands;
 
 namespace TDDD49.ViewModels
 {
-    public class ConfigureViewModel : ViewModel
+    public class SettingsViewModel : ViewModel
     {
         private ChatViewModel chatViewModel;
         private bool validInternalUserName = true;
         private bool validInternalPort = true;
 
 
-        public ConfigureViewModel(ChatViewModel chatViewModel)
+        public SettingsViewModel(ChatViewModel chatViewModel)
         {
             this.chatViewModel = chatViewModel;
+            SaveCommand = new SaveCommand(this, chatViewModel);
         }
+
+        public ICommand SaveCommand { get; set; }
 
         public bool ValidInternalPort
         {
@@ -45,7 +49,11 @@ namespace TDDD49.ViewModels
 
         public string InternalUserName
         {
-            get { return chatViewModel.InternalUser.Name; }
+            get
+            {
+                if(chatViewModel.InternalUser == null) { return null; }
+                return chatViewModel.InternalUser.Name;
+            }
             set
             {
                 chatViewModel.InternalUser.Name = value;
@@ -68,7 +76,11 @@ namespace TDDD49.ViewModels
 
         public string InternalIpAddress
         {
-            get { return chatViewModel.InternalUser.IpAddress; }
+            get
+            {
+                if (chatViewModel.InternalUser == null) { return null; }
+                return chatViewModel.InternalUser.IpAddress;
+            }
             set
             {
                 chatViewModel.InternalUser.IpAddress = value;
@@ -78,7 +90,11 @@ namespace TDDD49.ViewModels
 
         public int InternalPort
         {
-            get { return chatViewModel.InternalUser.Port; }
+            get
+            {
+                if (chatViewModel.InternalUser == null) { return 0; }
+                return chatViewModel.InternalUser.Port;
+            }
             set
             {
                 if (value > 1023 && value < 65353) { ValidInternalPort = true; }

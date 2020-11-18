@@ -60,24 +60,25 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\Commands\AddUserCommand.cs" />
-    <Compile Include="ViewModels\Commands\DisconnectButtonCommand.cs" />
+    <Compile Include="ViewModels\Commands\DisconnectCommand.cs" />
     <Compile Include="ViewModels\Commands\ListenCommand.cs" />
-    <Compile Include="ViewModels\Commands\SendButtonCommand.cs" />
+    <Compile Include="ViewModels\Commands\SaveCommand.cs" />
+    <Compile Include="ViewModels\Commands\SendCommand.cs" />
     <Compile Include="ViewModels\Commands\SwitchUserCommand.cs" />
-    <Compile Include="ViewModels\Commands\TopMenuButtonCommand.cs" />
-    <Compile Include="ViewModels\ConfigureViewModel.cs" />
-    <Compile Include="ViewModels\ConnectUserViewModel.cs" />
+    <Compile Include="ViewModels\Commands\SwitchPageCommand.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\ConnectViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Communication\Communicator.cs" />
     <Compile Include="Views\ChatPage.xaml.cs">
       <DependentUpon>ChatPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ConfigurePage.xaml.cs">
-      <DependentUpon>ConfigurePage.xaml</DependentUpon>
+    <Compile Include="Views\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ConnectUserPage.xaml.cs">
-      <DependentUpon>ConnectUserPage.xaml</DependentUpon>
+    <Compile Include="Views\ConnectPage.xaml.cs">
+      <DependentUpon>ConnectPage.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -95,11 +96,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ConfigurePage.xaml">
+    <Page Include="Views\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ConnectUserPage.xaml">
+    <Page Include="Views\ConnectPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

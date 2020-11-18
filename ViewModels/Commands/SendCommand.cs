@@ -11,10 +11,10 @@ using System.Net.Sockets;
 
 namespace TDDD49.ViewModels.Commands
 {
-    class SendButtonCommand : ICommand
+    class SendCommand : ICommand
     {
         private ChatViewModel chatViewModel;
-        public SendButtonCommand(ChatViewModel chatViewModel)
+        public SendCommand(ChatViewModel chatViewModel)
         {
             this.chatViewModel = chatViewModel;
         }

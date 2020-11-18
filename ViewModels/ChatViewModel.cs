@@ -29,9 +29,9 @@ namespace TDDD49.ViewModels
 
         public ChatViewModel(Communicator c)
         {
-            SendCommand = new SendButtonCommand(this);
+            SendCommand = new SendCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
-            DisconnectButtonCommand = new DisconnectButtonCommand(c, this);
+            DisconnectCommand = new DisconnectCommand(c, this);
             ReadFromJSON();
             communicator = c;
             ReadMessage();
@@ -39,7 +39,7 @@ namespace TDDD49.ViewModels
 
         public ICommand SendCommand { get; set; }
         public ICommand SwitchUserCommand { get; set; }
-        public ICommand DisconnectButtonCommand { get; set; }
+        public ICommand DisconnectCommand { get; set; }
 
         private void ReadFromJSON()
         {
@@ -62,6 +62,7 @@ namespace TDDD49.ViewModels
                 InternalUser = JsonConvert.DeserializeObject<User>(inputUserString);
 
             }
+            if(InternalUser == null) { return; }
             if (InternalUser.ID == null)
             {
                 InternalUser.ID = GetHashCode();
@@ -72,7 +73,7 @@ namespace TDDD49.ViewModels
             }
         }
 
-        private void WriteToJSON(Message newMessage)
+        private void WriteUsersToJSON(Message newMessage)
         {
             var json = File.ReadAllText("../../UsersStorage.json");
             List<User> tmp = JsonConvert.DeserializeObject<List<User>>(json).ToList<User>();
@@ -106,10 +107,18 @@ namespace TDDD49.ViewModels
             }
         }
 
+        public void WriteUserToJSON()
+        {
+            using (StreamWriter writer = new StreamWriter("../../UserStorage.json", false))
+            {
+                writer.Write(JsonConvert.SerializeObject(InternalUser));
+            }
+        }
+
         public void AddMessage(Message newMessage)
         {
             Messages.Add(newMessage);
-            WriteToJSON(newMessage);
+            WriteUsersToJSON(newMessage);
         }
 
         public string SearchQuery

@@ -13,13 +13,13 @@ namespace TDDD49.ViewModels.Commands
 {
     public class ListenCommand : ICommand
     {
-        private ConnectUserViewModel connectUserViewModel;
+        private ConnectViewModel connectViewModel;
         private Communicator communicator;
         private Thread listenThread;
         private ChatViewModel chatViewModel;
-        public ListenCommand(ConnectUserViewModel connectUserViewModel, Communicator c, ChatViewModel chatViewModel) 
+        public ListenCommand(ConnectViewModel connectViewModel, Communicator c, ChatViewModel chatViewModel) 
         { 
-            this.connectUserViewModel = connectUserViewModel; 
+            this.connectViewModel = connectViewModel; 
             this.communicator = c;
             this.chatViewModel = chatViewModel;
         }
@@ -32,7 +32,7 @@ namespace TDDD49.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-             if(connectUserViewModel.ValidExternalPort) { return true; }
+             if(connectViewModel.ValidExternalPort) { return true; }
             return false;
         }
 
@@ -80,8 +80,8 @@ namespace TDDD49.ViewModels.Commands
                             {
                                 //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det
                                 Name = communicator.externalUser.Name,
-                                Port = connectUserViewModel.ExternalPort,
-                                IpAddress = connectUserViewModel.ExternalIpAddress
+                                Port = connectViewModel.ExternalPort,
+                                IpAddress = connectViewModel.ExternalIpAddress
                             });
                         });
                     }

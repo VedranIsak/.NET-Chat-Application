@@ -49,7 +49,7 @@
 
         <StackPanel x:Name="UserPanel" Grid.Column="0" Grid.Row="0" Style="{StaticResource SideStackPanel}">
             <ScrollViewer Height="{Binding ElementName=UserPanel, Path=ActualHeight}" VerticalScrollBarVisibility="Visible">
-                <ItemsControl x:Name="UserList" ItemsSource="{Binding Users, Mode=OneWay}">
+                <ItemsControl x:Name="UserList" ItemsSource="{Binding Users, Mode=OneWay, TargetNullValue=No friends connected! Add some?}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -73,7 +73,7 @@
             <Label Content="Search" Style="{StaticResource SubLabel}" HorizontalContentAlignment="Center"></Label>
             <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" Background="SteelBlue" Foreground="White"></TextBox>
             <ScrollViewer Height="{Binding ElementName=FilteredPanel, Path=ActualHeight}" VerticalScrollBarVisibility="Visible">
-                <ItemsControl x:Name="FilteredList" ItemsSource="{Binding FilteredUsers, Mode=OneWay}">
+                <ItemsControl x:Name="FilteredList" ItemsSource="{Binding FilteredUsers, Mode=OneWay, TargetNullValue=No friends connected! Add some?}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -115,11 +115,11 @@
             
             <Label Content="Chatting with" Style="{StaticResource HeaderLabel}" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="0"></Label>
             <Label Content="{Binding ExternalUserName}" Style="{StaticResource HeaderLabel}" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="0" Margin="-15 0 0 0"></Label>
-            <Button Content="Disconnect" Grid.Column="6" Grid.ColumnSpan="2" Margin="0 5 15 45" Command="{Binding DisconnectButtonCommand}"></Button>
+            <Button Content="Disconnect" Grid.Column="6" Grid.ColumnSpan="2" Margin="0 5 15 45" Command="{Binding DisconnectCommand}"></Button>
 
             <StackPanel x:Name="ChatPanel" Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="1" Grid.RowSpan="4" Style="{StaticResource SideStackPanel}" Margin="0 0 15 0">
                 <ScrollViewer Height="{Binding ElementName=ChatPanel, Path=ActualHeight}" VerticalScrollBarVisibility="Visible">
-                    <ItemsControl ItemsSource="{Binding Messages}">
+                    <ItemsControl ItemsSource="{Binding Messages, TargetNullValue=No messages to show! Add some friends?}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>

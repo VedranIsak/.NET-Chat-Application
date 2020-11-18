@@ -15,10 +15,6 @@ C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\TDDD49.exe
 C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\TDDD49.pdb
 C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ChatPage.g.cs
 C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ChatPage.baml
-C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConfigurePage.g.cs
-C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConfigurePage.baml
-C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConnectUserPage.g.cs
-C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConnectUserPage.baml
 C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49.csprojAssemblyReference.cache
 C:\Users\herma\Desktop\tddd49\obj\Debug\MainWindow.g.cs
 C:\Users\herma\Desktop\tddd49\obj\Debug\Views\ChatPage.g.cs
@@ -45,3 +41,8 @@ C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49.csproj.CoreCompileInputs.cache
 C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49.csproj.CopyComplete
 C:\Users\vedra\source\repos\TDDD49\TDDD49\bin\Debug\Newtonsoft.Json.dll
 C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\TDDD49.csproj.CopyComplete
+C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\SettingsPage.g.cs
+C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\SettingsPage.baml
+C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConnectPage.g.cs
+C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConnectPage.baml
+C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\TDDD49.csprojAssemblyReference.cache
