@@ -18,8 +18,6 @@ C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ChatPage.baml
 C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49.csprojAssemblyReference.cache
 C:\Users\herma\Desktop\tddd49\obj\Debug\MainWindow.g.cs
 C:\Users\herma\Desktop\tddd49\obj\Debug\Views\ChatPage.g.cs
-C:\Users\herma\Desktop\tddd49\obj\Debug\Views\ConfigurePage.g.cs
-C:\Users\herma\Desktop\tddd49\obj\Debug\Views\ConnectUserPage.g.cs
 C:\Users\herma\Desktop\tddd49\obj\Debug\App.g.cs
 C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49_MarkupCompile.cache
 C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49_MarkupCompile.lref
@@ -32,8 +30,6 @@ C:\Users\herma\Desktop\tddd49\bin\Debug\Newtonsoft.Json.dll
 C:\Users\herma\Desktop\tddd49\obj\Debug\App.baml
 C:\Users\herma\Desktop\tddd49\obj\Debug\MainWindow.baml
 C:\Users\herma\Desktop\tddd49\obj\Debug\Views\ChatPage.baml
-C:\Users\herma\Desktop\tddd49\obj\Debug\Views\ConfigurePage.baml
-C:\Users\herma\Desktop\tddd49\obj\Debug\Views\ConnectUserPage.baml
 C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49.g.resources
 C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49.Properties.Resources.resources
 C:\Users\herma\Desktop\tddd49\obj\Debug\TDDD49.csproj.GenerateResource.cache
@@ -46,3 +42,7 @@ C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\SettingsPage.baml
 C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConnectPage.g.cs
 C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\Views\ConnectPage.baml
 C:\Users\vedra\source\repos\TDDD49\TDDD49\obj\Debug\TDDD49.csprojAssemblyReference.cache
+C:\Users\herma\Desktop\tddd49\obj\Debug\Views\SettingsPage.g.cs
+C:\Users\herma\Desktop\tddd49\obj\Debug\Views\ConnectPage.g.cs
+C:\Users\herma\Desktop\tddd49\obj\Debug\Views\SettingsPage.baml
+C:\Users\herma\Desktop\tddd49\obj\Debug\Views\ConnectPage.baml
