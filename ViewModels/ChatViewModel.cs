@@ -47,25 +47,30 @@ namespace TDDD49.ViewModels
 
         private void ReadFromJSON()
         {
+            List<User> tmp;
             using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
             {
                 string inputUsersString = usersReader.ReadToEnd();
-                List<User> tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
-                ObservableCollection<User> tmpObservable = new ObservableCollection<User>();
-                foreach (var user in tmp)
-                {
-                    tmpObservable.Add(user);
-                }
-                Users = tmpObservable;
-                ExternalUser = Users.ElementAt(0);
-                Messages = ExternalUser.Messages;
+                tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
+               
             }
+
+            ObservableCollection<User> tmpObservable = new ObservableCollection<User>();
+            foreach (var user in tmp)
+            {
+                tmpObservable.Add(user);
+            }
+            Users = tmpObservable;
+            ExternalUser = Users.ElementAt(0);
+            Messages = ExternalUser.Messages;
+
             using (StreamReader userReader = new StreamReader("../../UserStorage.json"))
             {
                 string inputUserString = userReader.ReadToEnd();
                 InternalUser = JsonConvert.DeserializeObject<User>(inputUserString);
 
             }
+
             if(InternalUser == null) { return; }
             if (InternalUser.ID == null)
             {
@@ -79,9 +84,13 @@ namespace TDDD49.ViewModels
 
         private void WriteUsersToJSON(Message newMessage)
         {
-            var json = File.ReadAllText("../../UsersStorage.json");
-            List<User> tmp = JsonConvert.DeserializeObject<List<User>>(json).ToList<User>();
+            List<User> tmp;
+            using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
+            {
+                tmp = JsonConvert.DeserializeObject<List<User>>(usersReader.ReadToEnd()).ToList();
 
+            }
+            
             if (!tmp.Any(item => item.ID == this.externalUser.ID))
             {
                 if (this.externalUser.Messages == null)
@@ -295,6 +304,7 @@ namespace TDDD49.ViewModels
                             else if (message.MessageType == "disconnect")
                             {
                                 CanRecieve = false;
+                                continue;
                             }
                             else if (message.MessageType == "buzz")
                             {

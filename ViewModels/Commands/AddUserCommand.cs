@@ -69,32 +69,14 @@ namespace TDDD49.ViewModels.Commands
                     if (!chatViewModel.Users.Any(item => item.ID == communicator.externalUser.ID))
                     {
                         Console.WriteLine("new user");
+                        
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            chatViewModel.Users.Add(new User()
-                            {
-                                //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det
-                                //Name = connectUserViewModel.ExternalUserName, 
-                                ID = communicator.externalUser.ID,
-                                Name = communicator.externalUser.Name,
-                                Port = connectViewModel.ExternalPort,
-                                IpAddress = connectViewModel.ExternalIpAddress
-                            });
+                            chatViewModel.Users.Add(communicator.externalUser);
                             
                         });
                     }
                     chatViewModel.CanRecieve = true;
-
-                    /*
-                    communicator.connectPerson(name: chatViewModel.InternalUser.Name, port: connectUserViewModel.ExternalPort, server: connectUserViewModel.ExternalIpAddress);
-                    chatViewModel.Users.Add(new User()
-                    {
-                        //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det
-                        //Name = connectUserViewModel.ExternalUserName, 
-                        Name = communicator.Name,
-                        Port = connectUserViewModel.ExternalPort,
-                        IpAddress = connectUserViewModel.ExternalIpAddress
-                    });*/
                 }
                 catch (SocketException e)
                 {

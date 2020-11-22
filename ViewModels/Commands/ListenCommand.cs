@@ -76,13 +76,7 @@ namespace TDDD49.ViewModels.Commands
                         Console.WriteLine("new user");
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            chatViewModel.Users.Add(new User()
-                            {
-                                //Här måste man få tag i Namnet via anslutning och sätta Name propertyn till det
-                                Name = communicator.externalUser.Name,
-                                Port = connectViewModel.ExternalPort,
-                                IpAddress = connectViewModel.ExternalIpAddress
-                            });
+                            chatViewModel.Users.Add(communicator.externalUser);
                         });
                     }
                     chatViewModel.CanRecieve = true;
