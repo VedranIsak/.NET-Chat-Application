@@ -292,6 +292,10 @@ namespace TDDD49.ViewModels
                             {
                                 CanRecieve = false;
                             }
+                            else if (message.MessageType == "buzz")
+                            {
+                                continue;
+                            }
                             else
                             {
                                 Console.WriteLine("adding message");

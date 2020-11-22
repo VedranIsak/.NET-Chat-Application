@@ -1,11 +1,12 @@
-﻿using System;
-using System.Text;
+﻿using Newtonsoft.Json;
+using System;
+using System.Media;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using TDDD49.Models;
-using Newtonsoft.Json;
-using System.Text.RegularExpressions;
 
 namespace TDDD49
 {
@@ -17,6 +18,7 @@ namespace TDDD49
         public NetworkStream Stream { get; set; }
         private const string Pattern = @"^(([0-9]{1,3}.){3}([0-9]{1,3})|localhost)";
         private Regex regex = new Regex(Pattern, RegexOptions.Compiled);
+        SoundPlayer audio = new SoundPlayer(Properties.Resources.pling);
 
         public Communicator() { }
 
@@ -26,11 +28,16 @@ namespace TDDD49
                 : base(message)
             {
             }
+            
+            public BadServerException() { }
+
+
         }
         
         // https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.tcpclient?view=netcore-3.1
         public void ConnectToOtherPerson(Int32 port, string server, User internalUser)
         {
+            
             if (!regex.Match(server).Success) {
                 Console.WriteLine("bad server");
                 string s = string.Format("{0} is invalid server ip", server);
@@ -235,6 +242,11 @@ namespace TDDD49
                             String s = String.Format("{0}: {1}", response.Sender, response.Content);
                             //Console.WriteLine(s);
                             response.IsInternalUserMessage = false;
+                            return response;
+                        }
+                        else if (response.MessageType == "buzz")
+                        {
+                            audio.Play();
                             return response;
                         }
                     }
