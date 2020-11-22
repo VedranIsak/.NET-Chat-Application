@@ -32,6 +32,8 @@ namespace TDDD49.ViewModels
             SendCommand = new SendCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
             DisconnectCommand = new DisconnectCommand(c, this);
+            Users = new ObservableCollection<User>();
+            FilteredUsers = new ObservableCollection<User>();
             ReadFromJSON();
             communicator = c;
             ReadMessage();

@@ -83,7 +83,6 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock x:Name="IdStorer" Text="{Binding ID}" Visibility="Collapsed"></TextBlock>
                                 <Label Style="{StaticResource SubLabel}" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding Name}"></Label>
                                 <Button Style="{StaticResource ChatButton}" Grid.Column="3" Content="Chat" Command="{Binding ElementName=FilteredList,  Path=DataContext.SwitchUserCommand}" CommandParameter="{Binding Name}" FontSize="16"></Button>
                             </Grid>
