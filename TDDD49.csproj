@@ -60,6 +60,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\Commands\AddUserCommand.cs" />
+    <Compile Include="ViewModels\Commands\BuzzCommand.cs" />
     <Compile Include="ViewModels\Commands\DisconnectCommand.cs" />
     <Compile Include="ViewModels\Commands\ListenCommand.cs" />
     <Compile Include="ViewModels\Commands\SaveCommand.cs" />

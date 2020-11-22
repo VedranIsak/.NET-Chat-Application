@@ -146,7 +146,8 @@
             </StackPanel>
 
             <Button Style="{StaticResource ChatButton}" Content="Send" Command="{Binding SendCommand}" CommandParameter="{Binding Path=Text, ElementName=MsgTextBox}" Grid.Column="0" Grid.Row="5" VerticalAlignment="Bottom" Margin="5 0 5 5"></Button>
-            <TextBox x:Name="MsgTextBox" VerticalAlignment="Bottom" Background="SteelBlue" Foreground="White" Grid.Column="1" Grid.ColumnSpan="7" Grid.Row="5" Margin="0 0 25 5"></TextBox>
+            <Button Style="{StaticResource ChatButton}" Content="Buzz" Command="{Binding BuzzCommand}" Grid.Column="1" Grid.Row="5" VerticalAlignment="Bottom" Margin="5 0 5 5"></Button>
+            <TextBox x:Name="MsgTextBox" VerticalAlignment="Bottom" Background="SteelBlue" Foreground="White" Grid.Column="2" Grid.ColumnSpan="7" Grid.Row="5" Margin="0 0 25 5"></TextBox>
         </Grid>
     </Grid>
 </Page>

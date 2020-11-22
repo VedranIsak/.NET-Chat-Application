@@ -32,6 +32,7 @@ namespace TDDD49.ViewModels
             SendCommand = new SendCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
             DisconnectCommand = new DisconnectCommand(c, this);
+            BuzzCommand = new BuzzCommand(c, this);
             Users = new ObservableCollection<User>();
             FilteredUsers = new ObservableCollection<User>();
             ReadFromJSON();
@@ -42,6 +43,7 @@ namespace TDDD49.ViewModels
         public ICommand SendCommand { get; set; }
         public ICommand SwitchUserCommand { get; set; }
         public ICommand DisconnectCommand { get; set; }
+        public ICommand BuzzCommand { get; set; }
 
         private void ReadFromJSON()
         {
