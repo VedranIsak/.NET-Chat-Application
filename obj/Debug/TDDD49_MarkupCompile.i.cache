@@ -12,8 +12,13 @@ DEBUG;TRACE
 C:\Users\herma\Desktop\tddd49\App.xaml
 4-659756005
 
+<<<<<<< HEAD
 251342306403
 14-1175798665
+=======
+29448932999
+15-1888226655
+>>>>>>> 7e321f9efdc13d66efd50e631b87c04f290f1c6e
 MainWindow.xaml;Views\ChatPage.xaml;Views\SettingsPage.xaml;Views\ConnectPage.xaml;
 
 True

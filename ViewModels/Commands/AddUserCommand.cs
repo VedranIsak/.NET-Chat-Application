@@ -34,7 +34,12 @@ namespace TDDD49.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            if(connectViewModel.ValidExternalPort) { return true; }
+            if(connectViewModel.ValidExternalPort
+                && chatViewModel.InternalUser != null 
+                && chatViewModel.InternalUser.Name != null
+                && chatViewModel.InternalUser.Port > 1023 
+                && chatViewModel.InternalUser.Port < 65353
+                && chatViewModel.InternalUser.IpAddress != null) { return true; }
             return false;
         }
 
@@ -52,8 +57,6 @@ namespace TDDD49.ViewModels.Commands
                 {
                     communicator.stopChatting(chatViewModel.InternalUser);
                 }
-                //MessageBox.Show("Du blir bortkopplad från din nuvarande chatt!", "kopplar bort");
-                //communicator.stopChatting(chatViewModel.InternalUser);
                 addThread.Abort();
             }
 
