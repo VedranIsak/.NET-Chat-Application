@@ -72,8 +72,8 @@ namespace TDDD49.ViewModels.Commands
                         
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            chatViewModel.Users.Add(communicator.externalUser);
-                            
+                            chatViewModel.Users.Add(new User() { Name = communicator.externalUser.Name, IpAddress = communicator.externalUser.IpAddress, Port = communicator.externalUser.Port });
+
                         });
                     }
                     chatViewModel.CanRecieve = true;

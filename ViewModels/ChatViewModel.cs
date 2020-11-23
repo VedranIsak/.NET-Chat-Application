@@ -38,6 +38,8 @@ namespace TDDD49.ViewModels
             ReadFromJSON();
             communicator = c;
             ReadMessage();
+
+            if(InternalUser == null) { InternalUser = new User(); }
         }
 
         public ICommand SendCommand { get; set; }
@@ -93,24 +95,37 @@ namespace TDDD49.ViewModels
                 tmp = JsonConvert.DeserializeObject<List<User>>(usersReader.ReadToEnd()).ToList();
 
             }
-            
-            if (!tmp.Any(item => item.ID == this.externalUser.ID))
+
+            if (tmp?.Any() == true)
             {
+                tmp = new List<User>();
                 if (this.externalUser.Messages == null)
                 {
                     this.externalUser.Messages = new ObservableCollection<Message>();
                 }
-                this.externalUser.Messages.Add(newMessage);
-                tmp.Add(this.externalUser);
+                ExternalUser.Messages.Add(newMessage);
+                tmp.Add(ExternalUser);
             }
             else
             {
-                foreach (User u in tmp)
+                if (!tmp.Any(item => item.ID == this.externalUser.ID))
                 {
-                    if (u.ID == this.externalUser.ID)
+                    if (this.externalUser.Messages == null)
                     {
-                        u.Messages.Add(newMessage);
-                        break;
+                        this.externalUser.Messages = new ObservableCollection<Message>();
+                    }
+                    this.externalUser.Messages.Add(newMessage);
+                    tmp.Add(this.externalUser);
+                }
+                else
+                {
+                    foreach (User u in tmp)
+                    {
+                        if (u.ID == this.externalUser.ID)
+                        {
+                            u.Messages.Add(newMessage);
+                            break;
+                        }
                     }
                 }
             }
