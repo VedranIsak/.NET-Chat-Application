@@ -11,6 +11,7 @@ using TDDD49.ViewModels.Commands;
 using System.IO;
 using Newtonsoft.Json;
 using System.Windows;
+using TDDD49.Communication;
 
 namespace TDDD49.ViewModels
 {
@@ -24,6 +25,7 @@ namespace TDDD49.ViewModels
         private ObservableCollection<User> filteredUsers;
         private ObservableCollection<Message> messages;
         private Communicator communicator;
+        private InternalCommunicator internalCommunicator;
         private Thread recieveMessageThread;
         public bool CanRecieve { get; set; } = false;
 
@@ -35,8 +37,9 @@ namespace TDDD49.ViewModels
             BuzzCommand = new BuzzCommand(c, this);
             Users = new ObservableCollection<User>();
             FilteredUsers = new ObservableCollection<User>();
-            ReadFromJSON();
             communicator = c;
+            internalCommunicator = new InternalCommunicator(this);
+            ReadFromJSON();
             ReadMessage();
 
             if(InternalUser == null) { InternalUser = new User(); }
@@ -49,101 +52,104 @@ namespace TDDD49.ViewModels
 
         private void ReadFromJSON()
         {
-            List<User> tmp;
-            using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
-            {
-                string inputUsersString = usersReader.ReadToEnd();
-                tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
-               
-            }
+            internalCommunicator.ReadFromJSON();
+            //List<User> tmp;
+            //using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
+            //{
+            //    string inputUsersString = usersReader.ReadToEnd();
+            //    tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
 
-            ObservableCollection<User> tmpObservable = new ObservableCollection<User>();
-            foreach (var user in tmp)
-            {
-                tmpObservable.Add(user);
-            }
-            if(tmp?.Any() == true)
-            {
-                Users = tmpObservable;
-                ExternalUser = Users.ElementAt(0);
-                Messages = ExternalUser.Messages;
-            }
+            //}
 
-            using (StreamReader userReader = new StreamReader("../../UserStorage.json"))
-            {
-                string inputUserString = userReader.ReadToEnd();
-                InternalUser = JsonConvert.DeserializeObject<User>(inputUserString);
+            //ObservableCollection<User> tmpObservable = new ObservableCollection<User>();
+            //foreach (var user in tmp)
+            //{
+            //    tmpObservable.Add(user);
+            //}
+            //if (tmp?.Any() == true)
+            //{
+            //    Users = tmpObservable;
+            //    ExternalUser = Users.ElementAt(0);
+            //    Messages = ExternalUser.Messages;
+            //}
 
-            }
+            //using (StreamReader userReader = new StreamReader("../../UserStorage.json"))
+            //{
+            //    string inputUserString = userReader.ReadToEnd();
+            //    InternalUser = JsonConvert.DeserializeObject<User>(inputUserString);
 
-            if(InternalUser == null) { return; }
-            if (InternalUser.ID == null)
-            {
-                InternalUser.ID = GetHashCode();
-                using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
-                {
-                    writer.Write(JsonConvert.SerializeObject(InternalUser));
-                }
-            }
+            //}
+
+            //if (InternalUser == null) { return; }
+            //if (InternalUser.ID == null)
+            //{
+            //    InternalUser.ID = GetHashCode();
+            //    using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
+            //    {
+            //        writer.Write(JsonConvert.SerializeObject(InternalUser));
+            //    }
+            //}
         }
 
         private void WriteUsersToJSON(Message newMessage)
         {
-            List<User> tmp;
-            using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
-            {
-                tmp = JsonConvert.DeserializeObject<List<User>>(usersReader.ReadToEnd()).ToList();
+            internalCommunicator.WriteUsersToJSON(newMessage);
+        //    List<User> tmp;
+        //    using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
+        //    {
+        //        tmp = JsonConvert.DeserializeObject<List<User>>(usersReader.ReadToEnd()).ToList();
 
-            }
+        //    }
 
-            if (tmp?.Any() == true)
-            {
-                tmp = new List<User>();
-                if (this.externalUser.Messages == null)
-                {
-                    this.externalUser.Messages = new ObservableCollection<Message>();
-                }
-                ExternalUser.Messages.Add(newMessage);
-                tmp.Add(ExternalUser);
-            }
-            else
-            {
-                if (!tmp.Any(item => item.ID == this.externalUser.ID))
-                {
-                    if (this.externalUser.Messages == null)
-                    {
-                        this.externalUser.Messages = new ObservableCollection<Message>();
-                    }
-                    this.externalUser.Messages.Add(newMessage);
-                    tmp.Add(this.externalUser);
-                }
-                else
-                {
-                    foreach (User u in tmp)
-                    {
-                        if (u.ID == this.externalUser.ID)
-                        {
-                            u.Messages.Add(newMessage);
-                            break;
-                        }
-                    }
-                }
-            }
+        //    if (tmp?.Any() == true)
+        //    {
+        //        tmp = new List<User>();
+        //        if (this.externalUser.Messages == null)
+        //        {
+        //            this.externalUser.Messages = new ObservableCollection<Message>();
+        //        }
+        //        ExternalUser.Messages.Add(newMessage);
+        //        tmp.Add(ExternalUser);
+        //    }
+        //    else
+        //    {
+        //        if (!tmp.Any(item => item.ID == this.externalUser.ID))
+        //        {
+        //            if (this.externalUser.Messages == null)
+        //            {
+        //                this.externalUser.Messages = new ObservableCollection<Message>();
+        //            }
+        //            this.externalUser.Messages.Add(newMessage);
+        //            tmp.Add(this.externalUser);
+        //        }
+        //        else
+        //        {
+        //            foreach (User u in tmp)
+        //            {
+        //                if (u.ID == this.externalUser.ID)
+        //                {
+        //                    u.Messages.Add(newMessage);
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //    }
 
-            string jsonOut = JsonConvert.SerializeObject(tmp);
+        //    string jsonOut = JsonConvert.SerializeObject(tmp);
 
-            using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
-            {
-                writer.Write(jsonOut);
-            }
+        //    using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
+        //    {
+        //        writer.Write(jsonOut);
+        //    }
         }
 
         public void WriteUserToJSON()
         {
-            using (StreamWriter writer = new StreamWriter("../../UserStorage.json", false))
-            {
-                writer.Write(JsonConvert.SerializeObject(InternalUser));
-            }
+            internalCommunicator.WriteUserToJSON();
+            //using (StreamWriter writer = new StreamWriter("../../UserStorage.json", false))
+            //{
+            //    writer.Write(JsonConvert.SerializeObject(InternalUser));
+            //}
         }
 
         public void AddMessage(Message newMessage)
