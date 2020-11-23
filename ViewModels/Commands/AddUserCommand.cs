@@ -62,21 +62,37 @@ namespace TDDD49.ViewModels.Commands
                 chatViewModel.CanRecieve = false;
                 try
                 {
-                    Console.WriteLine(chatViewModel.InternalUser.Name);
-                    Console.WriteLine(chatViewModel.InternalUser.ID);
-                    communicator.ConnectToOtherPerson(internalUser: chatViewModel.InternalUser, port: connectViewModel.ExternalPort, server: connectViewModel.ExternalIpAddress);
-                    
-                    if (!chatViewModel.Users.Any(item => item.ID == communicator.externalUser.ID))
+                    communicator.ConnectToOtherPerson(internalUser: chatViewModel.InternalUser, port: connectViewModel.ExternalPort, server: connectViewModel.ExternalIpAddress, cvm: this.chatViewModel);
+                    if (communicator.externalUser != null)
                     {
-                        Console.WriteLine("new user");
-                        
-                        Application.Current.Dispatcher.Invoke(() =>
+                        User newUser = new User()
                         {
-                            chatViewModel.Users.Add(new User() { Name = communicator.externalUser.Name, IpAddress = communicator.externalUser.IpAddress, Port = communicator.externalUser.Port });
+                            Name = communicator.externalUser.Name,
+                            IpAddress = communicator.externalUser.IpAddress,
+                            Port = communicator.externalUser.Port,
+                            Messages = new System.Collections.ObjectModel.ObservableCollection<Message>()
+                        };
 
-                        });
+                        if (!chatViewModel.Users.Any(item => item.ID == newUser.ID))
+                        {
+
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                chatViewModel.Users.Add(new User() { Name = communicator.externalUser.Name, IpAddress = communicator.externalUser.IpAddress, Port = communicator.externalUser.Port });
+
+                            });
+                            chatViewModel.chattingWith = newUser;
+                        }
+                        else
+                        {
+                            chatViewModel.chattingWith = chatViewModel.Users.Single(item => item.ID == newUser.ID);
+                        }
+                        chatViewModel.CanRecieve = true;
                     }
-                    chatViewModel.CanRecieve = true;
+                    else
+                    {
+                        MessageBox.Show("Failed to connect");
+                    }
                 }
                 catch (SocketException e)
                 {

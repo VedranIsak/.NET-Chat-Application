@@ -26,6 +26,7 @@ namespace TDDD49.ViewModels
         private Communicator communicator;
         private Thread recieveMessageThread;
         public bool CanRecieve { get; set; } = false;
+        public User chattingWith;
 
         public ChatViewModel(Communicator c)
         {
@@ -39,7 +40,7 @@ namespace TDDD49.ViewModels
             communicator = c;
             ReadMessage();
 
-            if(InternalUser == null) { InternalUser = new User(); }
+            if (InternalUser == null) { InternalUser = new User(); }
         }
 
         public ICommand SendCommand { get; set; }
@@ -54,7 +55,7 @@ namespace TDDD49.ViewModels
             {
                 string inputUsersString = usersReader.ReadToEnd();
                 tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
-               
+
             }
 
             ObservableCollection<User> tmpObservable = new ObservableCollection<User>();
@@ -62,7 +63,7 @@ namespace TDDD49.ViewModels
             {
                 tmpObservable.Add(user);
             }
-            if(tmp?.Any() == true)
+            if (tmp?.Any() == true)
             {
                 Users = tmpObservable;
                 ExternalUser = Users.ElementAt(0);
@@ -76,7 +77,7 @@ namespace TDDD49.ViewModels
 
             }
 
-            if(InternalUser == null) { return; }
+            if (InternalUser == null) { return; }
             if (InternalUser.ID == null)
             {
                 InternalUser.ID = GetHashCode();
@@ -93,18 +94,17 @@ namespace TDDD49.ViewModels
             using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
             {
                 tmp = JsonConvert.DeserializeObject<List<User>>(usersReader.ReadToEnd()).ToList();
-
             }
 
             if (tmp?.Any() == true)
             {
                 tmp = new List<User>();
-                if (this.externalUser.Messages == null)
+                if (this.chattingWith.Messages == null)
                 {
-                    this.externalUser.Messages = new ObservableCollection<Message>();
+                    this.chattingWith.Messages = new ObservableCollection<Message>();
                 }
-                ExternalUser.Messages.Add(newMessage);
-                tmp.Add(ExternalUser);
+                chattingWith.Messages.Add(newMessage);
+                tmp.Add(chattingWith);
             }
             else
             {
@@ -168,7 +168,7 @@ namespace TDDD49.ViewModels
             ObservableCollection<User> userTmp = Users;
             List<User> tmp = userTmp.Where((user) => user.Name.IndexOf(query, StringComparison.CurrentCultureIgnoreCase) >= 0).ToList();
             ObservableCollection<User> observableTmp = new ObservableCollection<User>();
-            foreach(var user in tmp)
+            foreach (var user in tmp)
             {
                 observableTmp.Add(user);
             }
@@ -197,13 +197,13 @@ namespace TDDD49.ViewModels
 
         public ObservableCollection<Message> Messages
         {
-            get 
+            get
             {
                 if (messages == null)
                 {
                     messages = new ObservableCollection<Message>();
                 }
-                return messages; 
+                return messages;
             }
             set
             {
@@ -248,111 +248,12 @@ namespace TDDD49.ViewModels
 
         public void WriteMessage(string message)
         {
-            Console.WriteLine(this.externalUser.Name);
-            Message mes = new Message()
-            {
-                Content = message,
-                Sender = this.internalUser,
-                TimePosted = DateTime.Now,
-                MessageType = "message",
-                IsInternalUserMessage = true
-            };
-
-            Console.WriteLine("Write message");
-            try
-            {
-                Thread t = new Thread(() =>
-                {
-                    try
-                    {
-                        communicator.sendMessage(mes);
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            AddMessage(mes);
-                        });
-                    }
-                    catch (NullReferenceException e)
-                    {
-                        MessageBox.Show("No connection, try connecting again", "No connection");
-                        Console.WriteLine(e);
-                    }
-                    
-                });
-                t.IsBackground = true;
-                t.Start();
-                
-            }
-            catch (SocketException err)
-            {
-                MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
-                communicator.disconnectStream();
-                Console.WriteLine(err);
-            }
+            communicator.WriteMessage(message, InternalUser);
         }
 
         private void ReadMessage()
         {
-            try
-            {
-                this.recieveMessageThread = new Thread(() =>
-                {
-                    Message message;
-                    while (true)
-                    {
-                        message = null;
-                        if (CanRecieve)
-                        {
-                            try
-                            {
-                                message = this.communicator.recieveMessage();
-                                message.IsInternalUserMessage = false;
-                            }
-                            catch (ObjectDisposedException e1)
-                            {
-                                MessageBox.Show("Connection lost");
-                                CanRecieve = false;
-                                continue;
-                            }
-
-                            if (message == null)
-                            {
-                                continue;
-                            }
-                            else if (message.MessageType == "disconnect")
-                            {
-                                CanRecieve = false;
-                                continue;
-                            }
-                            else if (message.MessageType == "buzz")
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                Console.WriteLine("adding message");
-                                Application.Current.Dispatcher.Invoke(() =>
-                                {
-                                    AddMessage(message);
-                                });
-                            }
-                        }
-                    }
-                });
-                this.recieveMessageThread.IsBackground = true;
-                this.recieveMessageThread.Start();
-            }
-            catch (SocketException e1)
-            {
-                MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
-                CanRecieve = false;
-                communicator.disconnectStream();
-                Console.WriteLine(e1);
-            }
-            catch (JsonReaderException e2)
-            {
-                Console.WriteLine(e2);
-            }
-            
+            communicator.ReadMessage();
         }
     }
 }

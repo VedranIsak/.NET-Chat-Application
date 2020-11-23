@@ -5,25 +5,37 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using TDDD49.Models;
+using TDDD49.ViewModels;
 
 namespace TDDD49
 {
     public class Communicator
     {
         public User externalUser;
+        public User internalUser;
+        public ChatViewModel chatViewModel;
         public TcpListener Server { get; set; }
         public TcpClient Client { get; set; }
         public NetworkStream Stream { get; set; }
+        public bool CanRecieve { get; private set; } = false;
+
         private const string Pattern = @"^(([0-9]{1,3}.){3}([0-9]{1,3})|localhost)";
         private Regex regex = new Regex(Pattern, RegexOptions.Compiled);
         SoundPlayer audio = new SoundPlayer(Properties.Resources.pling);
+        private Thread recieveMessageThread;
 
         public Communicator() { }
 
         public class BadServerException : Exception
         {
+            public BadServerException(string message, Exception inner)
+                :base(message, inner)
+            {
+            }
+
             public BadServerException(string message)
                 : base(message)
             {
@@ -35,9 +47,11 @@ namespace TDDD49
         }
         
         // https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.tcpclient?view=netcore-3.1
-        public void ConnectToOtherPerson(Int32 port, string server, User internalUser)
+        public void ConnectToOtherPerson(Int32 port, string server, User internalUser, ChatViewModel cvm)
         {
-            
+            this.internalUser = internalUser;
+            this.chatViewModel = cvm;
+
             if (!regex.Match(server).Success) {
                 Console.WriteLine("bad server");
                 string s = string.Format("{0} is invalid server ip", server);
@@ -82,14 +96,18 @@ namespace TDDD49
                         externalUser = response.Sender;
                         sendMessage(internalUser, "accept");
 
+                        CanRecieve = true;
                         break;
                     }
                 }
             }
         }
 
-        public void ListenToPort(Int32 port, User internalUser)
+        public void ListenToPort(Int32 port, User internalUser, ChatViewModel cvm)
         {
+
+            this.internalUser = internalUser;
+            this.chatViewModel = cvm;
             try
             {
                 // Set the TcpListener on port 13000.
@@ -151,6 +169,7 @@ namespace TDDD49
                             string s = string.Format("You are now chatting with {0}", res.Sender.Name);
                             MessageBox.Show(s);
                             externalUser = res.Sender;
+                            CanRecieve = true;
                             break;
                         }
                         else if (res.MessageType == "decline")
@@ -211,7 +230,7 @@ namespace TDDD49
             externalUser = null;
         }
 
-        public Message recieveMessage()
+        public void recieveMessage()
         {
             //Console.WriteLine("recmes");
             if (Stream != null)
@@ -220,13 +239,14 @@ namespace TDDD49
                 {
                     if (Stream == null)
                     {
-                        return null;
+                        return;
                     }
                     if (Stream.DataAvailable)
                     {
                         var res = new byte[9999999];
                         int readBytes = Stream.Read(res, 0, res.Length);
                         Message response = JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(res, 0, readBytes));
+                        response.IsInternalUserMessage = false;
 
                         if (response.MessageType == "disconnect")
                         {
@@ -234,25 +254,22 @@ namespace TDDD49
                             String s = String.Format("{0} har kopplat bort.", response.Sender);
                             MessageBox.Show(s);
                             disconnectStream();
-                            return response;
-                            // break;
+                            break;
                         }
                         else if (response.MessageType == "message")
                         {
-                            String s = String.Format("{0}: {1}", response.Sender, response.Content);
-                            //Console.WriteLine(s);
-                            response.IsInternalUserMessage = false;
-                            return response;
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                chatViewModel.AddMessage(response);
+                            });
                         }
                         else if (response.MessageType == "buzz")
                         {
                             audio.Play();
-                            return response;
                         }
                     }
                 }
             }
-            return null;
         }
 
         public void sendMessage(User internalUser, string messageType, string message = "")
@@ -271,6 +288,87 @@ namespace TDDD49
             byte[] send = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(m));
             Stream.Write(send, 0, send.Length);
         }
+
+        public void ReadMessage()
+        {
+            this.recieveMessageThread = new Thread(() =>
+            {
+                while (true)
+                {
+                    if (CanRecieve)
+                    {
+                        try
+                        {
+                            recieveMessage();
+                        }
+                        catch (ObjectDisposedException e1)
+                        {
+                            MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
+                            CanRecieve = false;
+                            Console.WriteLine(e1);
+                        }  
+                        catch (SocketException e1)
+                        {
+                            MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
+                            CanRecieve = false;
+                            disconnectStream();
+                            Console.WriteLine(e1);
+                        }
+                        catch (JsonReaderException e2)
+                        {
+                            Console.WriteLine(e2);
+                        }
+                    }
+                }
+            });
+            this.recieveMessageThread.IsBackground = true;
+            this.recieveMessageThread.Start();
+            
+        }
+
+        public void WriteMessage(string message, User sender)
+        {
+            Message mes = new Message()
+            {
+                Content = message,
+                Sender = sender,
+                TimePosted = DateTime.Now,
+                MessageType = "message",
+                IsInternalUserMessage = true
+            };
+
+            Thread t = new Thread(() =>
+            {
+                try
+                {
+                    sendMessage(mes);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        this.chatViewModel.AddMessage(mes);
+                    });
+                }
+                catch (NullReferenceException e)
+                {
+                    MessageBox.Show("No connection, try connecting again", "No connection");
+                    disconnectStream();
+                    CanRecieve = false;
+                    Console.WriteLine(e);
+                }
+                catch (SocketException e2)
+                {
+                    MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
+                    disconnectStream();
+                    CanRecieve = false;
+                    Console.WriteLine(e2);
+                }
+
+        });
+            t.IsBackground = true;
+            t.Start();
+
+        }
+
     }
 }
+
 

@@ -38,23 +38,13 @@ namespace TDDD49.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            //Här ska den interna användaren kunnna börja lyssna på port & ip
             if (listenThread != null)
             {
                 if (listenThread.IsAlive)
                 {
-                    //MessageBox.Show("Du kommer börja lyssna på nytt!", "kopplar bort");
-                    /*if (communicator.Server != null)
-                    {
-                        communicator.Server.Stop();
-                    }
-                    if (communicator.Client != null)
-                    {
-                        communicator.Client.Close();
-                    }*/
+                    
                     communicator.stopChatting(chatViewModel.InternalUser);
                     listenThread.Abort();
-                    Console.WriteLine("aborted");
                 }
                 else
                 {
@@ -67,19 +57,32 @@ namespace TDDD49.ViewModels.Commands
                 chatViewModel.CanRecieve = false;
                 try
                 {
-                    Console.WriteLine(chatViewModel.InternalUser.ID);
-
                     communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port);
-
-                    if (!chatViewModel.Users.Any(item => item.ID == communicator.externalUser.ID))
+                    
+                    if (communicator.externalUser != null)
                     {
-                        Console.WriteLine("new user");
-                        Application.Current.Dispatcher.Invoke(() =>
+                        User newUser = new User()
                         {
-                            chatViewModel.Users.Add(communicator.externalUser);
-                        });
+                            Name = communicator.externalUser.Name,
+                            IpAddress = communicator.externalUser.IpAddress,
+                            Port = communicator.externalUser.Port,
+                            Messages = new System.Collections.ObjectModel.ObservableCollection<Message>()
+                        };
+
+                        if (!chatViewModel.Users.Any(item => item.ID == communicator.externalUser.ID))
+                        {
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                chatViewModel.Users.Add(newUser);
+                            });
+                            chatViewModel.chattingWith = newUser;
+                        }
+                        chatViewModel.CanRecieve = true;
                     }
-                    chatViewModel.CanRecieve = true;
+                    else
+                    {
+                        MessageBox.Show("Failed to connect");
+                    }
 
                 }
                 catch (SocketException e1)
