@@ -60,9 +60,12 @@ namespace TDDD49.ViewModels
             {
                 tmpObservable.Add(user);
             }
-            Users = tmpObservable;
-            ExternalUser = Users.ElementAt(0);
-            Messages = ExternalUser.Messages;
+            if(tmp?.Any() == true)
+            {
+                Users = tmpObservable;
+                ExternalUser = Users.ElementAt(0);
+                Messages = ExternalUser.Messages;
+            }
 
             using (StreamReader userReader = new StreamReader("../../UserStorage.json"))
             {
@@ -240,7 +243,6 @@ namespace TDDD49.ViewModels
                 IsInternalUserMessage = true
             };
 
-            // vid merge okommentera nedan
             Console.WriteLine("Write message");
             try
             {
