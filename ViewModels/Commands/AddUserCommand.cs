@@ -81,14 +81,14 @@ namespace TDDD49.ViewModels.Commands
 
                             Application.Current.Dispatcher.Invoke(() =>
                             {
-                                chatViewModel.Users.Add(new User() { Name = communicator.externalUser.Name, IpAddress = communicator.externalUser.IpAddress, Port = communicator.externalUser.Port });
+                                chatViewModel.AddUser(new User() { Name = communicator.externalUser.Name, IpAddress = communicator.externalUser.IpAddress, Port = communicator.externalUser.Port });
 
                             });
-                            chatViewModel.chattingWith = newUser;
+                            chatViewModel.chattingUser = newUser;
                         }
                         else
                         {
-                            chatViewModel.chattingWith = chatViewModel.Users.Single(item => item.ID == newUser.ID);
+                            chatViewModel.chattingUser = chatViewModel.Users.Single(item => item.ID == newUser.ID);
                         }
                         chatViewModel.CanRecieve = true;
                     }

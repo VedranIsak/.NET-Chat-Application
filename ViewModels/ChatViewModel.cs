@@ -20,6 +20,7 @@ namespace TDDD49.ViewModels
         private string searchQuery;
         private User internalUser;
         private User externalUser;
+        public User chattingUser;
         private string externalUserName;
         private ObservableCollection<User> users;
         private ObservableCollection<User> filteredUsers;
@@ -28,7 +29,6 @@ namespace TDDD49.ViewModels
         private InternalCommunicator internalCommunicator;
         private Thread recieveMessageThread;
         public bool CanRecieve { get; set; } = false;
-        public User chattingWith;
 
         public ChatViewModel(Communicator c)
         {
@@ -40,7 +40,7 @@ namespace TDDD49.ViewModels
             FilteredUsers = new ObservableCollection<User>();
             communicator = c;
             internalCommunicator = new InternalCommunicator(this);
-            ReadFromJSON();
+            internalCommunicator.ReadFromJson();
             ReadMessage();
 
             if (InternalUser == null) { InternalUser = new User(); }
@@ -51,188 +51,23 @@ namespace TDDD49.ViewModels
         public ICommand DisconnectCommand { get; set; }
         public ICommand BuzzCommand { get; set; }
 
-        private void ReadFromJSON()
-        {
-<<<<<<< HEAD
-            List<User> tmp;
-            using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
-            {
-                string inputUsersString = usersReader.ReadToEnd();
-                tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
-
-            }
-
-            ObservableCollection<User> tmpObservable = new ObservableCollection<User>();
-            foreach (var user in tmp)
-            {
-                tmpObservable.Add(user);
-            }
-            if (tmp?.Any() == true)
-            {
-                Users = tmpObservable;
-                ExternalUser = Users.ElementAt(0);
-                Messages = ExternalUser.Messages;
-            }
-=======
-            internalCommunicator.ReadFromJSON();
-            //List<User> tmp;
-            //using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
-            //{
-            //    string inputUsersString = usersReader.ReadToEnd();
-            //    tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
-
-            //}
->>>>>>> 7e321f9efdc13d66efd50e631b87c04f290f1c6e
-
-            //ObservableCollection<User> tmpObservable = new ObservableCollection<User>();
-            //foreach (var user in tmp)
-            //{
-            //    tmpObservable.Add(user);
-            //}
-            //if (tmp?.Any() == true)
-            //{
-            //    Users = tmpObservable;
-            //    ExternalUser = Users.ElementAt(0);
-            //    Messages = ExternalUser.Messages;
-            //}
-
-            //using (StreamReader userReader = new StreamReader("../../UserStorage.json"))
-            //{
-            //    string inputUserString = userReader.ReadToEnd();
-            //    InternalUser = JsonConvert.DeserializeObject<User>(inputUserString);
-
-<<<<<<< HEAD
-            if (InternalUser == null) { return; }
-            if (InternalUser.ID == null)
-            {
-                InternalUser.ID = GetHashCode();
-                using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
-                {
-                    writer.Write(JsonConvert.SerializeObject(InternalUser));
-                }
-            }
-=======
-            //}
-
-            //if (InternalUser == null) { return; }
-            //if (InternalUser.ID == null)
-            //{
-            //    InternalUser.ID = GetHashCode();
-            //    using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
-            //    {
-            //        writer.Write(JsonConvert.SerializeObject(InternalUser));
-            //    }
-            //}
->>>>>>> 7e321f9efdc13d66efd50e631b87c04f290f1c6e
-        }
-
-        private void WriteUsersToJSON(Message newMessage)
-        {
-<<<<<<< HEAD
-            List<User> tmp;
-            using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
-            {
-                tmp = JsonConvert.DeserializeObject<List<User>>(usersReader.ReadToEnd()).ToList();
-            }
-
-            if (tmp?.Any() == true)
-            {
-                tmp = new List<User>();
-                if (this.chattingWith.Messages == null)
-                {
-                    this.chattingWith.Messages = new ObservableCollection<Message>();
-                }
-                chattingWith.Messages.Add(newMessage);
-                tmp.Add(chattingWith);
-            }
-            else
-            {
-                if (!tmp.Any(item => item.ID == this.externalUser.ID))
-                {
-                    if (this.externalUser.Messages == null)
-                    {
-                        this.externalUser.Messages = new ObservableCollection<Message>();
-                    }
-                    this.externalUser.Messages.Add(newMessage);
-                    tmp.Add(this.externalUser);
-                }
-                else
-                {
-                    foreach (User u in tmp)
-                    {
-                        if (u.ID == this.externalUser.ID)
-                        {
-                            u.Messages.Add(newMessage);
-                            break;
-                        }
-                    }
-                }
-            }
-=======
-            internalCommunicator.WriteUsersToJSON(newMessage);
-        //    List<User> tmp;
-        //    using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
-        //    {
-        //        tmp = JsonConvert.DeserializeObject<List<User>>(usersReader.ReadToEnd()).ToList();
-
-        //    }
-
-        //    if (tmp?.Any() == true)
-        //    {
-        //        tmp = new List<User>();
-        //        if (this.externalUser.Messages == null)
-        //        {
-        //            this.externalUser.Messages = new ObservableCollection<Message>();
-        //        }
-        //        ExternalUser.Messages.Add(newMessage);
-        //        tmp.Add(ExternalUser);
-        //    }
-        //    else
-        //    {
-        //        if (!tmp.Any(item => item.ID == this.externalUser.ID))
-        //        {
-        //            if (this.externalUser.Messages == null)
-        //            {
-        //                this.externalUser.Messages = new ObservableCollection<Message>();
-        //            }
-        //            this.externalUser.Messages.Add(newMessage);
-        //            tmp.Add(this.externalUser);
-        //        }
-        //        else
-        //        {
-        //            foreach (User u in tmp)
-        //            {
-        //                if (u.ID == this.externalUser.ID)
-        //                {
-        //                    u.Messages.Add(newMessage);
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //    }
->>>>>>> 7e321f9efdc13d66efd50e631b87c04f290f1c6e
-
-        //    string jsonOut = JsonConvert.SerializeObject(tmp);
-
-        //    using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
-        //    {
-        //        writer.Write(jsonOut);
-        //    }
-        }
+        private void WriteMessageToJson(Message newMessage) { internalCommunicator.WriteMessageToJson(newMessage); }
 
         public void WriteUserToJSON()
         {
-            internalCommunicator.WriteUserToJSON();
-            //using (StreamWriter writer = new StreamWriter("../../UserStorage.json", false))
-            //{
-            //    writer.Write(JsonConvert.SerializeObject(InternalUser));
-            //}
+            internalCommunicator.WriteUserToJson();
+        }
+
+        public void AddUser(User newUser)
+        {
+            Users.Add(newUser);
+            internalCommunicator.WriteUsersToJson();
         }
 
         public void AddMessage(Message newMessage)
         {
             Messages.Add(newMessage);
-            WriteUsersToJSON(newMessage);
+            internalCommunicator.WriteMessageToJson(newMessage);
         }
 
         public string SearchQuery
@@ -280,14 +115,7 @@ namespace TDDD49.ViewModels
 
         public ObservableCollection<Message> Messages
         {
-            get
-            {
-                if (messages == null)
-                {
-                    messages = new ObservableCollection<Message>();
-                }
-                return messages;
-            }
+            get { return messages ?? new ObservableCollection<Message>(); }
             set
             {
                 messages = value;
@@ -299,6 +127,12 @@ namespace TDDD49.ViewModels
         {
             get { return internalUser; }
             set { internalUser = value; }
+        }
+
+        public User ChattingUser
+        {
+            get { return chattingUser; }
+            set { chattingUser = value; }
         }
 
         public User ExternalUser

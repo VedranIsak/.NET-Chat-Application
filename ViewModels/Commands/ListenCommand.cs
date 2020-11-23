@@ -78,9 +78,9 @@ namespace TDDD49.ViewModels.Commands
                         {
                             Application.Current.Dispatcher.Invoke(() =>
                             {
-                                chatViewModel.Users.Add(newUser);
+                                chatViewModel.AddUser(newUser);
                             });
-                            chatViewModel.chattingWith = newUser;
+                            chatViewModel.ChattingUser = newUser;
                         }
                         chatViewModel.CanRecieve = true;
                     }
