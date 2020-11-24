@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using TDDD49.Models;
-using TDDD49.ViewModels;
 
 namespace TDDD49.ViewModels.Commands
 {
@@ -37,7 +32,6 @@ namespace TDDD49.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            //Här är koden som ska kallas när man ska buzza
             Message m = new Message()
             {
                 MessageType = "buzz",
@@ -49,11 +43,25 @@ namespace TDDD49.ViewModels.Commands
                 t.IsBackground = true;
                 t.Start();
             }
-            catch (SocketException err)
+            catch (NullReferenceException e1)
             {
-                MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
-                communicator.disconnectStream();
-                Console.WriteLine(err);
+                Console.WriteLine(e1);
+            }
+            catch (SocketException e2)
+            {
+                Console.WriteLine(e2);
+            }
+            catch (ThreadAbortException e3)
+            {
+                Console.WriteLine(e3);
+            }
+            catch (IOException e4)
+            {
+                Console.WriteLine(e4);
+            }
+            catch (ObjectDisposedException e4)
+            {
+                Console.WriteLine(e4);
             }
 
         }

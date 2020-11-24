@@ -49,6 +49,7 @@ namespace TDDD49.Models
         // https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.tcpclient?view=netcore-3.1
         public void ConnectToOtherPerson(Int32 port, string server, User internalUser, ChatViewModel cvm)
         {
+            this.CanCommunicate = false;
             this.internalUser = internalUser;
             this.chatViewModel = cvm;
 
@@ -105,7 +106,7 @@ namespace TDDD49.Models
 
         public void ListenToPort(Int32 port, User internalUser, ChatViewModel cvm)
         {
-
+            this.CanCommunicate = false;
             this.internalUser = internalUser;
             this.chatViewModel = cvm;
             try
@@ -168,8 +169,8 @@ namespace TDDD49.Models
                         {
                             string s = string.Format("You are now chatting with {0}", res.Sender.Name);
                             MessageBox.Show(s);
-                            externalUser = res.Sender;
-                            CanCommunicate = true;
+                            this.externalUser = res.Sender;
+                            this.CanCommunicate = true;
                             break;
                         }
                         else if (res.MessageType == "decline")
@@ -207,6 +208,8 @@ namespace TDDD49.Models
 
         public void disconnectStream()
         {
+            CanCommunicate = false;
+
             if (this.Client != null)
             {
                 this.Client.Close();
@@ -278,9 +281,12 @@ namespace TDDD49.Models
 
         public void sendMessage(Message m)
         {
-            Console.WriteLine("sending message");
-            byte[] send = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(m));
-            Stream.Write(send, 0, send.Length);
+            if (Stream != null)
+            {
+                Console.WriteLine("sending message");
+                byte[] send = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(m));
+                Stream.Write(send, 0, send.Length);
+            }
         }
 
         public void ReadMessage()
