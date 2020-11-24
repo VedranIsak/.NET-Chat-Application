@@ -260,7 +260,7 @@ namespace TDDD49
                         {
                             Application.Current.Dispatcher.Invoke(() =>
                             {
-                                chatViewModel.AddMessage(response);
+                                chatViewModel.AddChattingMessage(response);
                             });
                         }
                         else if (response.MessageType == "buzz")
@@ -344,7 +344,7 @@ namespace TDDD49
                     sendMessage(mes);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        this.chatViewModel.AddMessage(mes);
+                        this.chatViewModel.AddChattingMessage(mes);
                     });
                 }
                 catch (NullReferenceException e)

@@ -61,8 +61,8 @@ namespace TDDD49.Communication
             if (tmp?.Any() == true)
             {
                 chatViewModel.Users = tmp;
-                chatViewModel.ExternalUser = chatViewModel.Users.ElementAt(0);
-                chatViewModel.Messages = chatViewModel.ExternalUser.Messages;
+                chatViewModel.VisibleUser = chatViewModel.Users.ElementAt(0);
+                chatViewModel.VisibleMessages = chatViewModel.VisibleUser.Messages;
             }
 
             chatViewModel.InternalUser = GetUserFromJson() ?? null;
@@ -112,29 +112,29 @@ namespace TDDD49.Communication
             if (tmp?.Any() == false)
             {
                 tmp = new ObservableCollection<User>();
-                if (this.chatViewModel.ExternalUser.Messages == null)
+                if (this.chatViewModel.VisibleUser.Messages == null)
                 {
-                    this.chatViewModel.ExternalUser.Messages = new ObservableCollection<Message>();
+                    this.chatViewModel.VisibleUser.Messages = new ObservableCollection<Message>();
                 }
-                chatViewModel.ExternalUser.Messages.Add(newMessage);
-                tmp.Add(chatViewModel.ExternalUser);
+                chatViewModel.VisibleUser.Messages.Add(newMessage);
+                tmp.Add(chatViewModel.VisibleUser);
             }
             else
             {
-                if (!tmp.Any(item => item.ID == this.chatViewModel.ExternalUser.ID))
+                if (!tmp.Any(item => item.ID == this.chatViewModel.VisibleUser.ID))
                 {
-                    if (this.chatViewModel.ExternalUser.Messages == null)
+                    if (this.chatViewModel.VisibleUser.Messages == null)
                     {
-                        this.chatViewModel.ExternalUser.Messages = new ObservableCollection<Message>();
+                        this.chatViewModel.VisibleUser.Messages = new ObservableCollection<Message>();
                     }
-                    this.chatViewModel.ExternalUser.Messages.Add(newMessage);
-                    tmp.Add(this.chatViewModel.ExternalUser);
+                    this.chatViewModel.VisibleUser.Messages.Add(newMessage);
+                    tmp.Add(this.chatViewModel.VisibleUser);
                 }
                 else
                 {
                     foreach (User u in tmp)
                     {
-                        if (u.ID == this.chatViewModel.ExternalUser.ID)
+                        if (u.ID == this.chatViewModel.VisibleUser.ID)
                         {
                             u.Messages.Add(newMessage);
                             break;

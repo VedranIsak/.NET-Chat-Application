@@ -4,21 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using TDDD49.ViewModels;
 using TDDD49.Models;
 
 namespace TDDD49.ViewModels.Commands
 {
-    public class SwitchUserCommand : ICommand
+    public class ChatCommand : ICommand
     {
-        //Här byter man vilken användare som man chattar med, så här ska anslutningsinställningarna (ip, port) bytas
-        public SwitchUserCommand(ChatViewModel chatViewModel)
-        {
-            this.ChatViewModel = chatViewModel;
-        }
+        private ChatViewModel chatViewModel;
+        public ChatCommand(ChatViewModel chatViewModel) { this.chatViewModel = chatViewModel; }
 
-        public ChatViewModel ChatViewModel { get; set; }
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
@@ -27,13 +21,14 @@ namespace TDDD49.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
+            //Här borde man ha att man kan bara chatta med personen man är uppkopplad med
             return true;
         }
 
         public void Execute(object parameter)
         {
-            User user = parameter as User;
-            ChatViewModel.VisibleUser = user;
+            User userToChat = parameter as User;
+            chatViewModel.ChattingUser = userToChat;
         }
     }
 }
