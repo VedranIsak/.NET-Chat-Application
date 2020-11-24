@@ -36,7 +36,7 @@ namespace TDDD49.ViewModels.Commands
                 Thread t = new Thread(() =>
                 {
                     communicator.stopChatting(this.chatViewModel.InternalUser);
-
+                    this.chatViewModel.ChattingUser = null;
                 });
                 t.IsBackground = true;
                 t.Start();
