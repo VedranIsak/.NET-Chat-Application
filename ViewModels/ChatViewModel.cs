@@ -11,17 +11,20 @@ namespace TDDD49.ViewModels
     public class ChatViewModel : ViewModel
     {
         private string searchQuery;
-        private User externalUser;
+        private User internalUser;
+        private User visibleUser;
         public User chattingUser;
-        private string externalUserName;
+        private string visibleUserName;
         private ObservableCollection<User> users;
         private ObservableCollection<User> filteredUsers;
-        private ObservableCollection<Message> messages;
+        private ObservableCollection<Message> visibleMessages;
+        private ObservableCollection<Message> chattingMessages;
         private Communicator communicator;
         private InternalCommunicator internalCommunicator;
 
         public ChatViewModel(Communicator c)
         {
+            ChatCommand = new ChatCommand(this);
             SendCommand = new SendCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
             DisconnectCommand = new DisconnectCommand(c, this);
@@ -36,6 +39,7 @@ namespace TDDD49.ViewModels
             if (InternalUser == null) { InternalUser = new User(); }
         }
 
+        public ICommand ChatCommand { get; set; }
         public ICommand SendCommand { get; set; }
         public ICommand SwitchUserCommand { get; set; }
         public ICommand DisconnectCommand { get; set; }
@@ -43,10 +47,7 @@ namespace TDDD49.ViewModels
 
         private void WriteMessageToJson(Message newMessage) { internalCommunicator.WriteMessageToJson(newMessage); }
 
-        public void WriteUserToJSON()
-        {
-            internalCommunicator.WriteUserToJson();
-        }
+        public void WriteUserToJSON()  { internalCommunicator.WriteUserToJson(); }
 
         public void AddUser(User newUser)
         {
@@ -54,9 +55,9 @@ namespace TDDD49.ViewModels
             internalCommunicator.WriteUsersToJson();
         }
 
-        public void AddMessage(Message newMessage)
+        public void AddChattingMessage(Message newMessage)
         {
-            Messages.Add(newMessage);
+            ChattingMessages.Add(newMessage);
             internalCommunicator.WriteMessageToJson(newMessage);
         }
 
@@ -103,13 +104,23 @@ namespace TDDD49.ViewModels
             }
         }
 
-        public ObservableCollection<Message> Messages
+        public ObservableCollection<Message> VisibleMessages
         {
-            get { return messages ?? new ObservableCollection<Message>(); }
+            get { return visibleMessages ?? new ObservableCollection<Message>(); }
             set
             {
-                messages = value;
-                OnPropertyChanged(nameof(Messages));
+                visibleMessages = value;
+                OnPropertyChanged(nameof(VisibleMessages));
+            }
+        }
+
+        public ObservableCollection<Message> ChattingMessages
+        {
+            get { return chattingMessages ?? new ObservableCollection<Message>(); }
+            set
+            {
+                chattingMessages = value;
+                OnPropertyChanged(nameof(ChattingMessages));
             }
         }
 
@@ -118,34 +129,33 @@ namespace TDDD49.ViewModels
         public User ChattingUser
         {
             get { return chattingUser; }
-            set { chattingUser = value; }
-        }
-
-        public User ExternalUser
-        {
-            get { return externalUser; }
             set
             {
-                externalUser = value;
-                ExternalUserName = externalUser.Name;
-                if (externalUser.Messages == null)
-                {
-                    Messages = new ObservableCollection<Message>();
-                }
-                else
-                {
-                    Messages = externalUser.Messages;
-                }
+                chattingUser = value;
+                VisibleUserName = chattingUser.Name;
+                VisibleMessages = chattingUser.Messages;
+                ChattingMessages = chattingUser.Messages ?? new ObservableCollection<Message>();
             }
         }
 
-        public string ExternalUserName
+        public User VisibleUser
         {
-            get { return externalUserName; }
+            get { return visibleUser; }
             set
             {
-                externalUserName = value;
-                OnPropertyChanged(nameof(ExternalUserName));
+                visibleUser = value;
+                VisibleUserName = visibleUser.Name;
+                VisibleMessages = visibleUser.Messages ?? new ObservableCollection<Message>();
+            }
+        }
+
+        public string VisibleUserName
+        {
+            get { return visibleUserName; }
+            set
+            {
+                visibleUserName = value;
+                OnPropertyChanged(nameof(VisibleUserName));
             }
         }
 
