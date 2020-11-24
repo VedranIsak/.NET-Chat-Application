@@ -30,12 +30,14 @@ namespace TDDD49.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
+            if (chatViewModel.IsListening) { return false; }
             if (connectViewModel.ValidExternalPort 
                 && chatViewModel.InternalUser != null
                 && chatViewModel.InternalUser.Name != null
                 && chatViewModel.InternalUser.Port > 1023
                 && chatViewModel.InternalUser.Port < 65353
-                && chatViewModel.InternalUser.IpAddress != null) { return true; }
+                && chatViewModel.InternalUser.IpAddress != null)
+            { return true; }
             return false;
         }
 
@@ -59,6 +61,7 @@ namespace TDDD49.ViewModels.Commands
             listenThread = new Thread(() =>
             {
                 chatViewModel.IsListening = true;
+                connectViewModel.IsListening = true;
                 try
                 {
                     communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port, cvm: chatViewModel);
@@ -114,6 +117,7 @@ namespace TDDD49.ViewModels.Commands
                 finally
                 {
                     chatViewModel.IsListening = false;
+                    connectViewModel.IsListening = false;
                 }
             });
             listenThread.IsBackground = true;

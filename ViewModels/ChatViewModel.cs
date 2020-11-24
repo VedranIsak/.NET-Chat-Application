@@ -43,7 +43,7 @@ namespace TDDD49.ViewModels
         public ICommand DisconnectCommand { get; set; }
         public ICommand BuzzCommand { get; set; }
 
-        private void WriteMessageToJson(Message newMessage) { internalCommunicator.WriteMessageToJson(newMessage); }
+        //private void WriteMessageToJson(Message newMessage) { internalCommunicator.WriteMessageToJson(newMessage); }
 
         public void WriteUserToJSON()  { internalCommunicator.WriteUserToJson(); }
 
