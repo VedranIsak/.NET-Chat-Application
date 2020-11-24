@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Media;
 using System.Net;
 using System.Net.Sockets;
@@ -7,10 +8,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
-using TDDD49.Models;
 using TDDD49.ViewModels;
 
-namespace TDDD49
+namespace TDDD49.Models
 {
     public class Communicator
     {
@@ -20,7 +20,7 @@ namespace TDDD49
         public TcpListener Server { get; set; }
         public TcpClient Client { get; set; }
         public NetworkStream Stream { get; set; }
-        public bool CanRecieve { get; private set; } = false;
+        public bool CanCommunicate { get; private set; } = false;
 
         private const string Pattern = @"^(([0-9]{1,3}.){3}([0-9]{1,3})|localhost)";
         private Regex regex = new Regex(Pattern, RegexOptions.Compiled);
@@ -96,7 +96,7 @@ namespace TDDD49
                         externalUser = response.Sender;
                         sendMessage(internalUser, "accept");
 
-                        CanRecieve = true;
+                        CanCommunicate = true;
                         break;
                     }
                 }
@@ -169,7 +169,7 @@ namespace TDDD49
                             string s = string.Format("You are now chatting with {0}", res.Sender.Name);
                             MessageBox.Show(s);
                             externalUser = res.Sender;
-                            CanRecieve = true;
+                            CanCommunicate = true;
                             break;
                         }
                         else if (res.MessageType == "decline")
@@ -188,11 +188,6 @@ namespace TDDD49
                     }
                     break;
                 }
-            }
-            catch (SocketException e)
-            {
-                MessageBox.Show("Kopplingen bröts, försök igen");
-                Console.WriteLine("SocketException: {0}", e);
             }
             finally
             {
@@ -232,7 +227,6 @@ namespace TDDD49
 
         public void recieveMessage()
         {
-            //Console.WriteLine("recmes");
             if (Stream != null)
             {
                 while (true)
@@ -291,39 +285,46 @@ namespace TDDD49
 
         public void ReadMessage()
         {
-            this.recieveMessageThread = new Thread(() =>
+            try
             {
-                while (true)
+                this.recieveMessageThread = new Thread(() =>
                 {
-                    if (CanRecieve)
+                    while (true)
                     {
                         try
                         {
-                            recieveMessage();
+                            if (CanCommunicate)
+                            {
+                                recieveMessage();
+                            }
                         }
                         catch (ObjectDisposedException e1)
                         {
                             MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
-                            CanRecieve = false;
+                            CanCommunicate = false;
                             Console.WriteLine(e1);
-                        }  
-                        catch (SocketException e1)
+                        }
+                        catch (SocketException e2)
                         {
                             MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
-                            CanRecieve = false;
+                            CanCommunicate = false;
                             disconnectStream();
-                            Console.WriteLine(e1);
-                        }
-                        catch (JsonReaderException e2)
-                        {
                             Console.WriteLine(e2);
                         }
+                        catch (JsonReaderException e3)
+                        {
+                            Console.WriteLine(e3);
+                        }
                     }
-                }
-            });
-            this.recieveMessageThread.IsBackground = true;
-            this.recieveMessageThread.Start();
-            
+
+                });
+                this.recieveMessageThread.IsBackground = true;
+                this.recieveMessageThread.Start();
+            }
+            catch (ThreadAbortException e4)
+            {
+                Console.WriteLine(e4);
+            }
         }
 
         public void WriteMessage(string message, User sender)
@@ -336,36 +337,48 @@ namespace TDDD49
                 MessageType = "message",
                 IsInternalUserMessage = true
             };
-
-            Thread t = new Thread(() =>
+            try
             {
-                try
+                if (!CanCommunicate)
+                {
+                    MessageBox.Show("Not connected");
+                    return;
+                }
+                Thread t = new Thread(() =>
                 {
                     sendMessage(mes);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         this.chatViewModel.AddMessage(mes);
                     });
-                }
-                catch (NullReferenceException e)
-                {
-                    MessageBox.Show("No connection, try connecting again", "No connection");
-                    disconnectStream();
-                    CanRecieve = false;
-                    Console.WriteLine(e);
-                }
-                catch (SocketException e2)
-                {
-                    MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
-                    disconnectStream();
-                    CanRecieve = false;
-                    Console.WriteLine(e2);
-                }
-
-        });
-            t.IsBackground = true;
-            t.Start();
-
+                });
+                t.IsBackground = true;
+                t.Start();
+            }
+            catch (NullReferenceException e1)
+            {
+                MessageBox.Show("No connection, try connecting again", "No connection");
+                disconnectStream();
+                CanCommunicate = false;
+                Console.WriteLine(e1);
+            }
+            catch (SocketException e2)
+            {
+                MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
+                disconnectStream();
+                CanCommunicate = false;
+                Console.WriteLine(e2);
+            }
+            catch (ThreadAbortException e3)
+            {
+                Console.WriteLine(e3);
+            }
+            catch (IOException e4)
+            {
+                Console.WriteLine(e4);
+                disconnectStream();
+                CanCommunicate = false;
+            }
         }
 
     }

@@ -70,6 +70,7 @@ namespace TDDD49.ViewModels.Commands
                     {
                         User newUser = new User()
                         {
+                            ID = communicator.externalUser.ID,
                             Name = communicator.externalUser.Name,
                             IpAddress = communicator.externalUser.IpAddress,
                             Port = communicator.externalUser.Port,
@@ -81,7 +82,7 @@ namespace TDDD49.ViewModels.Commands
 
                             Application.Current.Dispatcher.Invoke(() =>
                             {
-                                chatViewModel.AddUser(new User() { Name = communicator.externalUser.Name, IpAddress = communicator.externalUser.IpAddress, Port = communicator.externalUser.Port });
+                                chatViewModel.AddUser(newUser);
 
                             });
                             chatViewModel.chattingUser = newUser;
@@ -99,7 +100,7 @@ namespace TDDD49.ViewModels.Commands
                 }
                 catch (SocketException e)
                 {
-                    MessageBox.Show("Noone listening to that address");
+                    MessageBox.Show("No one listening to that address");
                     Console.WriteLine(e);
                 }
                 catch (ArgumentNullException e2)
