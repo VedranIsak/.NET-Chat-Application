@@ -14,6 +14,7 @@ namespace TDDD49.ViewModels.Commands
         private Communicator communicator;
         private Thread listenThread;
         private ChatViewModel chatViewModel;
+
         public ListenCommand(ConnectViewModel connectViewModel, Communicator c, ChatViewModel chatViewModel) 
         { 
             this.connectViewModel = connectViewModel; 
@@ -57,6 +58,7 @@ namespace TDDD49.ViewModels.Commands
             }
             listenThread = new Thread(() =>
             {
+                chatViewModel.IsListening = true;
                 try
                 {
                     communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port, cvm: chatViewModel);
@@ -108,6 +110,10 @@ namespace TDDD49.ViewModels.Commands
                 catch (ObjectDisposedException e4)
                 {
                     Console.WriteLine(e4);
+                }
+                finally
+                {
+                    chatViewModel.IsListening = false;
                 }
             });
             listenThread.IsBackground = true;

@@ -209,6 +209,7 @@ namespace TDDD49.Models
         public void disconnectStream()
         {
             CanCommunicate = false;
+            this.chatViewModel.ChattingUser = null;
 
             if (this.Client != null)
             {
@@ -248,7 +249,7 @@ namespace TDDD49.Models
                         if (response.MessageType == "disconnect")
                         {
                             Console.WriteLine("disconnected");
-                            String s = String.Format("{0} har kopplat bort.", response.Sender);
+                            String s = String.Format("{0} har kopplat bort.", response.Sender.Name);
                             MessageBox.Show(s);
                             disconnectStream();
                             break;
@@ -307,13 +308,12 @@ namespace TDDD49.Models
                         catch (ObjectDisposedException e1)
                         {
                             MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
-                            CanCommunicate = false;
+                            disconnectStream();
                             Console.WriteLine(e1);
                         }
                         catch (SocketException e2)
                         {
                             MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
-                            CanCommunicate = false;
                             disconnectStream();
                             Console.WriteLine(e2);
                         }
@@ -365,14 +365,12 @@ namespace TDDD49.Models
             {
                 MessageBox.Show("No connection, try connecting again", "No connection");
                 disconnectStream();
-                CanCommunicate = false;
                 Console.WriteLine(e1);
             }
             catch (SocketException e2)
             {
                 MessageBox.Show("Connection lost, try connnecting again!", "Lost connection");
                 disconnectStream();
-                CanCommunicate = false;
                 Console.WriteLine(e2);
             }
             catch (ThreadAbortException e3)
@@ -383,7 +381,6 @@ namespace TDDD49.Models
             {
                 Console.WriteLine(e4);
                 disconnectStream();
-                CanCommunicate = false;
             }
         }
 
