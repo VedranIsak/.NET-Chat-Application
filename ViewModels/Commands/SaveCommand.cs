@@ -26,8 +26,9 @@ namespace TDDD49.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            if(settingsViewModel.ValidInternalPort && settingsViewModel.ValidInternalUserName) { return true; }
-            return false;
+            if(!settingsViewModel.ValidInternalPort && !settingsViewModel.ValidInternalUserName) { return false; }
+            if(chatViewModel.ChattingUser != null) { return false; }
+            return true;
          }
 
         public void Execute(object parameter)

@@ -29,7 +29,8 @@ namespace TDDD49.ViewModels.Commands
         {
             string input = parameter as string;
             if(input == null) { return false; }
-            if (input.Length == 0) return false;
+            if (input.Length == 0) { return false; }
+            if(chatViewModel.ChattingUser == null) { return false; } 
             return true;
         }
 

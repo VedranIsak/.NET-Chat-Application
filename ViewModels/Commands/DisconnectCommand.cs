@@ -26,7 +26,11 @@ namespace TDDD49.ViewModels.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public bool CanExecute(object parameter) { return true; }
+        public bool CanExecute(object parameter)
+        {
+            if(chatViewModel.ChattingUser == null) { return false; }
+            return true;
+        }
 
         public void Execute(object parameter)
         {

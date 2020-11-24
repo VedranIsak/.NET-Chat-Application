@@ -19,7 +19,7 @@ namespace TDDD49.ViewModels
         private string searchQuery;
         private User internalUser;
         private User visibleUser;
-        public User chattingUser;
+        private User chattingUser;
         private string visibleUserName;
         private ObservableCollection<User> users;
         private ObservableCollection<User> filteredUsers;
@@ -31,7 +31,6 @@ namespace TDDD49.ViewModels
 
         public ChatViewModel(Communicator c)
         {
-            ChatCommand = new ChatCommand(this);
             SendCommand = new SendCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
             DisconnectCommand = new DisconnectCommand(c, this);
@@ -46,7 +45,6 @@ namespace TDDD49.ViewModels
             if (InternalUser == null) { InternalUser = new User(); }
         }
 
-        public ICommand ChatCommand { get; set; }
         public ICommand SendCommand { get; set; }
         public ICommand SwitchUserCommand { get; set; }
         public ICommand DisconnectCommand { get; set; }
@@ -62,7 +60,7 @@ namespace TDDD49.ViewModels
             internalCommunicator.WriteUsersToJson();
         }
 
-        public void AddChattingMessage(Message newMessage)
+        public void AddMessage(Message newMessage)
         {
             ChattingMessages.Add(newMessage);
             internalCommunicator.WriteMessageToJson(newMessage);
@@ -143,6 +141,7 @@ namespace TDDD49.ViewModels
             set
             {
                 chattingUser = value;
+                VisibleUser = value;
                 VisibleUserName = chattingUser.Name;
                 VisibleMessages = chattingUser.Messages;
                 ChattingMessages = chattingUser.Messages ?? new ObservableCollection<Message>();

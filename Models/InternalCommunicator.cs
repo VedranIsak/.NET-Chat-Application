@@ -112,29 +112,29 @@ namespace TDDD49.Models
             if (tmp?.Any() == false)
             {
                 tmp = new ObservableCollection<User>();
-                if (this.chatViewModel.VisibleUser.Messages == null)
+                if (this.chatViewModel.ChattingUser.Messages == null)
                 {
-                    this.chatViewModel.VisibleUser.Messages = new ObservableCollection<Message>();
+                    this.chatViewModel.ChattingUser.Messages = new ObservableCollection<Message>();
                 }
-                chatViewModel.VisibleUser.Messages.Add(newMessage);
-                tmp.Add(chatViewModel.VisibleUser);
+                chatViewModel.ChattingUser.Messages.Add(newMessage);
+                tmp.Add(chatViewModel.ChattingUser);
             }
             else
             {
-                if (!tmp.Any(item => item.ID == this.chatViewModel.VisibleUser.ID))
+                if (!tmp.Any(item => item.ID == this.chatViewModel.ChattingUser.ID))
                 {
-                    if (this.chatViewModel.VisibleUser.Messages == null)
+                    if (this.chatViewModel.ChattingUser.Messages == null)
                     {
-                        this.chatViewModel.VisibleUser.Messages = new ObservableCollection<Message>();
+                        this.chatViewModel.ChattingUser.Messages = new ObservableCollection<Message>();
                     }
-                    this.chatViewModel.VisibleUser.Messages.Add(newMessage);
-                    tmp.Add(this.chatViewModel.VisibleUser);
+                    this.chatViewModel.ChattingUser.Messages.Add(newMessage);
+                    tmp.Add(this.chatViewModel.ChattingUser);
                 }
                 else
                 {
                     foreach (User u in tmp)
                     {
-                        if (u.ID == this.chatViewModel.VisibleUser.ID)
+                        if (u.ID == this.chatViewModel.ChattingUser.ID)
                         {
                             u.Messages.Add(newMessage);
                             break;

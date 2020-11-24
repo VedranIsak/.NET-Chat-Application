@@ -254,7 +254,7 @@ namespace TDDD49.Models
                         {
                             Application.Current.Dispatcher.Invoke(() =>
                             {
-                                chatViewModel.AddChattingMessage(response);
+                                chatViewModel.AddMessage(response);
                             });
                         }
                         else if (response.MessageType == "buzz")
@@ -349,7 +349,7 @@ namespace TDDD49.Models
                     sendMessage(mes);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        this.chatViewModel.AddChattingMessage(mes);
+                        this.chatViewModel.AddMessage(mes);
                     });
                 });
                 t.IsBackground = true;

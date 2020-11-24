@@ -85,7 +85,7 @@ namespace TDDD49.ViewModels.Commands
                         }
                         else
                         {
-                            chatViewModel.chattingUser = chatViewModel.Users.Single(item => item.ID == newUser.ID);
+                            chatViewModel.ChattingUser = chatViewModel.Users.Single(item => item.ID == newUser.ID);
                         }
                         chatViewModel.CanRecieve = true;
                     }
