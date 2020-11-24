@@ -14,6 +14,7 @@ namespace TDDD49.ViewModels
     {
         private ChatViewModel chatViewModel;
         private bool validExternalPort = true;
+        private bool isListening = false;
         private int externalPort;
         private string externalIpAddress;
         private Communicator communicator;
@@ -58,6 +59,16 @@ namespace TDDD49.ViewModels
                 else { ValidExternalPort = false; }
                 externalPort = value;
                 OnPropertyChanged(nameof(ExternalPort));
+            }
+        }
+
+        public bool IsListening
+        {
+            get { return isListening; }
+            set
+            {
+                isListening = value;
+                OnPropertyChanged(nameof(IsListening));
             }
         }
     }

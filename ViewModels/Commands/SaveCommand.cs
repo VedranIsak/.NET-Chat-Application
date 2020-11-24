@@ -28,6 +28,7 @@ namespace TDDD49.ViewModels.Commands
         {
             if(!settingsViewModel.ValidInternalPort && !settingsViewModel.ValidInternalUserName) { return false; }
             if(chatViewModel.ChattingUser != null) { return false; }
+            if(chatViewModel.IsListening) { return false; }
             return true;
          }
 

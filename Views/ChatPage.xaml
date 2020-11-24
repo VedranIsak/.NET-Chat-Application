@@ -84,7 +84,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Style="{StaticResource SubLabel}" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding Name}"></Label>
-                                <Button Style="{StaticResource ChatButton}" Grid.Column="3" Content="Chat" Command="{Binding ElementName=FilteredList,  Path=DataContext.SwitchUserCommand}" CommandParameter="{Binding Name}" FontSize="16"></Button>
+                                <Button Style="{StaticResource ChatButton}" Grid.Column="3" Content="View" Command="{Binding ElementName=FilteredList,  Path=DataContext.SwitchUserCommand}" CommandParameter="{Binding}" FontSize="16"></Button>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

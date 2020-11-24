@@ -31,7 +31,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Add a new user to chat with!" Style="{StaticResource HeaderLabel}" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="1"></Label>
+        <Label Content="Fill in settings to start chatting" Style="{StaticResource HeaderLabel}" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="1"></Label>
 
         <Label Content="User IP Address" Grid.Column="1" Grid.Row="1" Margin="0 20 0 0"></Label>
         <Border Style="{StaticResource ContentBorder}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2">
@@ -54,7 +54,18 @@
             <TextBox Text="{Binding ExternalPort, UpdateSourceTrigger=PropertyChanged}" Padding="1"></TextBox>
         </Border>
 
-        <Button Content="Listen" Command="{Binding ListenCommand}" Grid.Column="1" Grid.Row="6"></Button>
+        <Label Content="You are listening!" Grid.Column="1" Grid.Row="6" Margin="0 0 0 20" Visibility="Hidden">
+            <Label.Style>
+                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsListening}" Value="True">
+                            <Setter Property="Label.Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+            <Button Content="Listen" Command="{Binding ListenCommand}" Grid.Column="1" Grid.Row="6"></Button>
         <Button Content="Add User" Command="{Binding AddUserCommand}" Grid.Column="3" Grid.Row="6"></Button>
     </Grid>
 </Page>
