@@ -104,17 +104,25 @@ namespace TDDD49.Models
             }
         }
 
-        public void ListenToPort(Int32 port, User internalUser, ChatViewModel cvm)
+        public void ListenToPort(Int32 port, User internalUser, ChatViewModel cvm, string ip)
         {
             this.CanCommunicate = false;
             this.internalUser = internalUser;
             this.chatViewModel = cvm;
+
+            if (!regex.Match(ip).Success)
+            {
+                Console.WriteLine("bad server");
+                string s = string.Format("{0} is invalid server ip", ip);
+                throw new BadServerException(s);
+            }
+
             try
             {
                 // Set the TcpListener on port 13000.
                 // Int32 port = 13000;
                 Console.WriteLine("Listen to port!!!!!");
-                IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+                IPAddress localAddr = IPAddress.Parse(ip);
 
                 // TcpListener server = new TcpListener(port);
                 Server = new TcpListener(localAddr, port);

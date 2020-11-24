@@ -61,7 +61,7 @@ namespace TDDD49.ViewModels.Commands
                 chatViewModel.IsListening = true;
                 try
                 {
-                    communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port, cvm: chatViewModel);
+                    communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port, cvm: chatViewModel, ip: chatViewModel.InternalUser.IpAddress);
                     
                     if (communicator.externalUser != null)
                     {
@@ -110,6 +110,11 @@ namespace TDDD49.ViewModels.Commands
                 catch (ObjectDisposedException e4)
                 {
                     Console.WriteLine(e4);
+                }
+                catch (Communicator.BadServerException e3)
+                {
+                    MessageBox.Show("Bad IP address, try again", "Bad IP address");
+                    Console.WriteLine(e3);
                 }
                 finally
                 {
