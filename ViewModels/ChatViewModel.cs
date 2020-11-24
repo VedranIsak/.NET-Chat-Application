@@ -11,7 +11,6 @@ using TDDD49.ViewModels.Commands;
 using System.IO;
 using Newtonsoft.Json;
 using System.Windows;
-using TDDD49.Communication;
 
 namespace TDDD49.ViewModels
 {
@@ -28,7 +27,6 @@ namespace TDDD49.ViewModels
         private ObservableCollection<Message> chattingMessages;
         private Communicator communicator;
         private InternalCommunicator internalCommunicator;
-        private Thread recieveMessageThread;
         public bool CanRecieve { get; set; } = false;
 
         public ChatViewModel(Communicator c)

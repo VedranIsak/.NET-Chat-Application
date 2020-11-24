@@ -38,7 +38,7 @@ namespace TDDD49.ViewModels.Commands
                 && chatViewModel.InternalUser.Port > 1023
                 && chatViewModel.InternalUser.Port < 65353
                 && chatViewModel.InternalUser.IpAddress != null) { return true; }
-            return false; return false;
+            return false;
         }
 
         public void Execute(object parameter)
@@ -62,25 +62,34 @@ namespace TDDD49.ViewModels.Commands
                 chatViewModel.CanRecieve = false;
                 try
                 {
+<<<<<<< HEAD
                     //communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port);
+=======
+                    communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port, cvm: chatViewModel);
+>>>>>>> f3093b824e5fa7ac8d076a682659c626877162a3
                     
                     if (communicator.externalUser != null)
                     {
                         User newUser = new User()
                         {
+                            ID = communicator.externalUser.ID,
                             Name = communicator.externalUser.Name,
                             IpAddress = communicator.externalUser.IpAddress,
                             Port = communicator.externalUser.Port,
                             Messages = new System.Collections.ObjectModel.ObservableCollection<Message>()
                         };
 
-                        if (!chatViewModel.Users.Any(item => item.ID == communicator.externalUser.ID))
+                        if (!chatViewModel.Users.Any(item => item.ID == newUser.ID))
                         {
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 chatViewModel.AddUser(newUser);
                             });
                             chatViewModel.ChattingUser = newUser;
+                        }
+                        else
+                        {
+                            chatViewModel.chattingUser = chatViewModel.Users.Single(item => item.ID == newUser.ID);
                         }
                         chatViewModel.CanRecieve = true;
                     }
@@ -92,11 +101,12 @@ namespace TDDD49.ViewModels.Commands
                 }
                 catch (SocketException e1)
                 {
-                    Console.WriteLine("e1");
+                    MessageBox.Show("Kopplingen bröts, försök igen");
+                    Console.WriteLine("SocketException: {0}", e1);
                 }
                 catch (ThreadAbortException e2)
                 {
-                    Console.WriteLine("e2");
+                    Console.WriteLine(e2);
                 }
                 catch (NullReferenceException e3)
                 {

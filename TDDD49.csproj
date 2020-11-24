@@ -73,7 +73,7 @@
     <Compile Include="ViewModels\ConnectViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
-    <Compile Include="Communication\Communicator.cs" />
+    <Compile Include="Models\Communicator.cs" />
     <Compile Include="Views\ChatPage.xaml.cs">
       <DependentUpon>ChatPage.xaml</DependentUpon>
     </Compile>
@@ -144,5 +144,6 @@
       <Version>12.0.3</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

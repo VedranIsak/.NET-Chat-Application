@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TDDD49.Models;
 
 namespace TDDD49.ViewModels.Commands
 {
@@ -29,24 +31,33 @@ namespace TDDD49.ViewModels.Commands
         public void Execute(object parameter)
         {
             Console.WriteLine("trying to disconnect");
-            Thread t = new Thread(() =>
+            try
             {
-                try
+                Thread t = new Thread(() =>
                 {
                     communicator.stopChatting(this.chatViewModel.InternalUser);
                     chatViewModel.CanRecieve = false;
-                }
-                catch (SocketException e)
-                {
-                    Console.WriteLine(e);
-                }
-                catch (NullReferenceException e2)
-                {
-                    Console.WriteLine(e2);
-                }
-            });
-            t.IsBackground = true;
-            t.Start();
+
+                });
+                t.IsBackground = true;
+                t.Start();
+            }
+            catch (NullReferenceException e1)
+            {
+                Console.WriteLine(e1);
+            }
+            catch (SocketException e2)
+            {
+                Console.WriteLine(e2);
+            }
+            catch (ThreadAbortException e3)
+            {
+                Console.WriteLine(e3);
+            }
+            catch (IOException e4)
+            {
+                Console.WriteLine(e4);
+            }
         }
     }
 }

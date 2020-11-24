@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using TDDD49.Models;
 using TDDD49.ViewModels;
 
-namespace TDDD49.Communication
+namespace TDDD49.Models
 {
     public class InternalCommunicator
     {

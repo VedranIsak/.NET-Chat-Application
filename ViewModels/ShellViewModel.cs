@@ -1,8 +1,8 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
-
 using TDDD49.Views;
 using TDDD49.ViewModels.Commands;
+using TDDD49.Models;
 
 namespace TDDD49.ViewModels
 {
