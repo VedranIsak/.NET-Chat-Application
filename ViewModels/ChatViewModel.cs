@@ -2,22 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Sockets;
-using System.Threading;
 using System.Windows.Input;
-
 using TDDD49.Models;
 using TDDD49.ViewModels.Commands;
-using System.IO;
-using Newtonsoft.Json;
-using System.Windows;
 
 namespace TDDD49.ViewModels
 {
     public class ChatViewModel : ViewModel
     {
         private string searchQuery;
-        private User internalUser;
         private User externalUser;
         public User chattingUser;
         private string externalUserName;
@@ -26,7 +19,6 @@ namespace TDDD49.ViewModels
         private ObservableCollection<Message> messages;
         private Communicator communicator;
         private InternalCommunicator internalCommunicator;
-        public bool CanRecieve { get; set; } = false;
 
         public ChatViewModel(Communicator c)
         {
@@ -121,11 +113,7 @@ namespace TDDD49.ViewModels
             }
         }
 
-        public User InternalUser
-        {
-            get { return internalUser; }
-            set { internalUser = value; }
-        }
+        public User InternalUser { get; set; }
 
         public User ChattingUser
         {

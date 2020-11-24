@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using TDDD49.Models;
 
@@ -36,7 +32,6 @@ namespace TDDD49.ViewModels.Commands
                 Thread t = new Thread(() =>
                 {
                     communicator.stopChatting(this.chatViewModel.InternalUser);
-                    chatViewModel.CanRecieve = false;
 
                 });
                 t.IsBackground = true;
@@ -55,6 +50,10 @@ namespace TDDD49.ViewModels.Commands
                 Console.WriteLine(e3);
             }
             catch (IOException e4)
+            {
+                Console.WriteLine(e4);
+            }
+            catch (ObjectDisposedException e4)
             {
                 Console.WriteLine(e4);
             }

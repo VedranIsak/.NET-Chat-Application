@@ -10,6 +10,7 @@ using TDDD49.Models;
 using System.Threading;
 using System.Net.Sockets;
 using System.Windows;
+using System.IO;
 
 namespace TDDD49.ViewModels.Commands
 {
@@ -62,7 +63,6 @@ namespace TDDD49.ViewModels.Commands
 
             addThread = new Thread(() =>
             {
-                chatViewModel.CanRecieve = false;
                 try
                 {
                     communicator.ConnectToOtherPerson(internalUser: chatViewModel.InternalUser, port: connectViewModel.ExternalPort, server: connectViewModel.ExternalIpAddress, cvm: this.chatViewModel);
@@ -91,7 +91,6 @@ namespace TDDD49.ViewModels.Commands
                         {
                             chatViewModel.chattingUser = chatViewModel.Users.Single(item => item.ID == newUser.ID);
                         }
-                        chatViewModel.CanRecieve = true;
                     }
                     else
                     {
@@ -113,8 +112,14 @@ namespace TDDD49.ViewModels.Commands
                     MessageBox.Show("Bad IP address, try again", "Bad IP address");
                     Console.WriteLine(e3);
                 }
-
-                Console.WriteLine("donE");
+                catch (ObjectDisposedException e4)
+                {
+                    Console.WriteLine(e4);
+                }
+                catch (IOException e4)
+                {
+                    Console.WriteLine(e4);
+                }
             });
             addThread.IsBackground = true;
             addThread.Start();

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TDDD49.Models;
@@ -50,6 +47,7 @@ namespace TDDD49.ViewModels.Commands
                     
                     communicator.stopChatting(chatViewModel.InternalUser);
                     listenThread.Abort();
+                    listenThread = null;
                 }
                 else
                 {
@@ -59,7 +57,6 @@ namespace TDDD49.ViewModels.Commands
             }
             listenThread = new Thread(() =>
             {
-                chatViewModel.CanRecieve = false;
                 try
                 {
                     communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port, cvm: chatViewModel);
@@ -87,7 +84,6 @@ namespace TDDD49.ViewModels.Commands
                         {
                             chatViewModel.chattingUser = chatViewModel.Users.Single(item => item.ID == newUser.ID);
                         }
-                        chatViewModel.CanRecieve = true;
                     }
                     else
                     {
@@ -97,16 +93,21 @@ namespace TDDD49.ViewModels.Commands
                 }
                 catch (SocketException e1)
                 {
-                    MessageBox.Show("Kopplingen bröts, försök igen");
+                    MessageBox.Show("Anslutningen bröts, försök igen");
                     Console.WriteLine("SocketException: {0}", e1);
                 }
                 catch (ThreadAbortException e2)
                 {
+                    MessageBox.Show("Anslutningen bröts, försök igen");
                     Console.WriteLine(e2);
                 }
                 catch (NullReferenceException e3)
                 {
                     Console.WriteLine(e3);
+                }
+                catch (ObjectDisposedException e4)
+                {
+                    Console.WriteLine(e4);
                 }
             });
             listenThread.IsBackground = true;
