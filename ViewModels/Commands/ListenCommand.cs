@@ -62,11 +62,7 @@ namespace TDDD49.ViewModels.Commands
                 chatViewModel.CanRecieve = false;
                 try
                 {
-<<<<<<< HEAD
-                    //communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port);
-=======
                     communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port, cvm: chatViewModel);
->>>>>>> f3093b824e5fa7ac8d076a682659c626877162a3
                     
                     if (communicator.externalUser != null)
                     {
