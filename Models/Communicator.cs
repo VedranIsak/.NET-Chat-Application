@@ -14,7 +14,7 @@ namespace TDDD49.Models
 {
     public class Communicator
     {
-        public User externalUser;
+        public User externalUser = null;
         public User internalUser;
         public ChatViewModel chatViewModel;
         public TcpListener Server { get; set; }
@@ -112,7 +112,6 @@ namespace TDDD49.Models
 
             if (!regex.Match(ip).Success)
             {
-                Console.WriteLine("bad server");
                 string s = string.Format("{0} is invalid server ip", ip);
                 throw new BadServerException(s);
             }
@@ -121,7 +120,6 @@ namespace TDDD49.Models
             {
                 // Set the TcpListener on port 13000.
                 // Int32 port = 13000;
-                Console.WriteLine("Listen to port!!!!!");
                 IPAddress localAddr = IPAddress.Parse(ip);
 
                 // TcpListener server = new TcpListener(port);
@@ -136,12 +134,8 @@ namespace TDDD49.Models
                 // Enter the listening loop.
                 while (true)
                 {
-                    Console.Write("Waiting for a connection... ");
-
-                    // Perform a blocking call to accept requests.
-                    // You could also use server.AcceptSocket() here.
+                    // Blocking call
                     Client = Server.AcceptTcpClient();
-                    Console.WriteLine("Connected!");
                     
                     // Get a stream object for reading and writing
                     Stream = Client.GetStream();
@@ -256,7 +250,6 @@ namespace TDDD49.Models
 
                         if (response.MessageType == "disconnect")
                         {
-                            Console.WriteLine("disconnected");
                             String s = String.Format("{0} har kopplat bort.", response.Sender.Name);
                             MessageBox.Show(s);
                             disconnectStream();
@@ -292,7 +285,6 @@ namespace TDDD49.Models
         {
             if (Stream != null)
             {
-                Console.WriteLine("sending message");
                 byte[] send = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(m));
                 Stream.Write(send, 0, send.Length);
             }

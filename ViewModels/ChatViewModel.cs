@@ -160,6 +160,8 @@ namespace TDDD49.ViewModels
 
         public bool IsListening { get; set; } = false;
 
+        public bool IsConnecting { get; set; } = false;
+
         public void WriteMessage(string message)
         {
             communicator.WriteMessage(message, InternalUser);

@@ -63,6 +63,8 @@ namespace TDDD49.ViewModels.Commands
 
             addThread = new Thread(() =>
             {
+                chatViewModel.IsConnecting = true;
+
                 try
                 {
                     communicator.ConnectToOtherPerson(internalUser: chatViewModel.InternalUser, port: connectViewModel.ExternalPort, server: connectViewModel.ExternalIpAddress, cvm: this.chatViewModel);
@@ -86,6 +88,7 @@ namespace TDDD49.ViewModels.Commands
 
                             });
                             chatViewModel.ChattingUser = newUser;
+
                         }
                         else
                         {
@@ -119,6 +122,10 @@ namespace TDDD49.ViewModels.Commands
                 catch (IOException e4)
                 {
                     Console.WriteLine(e4);
+                }
+                finally
+                {
+                    chatViewModel.IsConnecting = false;
                 }
             });
             addThread.IsBackground = true;
