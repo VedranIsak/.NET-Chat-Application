@@ -35,7 +35,8 @@ namespace TDDD49.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            if (connectViewModel.ValidExternalPort && connectViewModel.ValidExternalIpAddress && chatViewModel.InternalUser != null) { return true; }
+            if (connectViewModel.ValidExternalPort && connectViewModel.ValidExternalIpAddress 
+                && chatViewModel.InternalUser != null && !connectViewModel.IsConnecting) { return true; }
             return false;
         }
 
@@ -59,6 +60,7 @@ namespace TDDD49.ViewModels.Commands
             addThread = new Thread(() =>
             {
                 chatViewModel.IsConnecting = true;
+                connectViewModel.IsConnecting = true;
 
                 try
                 {
@@ -121,6 +123,7 @@ namespace TDDD49.ViewModels.Commands
                 finally
                 {
                     chatViewModel.IsConnecting = false;
+                    connectViewModel.IsConnecting = false;
                 }
             });
             addThread.IsBackground = true;

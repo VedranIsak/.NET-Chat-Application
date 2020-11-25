@@ -17,6 +17,7 @@ namespace TDDD49.ViewModels
         private bool validExternalPort = false;
         private bool validExternalIpAddress = false;
         private bool isListening = false;
+        private bool isConnecting = false;
         private int externalPort;
         private string externalIpAddress;
         private Communicator communicator;
@@ -83,6 +84,16 @@ namespace TDDD49.ViewModels
             {
                 isListening = value;
                 OnPropertyChanged(nameof(IsListening));
+            }
+        }
+
+        public bool IsConnecting
+        {
+            get { return isConnecting; }
+            set
+            {
+                isConnecting = value;
+                OnPropertyChanged(nameof(IsConnecting));
             }
         }
     }
