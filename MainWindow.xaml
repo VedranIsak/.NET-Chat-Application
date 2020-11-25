@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TDDD49"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1080" WindowStartupLocation="CenterScreen">
+        Title="Chat_TDDD49_Herman_Vedran" Background="Black" Height="720" Width="1080" WindowStartupLocation="CenterScreen">
 
     <StackPanel x:Name="MainContainer" VerticalAlignment="Stretch">
         <Grid Height="{Binding ElementName=MainContainer, Path=ActualHeight}">

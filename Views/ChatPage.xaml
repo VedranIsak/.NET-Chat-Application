@@ -12,36 +12,61 @@
 
     <Page.Resources>
         <Style TargetType="{x:Type StackPanel}" x:Key="SideStackPanel">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="Black"/>
         </Style>
-        
+
         <Style TargetType="{x:Type Button}" x:Key="ChatButton">
             <Setter Property="FontFamily" Value="Roboto"/>
             <Setter Property="FontSize" Value="24"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Background" Value="SteelBlue"/>
-            <Setter Property="BorderThickness" Value="0"/>
         </Style>
 
+        <Style TargetType="{x:Type Border}" x:Key="ChatBorder">
+            <Setter Property="BorderBrush" Value="SteelBlue"/>
+            <Setter Property="BorderThickness" Value="1 1 0 1"/>
+        </Style>
+
+        <Style TargetType="{x:Type Border}" x:Key="TimeBorder">
+            <Setter Property="BorderBrush" Value="SteelBlue"/>
+            <Setter Property="BorderThickness" Value="0 1 1 1"/>
+        </Style>
+
+        <Style TargetType="{x:Type Border}" x:Key="ChatGridBorder">
+            <Setter Property="BorderBrush" Value="SteelBlue"/>
+            <Setter Property="Background" Value="SteelBlue"/>
+            <Setter Property="BorderThickness" Value="10"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Margin" Value="10 10 10 10"/>
+        </Style>
 
         <Style TargetType="{x:Type Label}" x:Key="ChatLabel">
             <Setter Property="FontFamily" Value="Roboto"/>
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="SteelBlue"/>
+            <Setter Property="Background" Value="Black"/>
+        </Style>
+
+        <Style TargetType="{x:Type Grid}" x:Key="ChatGrid">
             <Setter Property="Background" Value="SteelBlue"/>
         </Style>
-        
+
+        <Style TargetType="{x:Type Label}" x:Key="ChatGridLabel">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
     </Page.Resources>
 
-    <Grid Background="White">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <StackPanel x:Name="UserPanel" Grid.Column="0" Grid.Row="0" Style="{StaticResource SideStackPanel}">
@@ -49,20 +74,31 @@
                 <ItemsControl x:Name="UserList" ItemsSource="{Binding Users, Mode=OneWay, TargetNullValue=No friends connected! Add some?}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Style="{StaticResource SubLabel}" Grid.Column="0" Content="{Binding Name}"></Label>
-                                <Label Style="{StaticResource SubLabel}" Grid.Column="1"  Content="{Binding ID}" FontSize="8" Padding="0 12.5 0 0"></Label>
-                                <Label Style="{StaticResource SubLabel}" Grid.Column="2"  Content="{Binding Port}" FontSize="8" Padding="0 12.5 0 0"></Label>
-                                <Label Style="{StaticResource SubLabel}" Grid.Column="3"  Content="{Binding IpAddress}" FontSize="8" Padding="0 12.5 0 0"></Label>
-                                <Button Style="{StaticResource ChatButton}" Grid.Column="4" Content="View" Command="{Binding ElementName=UserList, Path=DataContext.SwitchUserCommand}" CommandParameter="{Binding}" FontSize="16"></Button>
-                            </Grid>
+                            <Border Style="{StaticResource ChatGridBorder}">
+                                <Grid Style="{StaticResource ChatGrid}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Content="{Binding Name}" Style="{StaticResource ChatGridLabel}" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
+                                           HorizontalContentAlignment="Center" FontSize="24"></Label>
+                                    <Label Content="ID" Style="{StaticResource ChatGridLabel}" Grid.Column="0" Grid.Row="1"></Label>
+                                    <Label Content="{Binding ID}" Style="{StaticResource ChatGridLabel}" Grid.Column="1" Grid.Row="1"></Label>
+                                    <Label Content="Port" Style="{StaticResource ChatGridLabel}" Grid.Column="0" Grid.Row="2"></Label>
+                                    <Label Content="{Binding Port}" Style="{StaticResource ChatGridLabel}" Grid.Column="1" Grid.Row="2"></Label>
+                                    <Label Content="IP Address" Style="{StaticResource ChatGridLabel}" Grid.Column="0" Grid.Row="3"/>
+                                    <Label Content="{Binding IpAddress}" Style="{StaticResource ChatGridLabel}" Grid.Column="1" Grid.Row="3"></Label>
+                                    <Button Content="View" Command="{Binding ElementName=UserList, Path=DataContext.SwitchUserCommand}" CommandParameter="{Binding}" 
+                                            Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Margin="0 5 0 0" FontSize="16"></Button>
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -71,7 +107,9 @@
 
         <StackPanel x:Name="FilteredPanel" Grid.Column="0" Grid.Row="1" Style="{StaticResource SideStackPanel}">
             <Label Content="Search" Style="{StaticResource SubLabel}" HorizontalContentAlignment="Center"></Label>
-            <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" Background="SteelBlue" Foreground="White"></TextBox>
+            <Border x:Name="SearchBorder" Style="{StaticResource ContentBorder}" Height="50" Margin="0 0 15 5">
+                <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" Height="{Binding ElementName=SearchBorder, Path=Height}" FontSize="16"></TextBox>
+            </Border>
             <ScrollViewer Height="{Binding ElementName=FilteredPanel, Path=ActualHeight}" VerticalScrollBarVisibility="Visible">
                 <ItemsControl x:Name="FilteredList" ItemsSource="{Binding FilteredUsers, Mode=OneWay, TargetNullValue=No friends connected! Add some?}">
                     <ItemsControl.ItemTemplate>
@@ -95,9 +133,7 @@
         <Grid Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="8*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -112,12 +148,11 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
-            <Label Content="{Binding VisibleUserName}" Style="{StaticResource HeaderLabel}" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Margin="-15 0 0 0"></Label>
-            <Button Content="Disconnect" Grid.Column="6" Grid.ColumnSpan="2" Margin="0 5 15 45" Command="{Binding DisconnectCommand}"></Button>
+            <Label Content="{Binding VisibleUserName}" Style="{StaticResource HeaderLabel}" Grid.Column="0" Grid.Row="0" Margin="5 0 0 0"></Label>
 
-            <StackPanel x:Name="ChatPanel" Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="1" Grid.RowSpan="4" Style="{StaticResource SideStackPanel}" Margin="0 0 15 0">
-                <ScrollViewer Height="{Binding ElementName=ChatPanel, Path=ActualHeight}" VerticalScrollBarVisibility="Visible">
-                    <ItemsControl ItemsSource="{Binding VisibleMessages, TargetNullValue=No messages to show! Add some friends?}">
+            <StackPanel x:Name="ChatPanel"  Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="1" Style="{StaticResource SideStackPanel}" Margin="0 0 0 0">
+                <ScrollViewer Height="{Binding ElementName=ChatPanel, Path=Height}" VerticalScrollBarVisibility="Visible">
+                    <ItemsControl ItemsSource="{Binding VisibleMessages, TargetNullValue=No messages to show! Add some friends?}" Margin="25 0 25 0">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
@@ -135,8 +170,12 @@
                                             </Style.Triggers>
                                         </Style>
                                     </StackPanel.Style>
-                                    <Label Content="{Binding Content}" Style="{StaticResource ChatLabel}"></Label>
-                                    <Label Content="{Binding TimePosted}" Style="{StaticResource ChatLabel}" FontSize="8"></Label>
+                                    <Border Style="{StaticResource ChatBorder}">
+                                        <Label Content="{Binding Content}" Style="{StaticResource ChatLabel}"></Label>
+                                    </Border>
+                                    <Border Style="{StaticResource TimeBorder}">
+                                        <Label Content="{Binding TimePosted}" Style="{StaticResource ChatLabel}" FontSize="8"></Label>
+                                    </Border>
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -144,9 +183,12 @@
                 </ScrollViewer>
             </StackPanel>
 
-            <Button Style="{StaticResource ChatButton}" Content="Send" Command="{Binding SendCommand}" CommandParameter="{Binding Path=Text, ElementName=MsgTextBox}" Grid.Column="0" Grid.Row="5" VerticalAlignment="Bottom" Margin="5 0 5 5"></Button>
-            <Button Style="{StaticResource ChatButton}" Content="Buzz" Command="{Binding BuzzCommand}" Grid.Column="1" Grid.Row="5" VerticalAlignment="Bottom" Margin="5 0 5 5"></Button>
-            <TextBox x:Name="MsgTextBox" VerticalAlignment="Bottom" Background="SteelBlue" Foreground="White" Grid.Column="2" Grid.ColumnSpan="7" Grid.Row="5" Margin="0 0 25 5"></TextBox>
+            <Border x:Name="MsgTextBoxBorder" Style="{StaticResource ContentBorder}" Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="2" Margin="5 0 35 5">
+                <TextBox x:Name="MsgTextBox" Height="{Binding ElementName=MsgTextBox, Path=Height}" FontSize="18"></TextBox>
+            </Border>
+            <Button Content="Send" Command="{Binding SendCommand}" CommandParameter="{Binding Path=Text, ElementName=MsgTextBox}" Background="Green" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="3" Margin="5 0 5 5"></Button>
+            <Button Content="Buzz" Command="{Binding BuzzCommand}" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="3" Margin="5 0 5 5"></Button>
+            <Button Content="Disconnect" Command="{Binding DisconnectCommand}" Background="Red" Grid.Column="6" Grid.ColumnSpan="2" Grid.Row="3" Margin="5 0 35 5"></Button>
         </Grid>
     </Grid>
 </Page>

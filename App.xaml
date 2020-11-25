@@ -11,12 +11,17 @@
             <Setter Property="Foreground" Value="SteelBlue"/>
         </Style>
 
+        <Style TargetType="{x:Type StackPanel}">
+            <Setter Property="Background" Value="Black"/>
+        </Style>
+
         <Style TargetType="{x:Type Button}">
             <Setter Property="FontFamily" Value="Roboto"/>
             <Setter Property="FontSize" Value="24"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="SteelBlue"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="SteelBlue"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="SteelBlue"/>
             <Setter Property="Button.Effect">
                 <Setter.Value>
                     <DropShadowEffect Color="Black" Direction="320" ShadowDepth="3" BlurRadius="5" Opacity="0.5" />
@@ -43,15 +48,15 @@
         </Style>
 
         <Style TargetType="{x:Type Border}" x:Key="ContentBorder">
-            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="CornerRadius" Value="20"/>
             <Setter Property="Padding" Value="10"/>
-            <Setter Property="BorderThickness" Value="5"/>
+            <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="SteelBlue"/>
         </Style>
 
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Foreground" Value="SteelBlue"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="Black"/>
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>

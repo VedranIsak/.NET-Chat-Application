@@ -9,12 +9,14 @@ using System.Windows.Input;
 
 using TDDD49.Views;
 using TDDD49.ViewModels.Commands;
+using System.Net;
 
 namespace TDDD49.ViewModels
 {
     public class SettingsViewModel : ViewModel
     {
         private ChatViewModel chatViewModel;
+        private bool validInternalIpAddress = true;
         private bool validInternalUserName = true;
         private bool validInternalPort = true;
 
@@ -26,6 +28,16 @@ namespace TDDD49.ViewModels
         }
 
         public ICommand SaveCommand { get; set; }
+
+        public bool ValidInternalIpAddress
+        {
+            get { return validInternalIpAddress; }
+            set
+            {
+                validInternalIpAddress = value;
+                OnPropertyChanged(nameof(ValidInternalIpAddress));
+            }
+        }
 
         public bool ValidInternalPort
         {
@@ -83,7 +95,9 @@ namespace TDDD49.ViewModels
             }
             set
             {
-                chatViewModel.InternalUser.IpAddress = value;
+                IPAddress Ip;
+                ValidInternalIpAddress = IPAddress.TryParse(value, out Ip);
+                if(ValidInternalIpAddress) { chatViewModel.InternalUser.IpAddress = value; }
                 OnPropertyChanged(nameof(InternalIpAddress));
             }
         }
