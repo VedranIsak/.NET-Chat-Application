@@ -15,7 +15,6 @@ namespace TDDD49.Models
     public class Communicator
     {
         public User externalUser = null;
-        public User internalUser;
         public ChatViewModel chatViewModel;
         public TcpListener Server { get; set; }
         public TcpClient Client { get; set; }
@@ -50,7 +49,6 @@ namespace TDDD49.Models
         public void ConnectToOtherPerson(Int32 port, string server, User internalUser, ChatViewModel cvm)
         {
             this.CanCommunicate = false;
-            this.internalUser = internalUser;
             this.chatViewModel = cvm;
 
             if (!regex.Match(server).Success) {
@@ -59,12 +57,9 @@ namespace TDDD49.Models
                 throw new BadServerException(s);
             }
 
-            Console.WriteLine("Connecting to person");
-            
             Client = new TcpClient(server, port);
             Stream = Client.GetStream();
 
-            Console.WriteLine("Connected to other person");
             // Get message to see if the other person wants to chat
 
             while (true)
@@ -84,7 +79,6 @@ namespace TDDD49.Models
                     {
                         String s = String.Format("{0} ville inte chatta med dig.", response.Sender.Name);
                         MessageBox.Show(s);
-
                         sendMessage(internalUser, "decline");
                         disconnectStream();
 
@@ -107,7 +101,6 @@ namespace TDDD49.Models
         public void ListenToPort(Int32 port, User internalUser, ChatViewModel cvm, string ip)
         {
             this.CanCommunicate = false;
-            this.internalUser = internalUser;
             this.chatViewModel = cvm;
 
             if (!regex.Match(ip).Success)

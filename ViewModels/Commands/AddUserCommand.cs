@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-
-using TDDD49.ViewModels;
 using TDDD49.Models;
 using System.Threading;
 using System.Net.Sockets;
