@@ -43,8 +43,6 @@ namespace TDDD49.ViewModels
         public ICommand DisconnectCommand { get; set; }
         public ICommand BuzzCommand { get; set; }
 
-        //private void WriteMessageToJson(Message newMessage) { internalCommunicator.WriteMessageToJson(newMessage); }
-
         public void WriteUserToJSON()  { internalCommunicator.WriteUserToJson(); }
 
         public void AddUser(User newUser)
@@ -131,9 +129,12 @@ namespace TDDD49.ViewModels
             {
                 chattingUser = value;
                 VisibleUser = value;
-                VisibleUserName = chattingUser.Name;
-                VisibleMessages = chattingUser.Messages;
-                ChattingMessages = chattingUser.Messages ?? new ObservableCollection<Message>();
+                if(ChattingUser != null)
+                {
+                    VisibleUserName = chattingUser.Name ?? String.Empty;
+                    VisibleMessages = chattingUser.Messages ?? new ObservableCollection<Message>();
+                    ChattingMessages = chattingUser.Messages ?? new ObservableCollection<Message>();
+                }
             }
         }
 
@@ -143,8 +144,11 @@ namespace TDDD49.ViewModels
             set
             {
                 visibleUser = value;
-                VisibleUserName = visibleUser.Name;
-                VisibleMessages = visibleUser.Messages ?? new ObservableCollection<Message>();
+                if(visibleUser != null)
+                {
+                    VisibleUserName = visibleUser.Name ?? String.Empty;
+                    VisibleMessages = visibleUser.Messages ?? new ObservableCollection<Message>();
+                }
             }
         }
 

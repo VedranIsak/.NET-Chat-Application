@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -13,7 +14,8 @@ namespace TDDD49.ViewModels
     public class ConnectViewModel : ViewModel
     {
         private ChatViewModel chatViewModel;
-        private bool validExternalPort = true;
+        private bool validExternalPort = false;
+        private bool validExternalIpAddress = false;
         private bool isListening = false;
         private int externalPort;
         private string externalIpAddress;
@@ -37,6 +39,16 @@ namespace TDDD49.ViewModels
             }
         }
 
+        public bool ValidExternalIpAddress
+        {
+            get { return validExternalIpAddress; }
+            set
+            {
+                validExternalIpAddress = value;
+                OnPropertyChanged(nameof(ValidExternalIpAddress));
+            }
+        }
+
         public ICommand ListenCommand { get; set; }
         public ICommand AddUserCommand { get; set; }
 
@@ -45,6 +57,8 @@ namespace TDDD49.ViewModels
             get { return externalIpAddress; }
             set
             {
+                IPAddress ip;
+                ValidExternalIpAddress = IPAddress.TryParse(ExternalIpAddress, out ip);
                 externalIpAddress = value;
                 OnPropertyChanged(ExternalIpAddress);
             }

@@ -30,14 +30,7 @@ namespace TDDD49.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            if (chatViewModel.IsListening) { return false; }
-            if (connectViewModel.ValidExternalPort 
-                && chatViewModel.InternalUser != null
-                && chatViewModel.InternalUser.Name != null
-                && chatViewModel.InternalUser.Port > 1023
-                && chatViewModel.InternalUser.Port < 65353
-                && chatViewModel.InternalUser.IpAddress != null)
-            { return true; }
+            if (chatViewModel.InternalUser != null && !connectViewModel.IsListening) { return true; }
             return false;
         }
 
