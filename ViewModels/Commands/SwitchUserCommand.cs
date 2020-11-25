@@ -12,13 +12,13 @@ namespace TDDD49.ViewModels.Commands
 {
     public class SwitchUserCommand : ICommand
     {
-        //Här byter man vilken användare som man chattar med, så här ska anslutningsinställningarna (ip, port) bytas
+        private ChatViewModel chatViewModel;
+
         public SwitchUserCommand(ChatViewModel chatViewModel)
         {
-            this.ChatViewModel = chatViewModel;
+            this.chatViewModel = chatViewModel;
         }
 
-        public ChatViewModel ChatViewModel { get; set; }
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
@@ -33,7 +33,7 @@ namespace TDDD49.ViewModels.Commands
         public void Execute(object parameter)
         {
             User user = parameter as User;
-            ChatViewModel.VisibleUser = user;
+            chatViewModel.VisibleUser = user;
         }
     }
 }

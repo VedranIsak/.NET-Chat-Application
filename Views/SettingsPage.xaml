@@ -46,7 +46,7 @@
             </Label.Style>
         </Label>
         <Border Style="{StaticResource ContentBorder}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2">
-            <TextBox Text="{Binding InternalUserName, UpdateSourceTrigger=PropertyChanged, TargetNullValue=No name could be found! Add one?}" Padding="1"></TextBox>
+            <TextBox Text="{Binding InternalUserName, UpdateSourceTrigger=PropertyChanged, TargetNullValue=No name could be found! Add one?}"></TextBox>
         </Border>
 
         <Label Content="IP Address" Grid.Column="1" Grid.Row="3" Margin="0 20 0 0"></Label>
@@ -54,7 +54,7 @@
             <Label.Style>
                 <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ValidInternalIpAddress}" Value="True">
+                        <DataTrigger Binding="{Binding ValidIpAddress}" Value="True">
                             <Setter Property="Label.Visibility" Value="Hidden"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -62,7 +62,7 @@
             </Label.Style>
         </Label>
         <Border Style="{StaticResource ContentBorder}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="4">
-            <TextBox Text="{Binding InternalIpAddress, UpdateSourceTrigger=PropertyChanged, TargetNullValue=No address could be found! Add one?}" Padding="1"></TextBox>
+            <TextBox Text="{Binding InternalIpAddress, UpdateSourceTrigger=PropertyChanged, TargetNullValue=No address could be found! Add one?}"></TextBox>
         </Border>
 
         <Label Content="Port" Grid.Column="1" Grid.Row="5" Margin="0 20 0 0"></Label>
@@ -70,7 +70,7 @@
             <Label.Style>
                 <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ValidInternalPort}" Value="True">
+                        <DataTrigger Binding="{Binding ValidPort}" Value="True">
                             <Setter Property="Label.Visibility" Value="Hidden"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -78,7 +78,7 @@
             </Label.Style>
         </Label>
         <Border Style="{StaticResource ContentBorder}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="6">
-            <TextBox Text="{Binding InternalPort, UpdateSourceTrigger=PropertyChanged, TargetNullValue=No port could be found! Add one?}" Padding="1"></TextBox>
+            <TextBox Text="{Binding InternalPort, UpdateSourceTrigger=PropertyChanged, TargetNullValue=No port could be found! Add one?}"></TextBox>
         </Border>
         <Button Content="Save Settings" Command="{Binding SaveCommand}" Grid.Column="2" Grid.Row="8"></Button>
     

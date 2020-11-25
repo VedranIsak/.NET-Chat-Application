@@ -9,19 +9,25 @@ namespace TDDD49.ViewModels
     class ShellViewModel : ViewModel
     {
         private Page currentPage;
+        private InternalCommunicator internalCommunicator;
         private ChatViewModel chatViewModel;
+        private HistoryViewModel historyViewModel;
         private SettingsPage settingsPage;
         private ChatPage chatPage;
+        private HistoryPage historyPage;
         private ConnectPage connectPage;
         private Communicator communicator = new Communicator();
 
         public ShellViewModel()
         {
-            chatViewModel = new ChatViewModel(communicator);
+            historyViewModel = new HistoryViewModel();
+            historyPage = new HistoryPage(historyViewModel);
+            chatViewModel = new ChatViewModel(communicator, historyViewModel);
             chatPage = new ChatPage(chatViewModel);
             settingsPage = new SettingsPage(chatViewModel);
             connectPage = new ConnectPage(chatViewModel, communicator);
-            SwitchPageCommand = new SwitchPageCommand(this, settingsPage, chatPage, connectPage);
+            internalCommunicator = new InternalCommunicator(chatViewModel);
+            SwitchPageCommand = new SwitchPageCommand(this, settingsPage, chatPage, connectPage, historyPage);
             CurrentPage = settingsPage;
         }
 

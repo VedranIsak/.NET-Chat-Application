@@ -14,10 +14,6 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -26,12 +22,14 @@
             </Grid.RowDefinitions>
 
             <Button Content="Settings" Command="{Binding SwitchPageCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0"></Button>
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}" Grid.Column="0" Grid.Row="0"></Button>
             <Button Content="Chat" Command="{Binding SwitchPageCommand}" 
-                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0"></Button>
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}" Grid.Column="1" Grid.Row="0"></Button>
+            <Button Content="History" Command="{Binding SwitchPageCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}" Grid.Column="2" Grid.Row="0"></Button>
             <Button Content="Connect" Command="{Binding SwitchPageCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}" Grid.Column="5" Grid.ColumnSpan="2" Grid.Row="0"></Button>
-            <Frame Content="{Binding CurrentPage}" Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="1"  Margin="0"/>
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}" Grid.Column="3" Grid.Row="0"></Button>
+            <Frame Content="{Binding CurrentPage}" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1"  Margin="0"/>
         </Grid>
     </StackPanel>
 </Window>

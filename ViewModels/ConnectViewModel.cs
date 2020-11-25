@@ -58,8 +58,7 @@ namespace TDDD49.ViewModels
             get { return externalIpAddress; }
             set
             {
-                IPAddress ip;
-                ValidExternalIpAddress = IPAddress.TryParse(ExternalIpAddress, out ip);
+                ValidIpAddress = CheckIpAddress(value);
                 externalIpAddress = value;
                 OnPropertyChanged(ExternalIpAddress);
             }
@@ -70,8 +69,7 @@ namespace TDDD49.ViewModels
             get { return externalPort; }
             set
             {
-                if (value > 1023 && value < 65353) { ValidExternalPort = true; }
-                else { ValidExternalPort = false; }
+                ValidPort = CheckPort(value);
                 externalPort = value;
                 OnPropertyChanged(nameof(ExternalPort));
             }

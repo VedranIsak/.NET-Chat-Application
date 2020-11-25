@@ -16,12 +16,14 @@ namespace TDDD49.ViewModels.Commands
         private SettingsPage settingsPage;
         private ChatPage chatPage;
         private ConnectPage connectPage;
-        public SwitchPageCommand(ShellViewModel shellViewModel, SettingsPage configurePage, ChatPage chatPage, ConnectPage connectPage)
+        private HistoryPage historyPage;
+        public SwitchPageCommand(ShellViewModel shellViewModel, SettingsPage configurePage, ChatPage chatPage, ConnectPage connectPage, HistoryPage historyPage)
         {
             this.shellViewModel = shellViewModel;
             this.settingsPage = configurePage;
             this.chatPage = chatPage;
             this.connectPage = connectPage;
+            this.historyPage = historyPage;
         }
 
         public event EventHandler CanExecuteChanged
@@ -43,6 +45,9 @@ namespace TDDD49.ViewModels.Commands
                     break;
                 case "Chat":
                     shellViewModel.CurrentPage = chatPage;
+                    break;
+                case "History":
+                    shellViewModel.CurrentPage = historyPage;
                     break;
                 case "Connect":
                     shellViewModel.CurrentPage = connectPage;

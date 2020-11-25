@@ -19,6 +19,8 @@ namespace TDDD49.ViewModels
         private bool validInternalIpAddress = true;
         private bool validInternalUserName = true;
         private bool validInternalPort = true;
+        private string internalIpAddress;
+        private int internalPort;
 
 
         public SettingsViewModel(ChatViewModel chatViewModel)
@@ -91,13 +93,14 @@ namespace TDDD49.ViewModels
             get
             {
                 if (chatViewModel.InternalUser == null) { return null; }
-                return chatViewModel.InternalUser.IpAddress;
+                else if (!ValidIpAddress) { return internalIpAddress; }
+                else { return chatViewModel.InternalUser.IpAddress; }
             }
             set
             {
-                IPAddress Ip;
-                ValidInternalIpAddress = IPAddress.TryParse(value, out Ip);
-                if(ValidInternalIpAddress) { chatViewModel.InternalUser.IpAddress = value; }
+                internalIpAddress = value;
+                ValidIpAddress = CheckIpAddress(internalIpAddress);
+                if (ValidIpAddress) { chatViewModel.InternalUser.IpAddress = internalIpAddress; }
                 OnPropertyChanged(nameof(InternalIpAddress));
             }
         }
@@ -107,14 +110,14 @@ namespace TDDD49.ViewModels
             get
             {
                 if (chatViewModel.InternalUser == null) { return 0; }
-                return chatViewModel.InternalUser.Port;
+                else if(!ValidPort) { return internalPort; }
+                else { return chatViewModel.InternalUser.Port; }
             }
             set
             {
-                if (value > 1023 && value < 65353) { ValidInternalPort = true; }
-                else { ValidInternalPort = false; }
-                chatViewModel.InternalUser.Port = value;
-                if (ValidInternalPort) { chatViewModel.InternalUser.Port = value; }
+                internalPort = value;
+                ValidPort = CheckPort(internalPort);
+                if (ValidPort) { chatViewModel.InternalUser.Port = internalPort; }
                 OnPropertyChanged(nameof(InternalPort));
             }
         }

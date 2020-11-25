@@ -14,7 +14,10 @@ namespace TDDD49.Models
     public class InternalCommunicator
     {
         private ChatViewModel chatViewModel;
-        public InternalCommunicator(ChatViewModel chatViewModel) { this.chatViewModel = chatViewModel; }
+        public InternalCommunicator(ChatViewModel chatViewModel)
+        {
+            this.chatViewModel = chatViewModel;
+        }
 
         private ObservableCollection<User> GetUsersFromJson()
         {
@@ -44,19 +47,6 @@ namespace TDDD49.Models
 
         public void ReadFromJson()
         {
-            //List<User> tmp;
-            //using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
-            //{
-            //    string inputUsersString = usersReader.ReadToEnd();
-            //    tmp = JsonConvert.DeserializeObject<List<User>>(inputUsersString).ToList<User>();
-
-            //}
-
-            //ObservableCollection<User> tmpObservable = new ObservableCollection<User>();
-            //foreach (var user in tmp)
-            //{
-            //    tmpObservable.Add(user);
-            //}
             ObservableCollection<User> tmp = GetUsersFromJson();
             if (tmp?.Any() == true)
             {
@@ -66,15 +56,6 @@ namespace TDDD49.Models
             }
 
             chatViewModel.InternalUser = GetUserFromJson() ?? null;
-            //using (StreamReader userReader = new StreamReader("../../UserStorage.json"))
-            //{
-            //    string inputUserString = userReader.ReadToEnd();
-            //    chatViewModel.InternalUser = JsonConvert.DeserializeObject<User>(inputUserString);
-
-            //}
-
-
-            //Borde det inte vara UserStorage.json här??
             if (chatViewModel.InternalUser == null) { return; }
             if (chatViewModel.InternalUser.ID == null)
             {
@@ -88,23 +69,6 @@ namespace TDDD49.Models
 
         public void WriteMessageToJson(Message newMessage)
         {
-            //List<User> tmp;
-            //using (StreamReader usersReader = new StreamReader("../../UsersStorage.json"))
-            //{
-            //    tmp = JsonConvert.DeserializeObject<List<User>>(usersReader.ReadToEnd()).ToList();
-
-            //}
-
-            //if (tmp?.Any() == true)
-            //{
-            //    tmp = new List<User>();
-            //    if (this.chatViewModel.ExternalUser.Messages == null)
-            //    {
-            //        this.chatViewModel.ExternalUser.Messages = new ObservableCollection<Message>();
-            //    }
-            //    chatViewModel.ExternalUser.Messages.Add(newMessage);
-            //    tmp.Add(chatViewModel.ExternalUser);
-            //}
 
             ObservableCollection<User> tmp = GetUsersFromJson();
 
@@ -147,48 +111,6 @@ namespace TDDD49.Models
             {
                 writer.Write(JsonConvert.SerializeObject(tmp));
             }
-
-            //Borde vara tmp?.Any() == false och inte == true?? 
-            //if (tmp?.Any() == false)
-            //{
-            //    tmp = new List<User>();
-            //    if (this.chatViewModel.ExternalUser.Messages == null)
-            //    {
-            //        this.chatViewModel.ExternalUser.Messages = new ObservableCollection<Message>();
-            //    }
-            //    chatViewModel.ExternalUser.Messages.Add(newMessage);
-            //    tmp.Add(chatViewModel.ExternalUser);
-            //}
-            //else
-            //{
-            //    if (!tmp.Any(item => item.ID == this.chatViewModel.ExternalUser.ID))
-            //    {
-            //        if (this.chatViewModel.ExternalUser.Messages == null)
-            //        {
-            //            this.chatViewModel.ExternalUser.Messages = new ObservableCollection<Message>();
-            //        }
-            //        this.chatViewModel.ExternalUser.Messages.Add(newMessage);
-            //        tmp.Add(this.chatViewModel.ExternalUser);
-            //    }
-            //    else
-            //    {
-            //        foreach (User u in tmp)
-            //        {
-            //            if (u.ID == this.chatViewModel.ExternalUser.ID)
-            //            {
-            //                u.Messages.Add(newMessage);
-            //                break;
-            //            }
-            //        }
-            //    }
-            //}
-
-            //string jsonOut = JsonConvert.SerializeObject(tmp);
-
-            //using (StreamWriter writer = new StreamWriter("../../UsersStorage.json", false))
-            //{
-            //    writer.Write(jsonOut);
-            //}
         }
 
         public void WriteUsersToJson()

@@ -11,7 +11,6 @@ namespace TDDD49.ViewModels
     public class ChatViewModel : ViewModel
     {
         private string searchQuery;
-        private User internalUser;
         private User visibleUser;
         private User chattingUser;
         private string visibleUserName;
@@ -20,17 +19,21 @@ namespace TDDD49.ViewModels
         private ObservableCollection<Message> visibleMessages;
         private ObservableCollection<Message> chattingMessages;
         private Communicator communicator;
+        private HistoryViewModel historyViewModel;
         private InternalCommunicator internalCommunicator;
 
-        public ChatViewModel(Communicator c)
+        public ChatViewModel(Communicator communicator, HistoryViewModel historyViewModel)
         {
+            this.communicator = communicator;
+            this.historyViewModel = historyViewModel;
+      
             SendCommand = new SendCommand(this);
             SwitchUserCommand = new SwitchUserCommand(this);
-            DisconnectCommand = new DisconnectCommand(c, this);
-            BuzzCommand = new BuzzCommand(c, this);
+            historyViewModel.SwitchUserCommand = SwitchUserCommand;
+            DisconnectCommand = new DisconnectCommand(communicator, this);
+            BuzzCommand = new BuzzCommand(communicator, this);
             Users = new ObservableCollection<User>();
             FilteredUsers = new ObservableCollection<User>();
-            communicator = c;
             internalCommunicator = new InternalCommunicator(this);
             internalCommunicator.ReadFromJson();
             ReadMessage();
@@ -77,7 +80,11 @@ namespace TDDD49.ViewModels
             {
                 observableTmp.Add(user);
             }
-            FilteredUsers = observableTmp;
+            if(query != null)
+            {
+                if (query != String.Empty) { FilteredUsers = observableTmp; }
+                else { FilteredUsers = new ObservableCollection<User>(); }
+            }
         }
 
         public ObservableCollection<User> FilteredUsers
@@ -92,12 +99,8 @@ namespace TDDD49.ViewModels
 
         public ObservableCollection<User> Users
         {
-            get { return users; }
-            set
-            {
-                users = value;
-                OnPropertyChanged(nameof(Users));
-            }
+            get { return historyViewModel.Users; }
+            set { historyViewModel.Users = value; }
         }
 
         public ObservableCollection<Message> VisibleMessages

@@ -39,7 +39,7 @@
             <Label.Style>
                 <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ValidExternalIpAddress}" Value="True">
+                        <DataTrigger Binding="{Binding ValidIpAddress}" Value="True">
                             <Setter Property="Label.Visibility" Value="Hidden"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -47,7 +47,7 @@
             </Label.Style>
         </Label>
         <Border Style="{StaticResource ContentBorder}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3">
-            <TextBox Text="{Binding ExternalIpAddress, UpdateSourceTrigger=PropertyChanged}" Padding="1"></TextBox>
+            <TextBox Text="{Binding ExternalIpAddress, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </Border>
         
         <Label Content="User Port" Grid.Column="1" Grid.Row="4" Margin="0 20 0 0"></Label>
@@ -55,7 +55,7 @@
             <Label.Style>
                 <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ValidExternalPort}" Value="True">
+                        <DataTrigger Binding="{Binding ValidPort}" Value="True">
                             <Setter Property="Label.Visibility" Value="Hidden"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -63,7 +63,7 @@
             </Label.Style>
         </Label>
         <Border Style="{StaticResource ContentBorder}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5">
-            <TextBox Text="{Binding ExternalPort, UpdateSourceTrigger=PropertyChanged}" Padding="1"></TextBox>
+            <TextBox Text="{Binding ExternalPort, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </Border>
 
         <Label Content="Success, searching for users" Foreground="LightGreen" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="5" HorizontalContentAlignment="Center">

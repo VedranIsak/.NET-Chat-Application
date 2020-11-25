@@ -68,6 +68,7 @@
     <Compile Include="ViewModels\Commands\SendCommand.cs" />
     <Compile Include="ViewModels\Commands\SwitchUserCommand.cs" />
     <Compile Include="ViewModels\Commands\SwitchPageCommand.cs" />
+    <Compile Include="ViewModels\HistoryViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ConnectViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
@@ -75,6 +76,9 @@
     <Compile Include="Models\Communicator.cs" />
     <Compile Include="Views\ChatPage.xaml.cs">
       <DependentUpon>ChatPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HistoryPage.xaml.cs">
+      <DependentUpon>HistoryPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -95,6 +99,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\ChatPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HistoryPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
