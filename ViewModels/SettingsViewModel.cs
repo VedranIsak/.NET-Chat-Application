@@ -16,9 +16,7 @@ namespace TDDD49.ViewModels
     public class SettingsViewModel : ViewModel
     {
         private ChatViewModel chatViewModel;
-        private bool validInternalIpAddress = true;
-        private bool validInternalUserName = true;
-        private bool validInternalPort = true;
+        private bool validInternalUserName = false;
         private string internalIpAddress;
         private int internalPort;
 
@@ -26,30 +24,14 @@ namespace TDDD49.ViewModels
         public SettingsViewModel(ChatViewModel chatViewModel)
         {
             this.chatViewModel = chatViewModel;
+            InternalUserName = chatViewModel.InternalUser.Name;
+            InternalIpAddress = chatViewModel.InternalUser.IpAddress;
+            InternalPort = chatViewModel.InternalUser.Port;
             SaveCommand = new SaveCommand(this, chatViewModel);
         }
 
         public ICommand SaveCommand { get; set; }
 
-        public bool ValidInternalIpAddress
-        {
-            get { return validInternalIpAddress; }
-            set
-            {
-                validInternalIpAddress = value;
-                OnPropertyChanged(nameof(ValidInternalIpAddress));
-            }
-        }
-
-        public bool ValidInternalPort
-        {
-            get { return validInternalPort; }
-            set
-            {
-                validInternalPort = value;
-                OnPropertyChanged(nameof(ValidInternalPort));
-            }
-        }
 
         public bool ValidInternalUserName
         {
@@ -71,7 +53,11 @@ namespace TDDD49.ViewModels
             set
             {
                 chatViewModel.InternalUser.Name = value;
-                if (value.Length >= 3)
+                if(value.Length < 3)
+                {
+                    ValidInternalUserName = false;
+                }
+                else
                 {
                     for (int i = 0; i < notAllowedCharacters.Length; i++)
                     {
@@ -82,9 +68,9 @@ namespace TDDD49.ViewModels
                         }
                         else { ValidInternalUserName = true; }
                     }
-                    if (ValidInternalUserName) { chatViewModel.InternalUser.Name = value; chatViewModel.InternalUser.ID = GetHashCode(); }
-                    OnPropertyChanged(nameof(InternalUserName));
                 }
+                if (ValidInternalUserName) { chatViewModel.InternalUser.Name = value; chatViewModel.InternalUser.ID = GetHashCode(); }
+                OnPropertyChanged(nameof(InternalUserName));
             }
         }
 
@@ -92,9 +78,10 @@ namespace TDDD49.ViewModels
         {
             get
             {
-                if (chatViewModel.InternalUser == null) { return null; }
-                else if (!ValidIpAddress) { return internalIpAddress; }
-                else { return chatViewModel.InternalUser.IpAddress; }
+                //if (chatViewModel.InternalUser == null) { return String.Empty; }
+                if (!ValidIpAddress) { return internalIpAddress; }
+                else if(chatViewModel.InternalUser != null) { return chatViewModel.InternalUser.IpAddress; }
+                else { return String.Empty; }
             }
             set
             {
@@ -109,9 +96,10 @@ namespace TDDD49.ViewModels
         {
             get
             {
-                if (chatViewModel.InternalUser == null) { return 0; }
-                else if(!ValidPort) { return internalPort; }
-                else { return chatViewModel.InternalUser.Port; }
+                //if (chatViewModel.InternalUser == null) { return 0; }
+                if(!ValidPort) { return internalPort; }
+                else if (chatViewModel.InternalUser != null) { return chatViewModel.InternalUser.Port; }
+                else { return 0; }
             }
             set
             {

@@ -30,7 +30,7 @@ namespace TDDD49.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            if (connectViewModel.ValidExternalPort && connectViewModel.ValidExternalIpAddress 
+            if (connectViewModel.ValidPort && connectViewModel.ValidIpAddress 
                 && chatViewModel.InternalUser != null && !connectViewModel.IsConnecting) { return true; }
             return false;
         }
@@ -42,7 +42,6 @@ namespace TDDD49.ViewModels.Commands
                 if (addThread.IsAlive)
                 {
                     communicator.disconnectStream();
-                    // communicator.Server.Stop();
                     addThread.Abort();
                 }
                 else
