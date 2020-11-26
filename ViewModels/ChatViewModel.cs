@@ -151,6 +151,7 @@ namespace TDDD49.ViewModels
                 {
                     VisibleUserName = visibleUser.Name ?? String.Empty;
                     VisibleMessages = visibleUser.Messages ?? new ObservableCollection<Message>();
+                    historyViewModel.CurrentUserName = VisibleUserName;
                 }
             }
         }

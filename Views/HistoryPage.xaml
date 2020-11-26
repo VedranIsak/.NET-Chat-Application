@@ -6,10 +6,25 @@
       xmlns:local="clr-namespace:TDDD49.Views"
       mc:Ignorable="d" 
       Title="History"
+      x:Name="HistoryPage"
       VerticalAlignment="Stretch"
       HorizontalAlignment="Stretch">
 
     <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -19,7 +34,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel x:Name="UserPanel" Style="{StaticResource SideStackPanel}" Grid.Column="1" Grid.ColumnSpan="3">
+        <Label Content="{Binding CurrentUserName, TargetNullValue=No friend currently selected!}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" HorizontalContentAlignment="Center"></Label>
+
+        <StackPanel x:Name="UserPanel" Style="{StaticResource SideStackPanel}" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="9">
             <ScrollViewer Height="{Binding ElementName=UserPanel, Path=ActualHeight}" VerticalScrollBarVisibility="Visible">
                 <ItemsControl x:Name="UserList" ItemsSource="{Binding Users, Mode=OneWay, TargetNullValue=No friends connected! Add some?}">
                     <ItemsControl.ItemTemplate>
@@ -46,7 +63,19 @@
                                     <Label Content="IP Address" Style="{StaticResource ChatGridLabel}" Grid.Column="0" Grid.Row="3"/>
                                     <Label Content="{Binding IpAddress}" Style="{StaticResource ChatGridLabel}" Grid.Column="1" Grid.Row="3"></Label>
                                     <Button Content="View" Command="{Binding ElementName=UserList, Path=DataContext.SwitchUserCommand}" CommandParameter="{Binding}" 
-                                            Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Margin="0 5 0 0" FontSize="16"></Button>
+                                            Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Margin="0 5 0 0" FontSize="16">
+                                    </Button>
+                                    <Label DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor,AncestorLevel=2, AncestorType={x:Type Grid}}}" Content="Is currently being shown" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Margin="0 5 0 0" FontSize="16">
+                                        <Label.Style>
+                                            <Style TargetType="{x:Type Label}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{DataContext.IsChattingUser}" Value="False">
+                                                        <Setter Property="Visibility" Value="Hidden"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
                                 </Grid>
                             </Border>
                         </DataTemplate>
