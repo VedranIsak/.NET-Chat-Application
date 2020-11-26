@@ -21,7 +21,7 @@
             <Border x:Name="SearchBorder" Style="{StaticResource ContentBorder}" Height="50" Margin="0 0 15 5">
                 <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" Height="{Binding ElementName=SearchBorder, Path=Height}" FontSize="16" Padding="5"></TextBox>
             </Border>
-            <ScrollViewer Height="{Binding ElementName=FilteredPanel, Path=ActualHeight}" VerticalScrollBarVisibility="Visible">
+            <ScrollViewer Height="500" VerticalScrollBarVisibility="Visible">
                 <ItemsControl x:Name="FilteredList" ItemsSource="{Binding FilteredUsers, Mode=OneWay, TargetNullValue=No friends connected! Add some?}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -62,7 +62,7 @@
             <Label Content="{Binding VisibleUserName}" Style="{StaticResource HeaderLabel}" Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="0" Margin="5 0 0 0"></Label>
 
             <StackPanel x:Name="ChatPanel"  Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="1" Style="{StaticResource SideStackPanel}" Margin="0 0 0 0">
-                <ScrollViewer Height="{Binding ElementName=ChatPanel, Path=Height}" VerticalScrollBarVisibility="Visible">
+                <ScrollViewer Height="440" VerticalScrollBarVisibility="Visible">
                     <ItemsControl ItemsSource="{Binding VisibleMessages, TargetNullValue=No messages to show! Add some friends?}" Margin="25 0 25 0">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

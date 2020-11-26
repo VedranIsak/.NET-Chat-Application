@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TDDD49.Views"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       Title="History"
       VerticalAlignment="Stretch"
       HorizontalAlignment="Stretch">
@@ -13,8 +13,8 @@
 
         <StackPanel x:Name="UserPanel" Style="{StaticResource SideStackPanel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Label Content="{Binding CurrentUserName}" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
-            <ScrollViewer Height="{Binding ElementName=UserPanel, Path=ActualHeight}" VerticalScrollBarVisibility="Visible">
-                <Grid>
+            <ScrollViewer Height="565" VerticalScrollBarVisibility="Visible">
+                <Grid x:Name="UserListGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
