@@ -9,8 +9,7 @@ namespace TDDD49.ViewModels
     public class ConnectViewModel : ViewModel
     {
         private ChatViewModel chatViewModel;
-        private bool validExternalPort = false;
-        private bool validExternalIpAddress = false;
+        private bool showSuccessfulListen = false;
         private bool isListening = false;
         private bool isConnecting = false;
         private int externalPort;
@@ -25,23 +24,13 @@ namespace TDDD49.ViewModels
             communicator = c;
         }
 
-        public bool ValidExternalPort
+        public bool ShowSuccessfulListen
         {
-            get { return validExternalPort; }
+            get { return showSuccessfulListen; }
             set
             {
-                validExternalPort = value;
-                OnPropertyChanged(nameof(ValidExternalPort));
-            }
-        }
-
-        public bool ValidExternalIpAddress
-        {
-            get { return validExternalIpAddress; }
-            set
-            {
-                validExternalIpAddress = value;
-                OnPropertyChanged(nameof(ValidExternalIpAddress));
+                showSuccessfulListen = value;
+                OnPropertyChanged(nameof(ShowSuccessfulListen));
             }
         }
 

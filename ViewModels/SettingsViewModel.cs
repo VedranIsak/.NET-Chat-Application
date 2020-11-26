@@ -16,6 +16,7 @@ namespace TDDD49.ViewModels
     public class SettingsViewModel : ViewModel
     {
         private ChatViewModel chatViewModel;
+        private bool showSuccessfulSave = false;
         private bool validInternalUserName = false;
         private string internalIpAddress;
         private int internalPort;
@@ -32,6 +33,15 @@ namespace TDDD49.ViewModels
 
         public ICommand SaveCommand { get; set; }
 
+        public bool ShowSuccessfulSave
+        {
+            get { return showSuccessfulSave; }
+            set
+            {
+                showSuccessfulSave = value;
+                OnPropertyChanged(nameof(ShowSuccessfulSave));
+            }
+        }
 
         public bool ValidInternalUserName
         {
@@ -47,13 +57,13 @@ namespace TDDD49.ViewModels
         {
             get
             {
-                if(chatViewModel.InternalUser == null) { return null; }
+                if (chatViewModel.InternalUser == null) { return null; }
                 return chatViewModel.InternalUser.Name;
             }
             set
             {
                 chatViewModel.InternalUser.Name = value;
-                if(value.Length < 3)
+                if (value.Length < 3)
                 {
                     ValidInternalUserName = false;
                 }
@@ -80,7 +90,7 @@ namespace TDDD49.ViewModels
             {
                 //if (chatViewModel.InternalUser == null) { return String.Empty; }
                 if (!ValidIpAddress) { return internalIpAddress; }
-                else if(chatViewModel.InternalUser != null) { return chatViewModel.InternalUser.IpAddress; }
+                else if (chatViewModel.InternalUser != null) { return chatViewModel.InternalUser.IpAddress; }
                 else { return String.Empty; }
             }
             set
@@ -97,7 +107,7 @@ namespace TDDD49.ViewModels
             get
             {
                 //if (chatViewModel.InternalUser == null) { return 0; }
-                if(!ValidPort) { return internalPort; }
+                if (!ValidPort) { return internalPort; }
                 else if (chatViewModel.InternalUser != null) { return chatViewModel.InternalUser.Port; }
                 else { return 0; }
             }

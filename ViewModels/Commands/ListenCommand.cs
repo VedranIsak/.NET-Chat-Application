@@ -15,9 +15,9 @@ namespace TDDD49.ViewModels.Commands
         private Thread listenThread;
         private ChatViewModel chatViewModel;
 
-        public ListenCommand(ConnectViewModel connectViewModel, Communicator c, ChatViewModel chatViewModel) 
-        { 
-            this.connectViewModel = connectViewModel; 
+        public ListenCommand(ConnectViewModel connectViewModel, Communicator c, ChatViewModel chatViewModel)
+        {
+            this.connectViewModel = connectViewModel;
             this.communicator = c;
             this.chatViewModel = chatViewModel;
         }
@@ -40,7 +40,7 @@ namespace TDDD49.ViewModels.Commands
             {
                 if (listenThread.IsAlive)
                 {
-                    
+
                     communicator.stopChatting(chatViewModel.InternalUser);
                     listenThread.Abort();
                     listenThread = null;
@@ -49,8 +49,26 @@ namespace TDDD49.ViewModels.Commands
                 {
                     communicator.stopChatting(chatViewModel.InternalUser);
                 }
-
             }
+
+            Thread showThread = new Thread(() =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    connectViewModel.ShowSuccessfulListen = true;
+                });
+
+                Thread.Sleep(3000);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    connectViewModel.ShowSuccessfulListen = false;
+                });
+            });
+
+            showThread.IsBackground = false;
+            showThread.Start();
+
             listenThread = new Thread(() =>
             {
                 chatViewModel.IsListening = true;
@@ -58,7 +76,7 @@ namespace TDDD49.ViewModels.Commands
                 try
                 {
                     communicator.ListenToPort(internalUser: this.chatViewModel.InternalUser, port: this.chatViewModel.InternalUser.Port, cvm: chatViewModel, ip: chatViewModel.InternalUser.IpAddress);
-                    
+
                     if (communicator.externalUser != null)
                     {
                         User newUser = new User()

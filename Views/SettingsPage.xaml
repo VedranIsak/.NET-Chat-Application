@@ -81,6 +81,17 @@
             <TextBox Text="{Binding InternalPort, UpdateSourceTrigger=PropertyChanged, TargetNullValue=No port could be found! Add one?}"></TextBox>
         </Border>
         <Button Content="Save Settings" Command="{Binding SaveCommand}" Grid.Column="2" Grid.Row="8"></Button>
-    
+        <Label Content="Successfully saved settings" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="9" HorizontalContentAlignment="Center" Foreground="LightGreen">
+            <Label.Style>
+                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowSuccessfulSave}" Value="False">
+                            <Setter Property="Label.Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+
     </Grid>
 </Page>

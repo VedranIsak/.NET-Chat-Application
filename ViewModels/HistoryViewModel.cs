@@ -12,13 +12,26 @@ namespace TDDD49.ViewModels
 {
     public class HistoryViewModel : ViewModel
     {
-        private string currentUserName;
         private User currentUser;
-        private bool isChattingUser;
+        private string currentUserName;
         private ObservableCollection<User> users;
         public HistoryViewModel() { }
 
         public ICommand SwitchUserCommand { get; set; }
+
+        public User CurrentUser
+        {
+            get { return currentUser; }
+            set
+            {
+                currentUser = value;
+                if (currentUser != null)
+                {
+                    CurrentUserName = currentUser.Name ?? String.Empty;
+                }
+                OnPropertyChanged(nameof(CurrentUser));
+            }
+        }
 
         public string CurrentUserName
         {
@@ -27,41 +40,6 @@ namespace TDDD49.ViewModels
             {
                 currentUserName = value;
                 OnPropertyChanged(nameof(CurrentUserName));
-            }
-        }
-
-        public User CurrentUser
-        {
-            get { return currentUser; }
-            set
-            {
-                currentUser = value;
-                if(currentUser != null)
-                {
-                    CurrentUserName = currentUser.Name;
-                    IsChattingUser = CheckCurrentUser();
-                }
-                OnPropertyChanged(nameof(CurrentUser));
-            }
-        }
-
-        public bool CheckCurrentUser()
-        {
-            if(CurrentUser != null && Users != null)
-            {
-                if (Users.Any(user => user.ID == CurrentUser.ID)) { return true; ; }
-                else { return false; }
-            }
-            return false;
-        }
-
-        public bool IsChattingUser
-        {
-            get { return isChattingUser; }
-            set
-            {
-                isChattingUser = value;
-                OnPropertyChanged(nameof(IsChattingUser));
             }
         }
 
